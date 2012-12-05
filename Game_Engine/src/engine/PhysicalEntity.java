@@ -18,7 +18,7 @@ public abstract class PhysicalEntity implements Entity {
     Vector3f acceleration;
     float invMass;
     Vector3f forceAccum;
-    ArrayList<ForceGenerator> fg;
+    public ArrayList<ForceGenerator> fg;
     float drag = 0.999f;
     boolean isAwake;
     float vAvg;

@@ -4,7 +4,6 @@
  */
 package engine;
 
-import com.sun.org.apache.bcel.internal.generic.SIPUSH;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import org.lwjgl.BufferUtils;
