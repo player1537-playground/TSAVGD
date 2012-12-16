@@ -63,21 +63,21 @@ public class Model {
     
     public static Model loadModel(String mPath, String tPath) {
 
-        ArrayList verts = new ArrayList();
-        ArrayList normals = new ArrayList();
-        ArrayList faces = new ArrayList();
+        ArrayList verts = new ArrayList(1000);
+        ArrayList normals = new ArrayList(1000);
+        ArrayList faces = new ArrayList(1000);
         try {
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(
                     ResourceLoader.getResourceAsStream("res/" + mPath)));
             String currentLine;
             while ((currentLine = reader.readLine()) != null) {
-
+		String[] splitLine = currentLine.split(" ");
                 //System.out.println(currentLine);
                 if (currentLine.startsWith("v ")) {
-                    float x = Float.valueOf(currentLine.split(" ")[1]);
-                    float y = Float.valueOf(currentLine.split(" ")[2]);
-                    float z = Float.valueOf(currentLine.split(" ")[3]);
+                    float x = Float.valueOf(splitLine[1]);
+                    float y = Float.valueOf(splitLine[2]);
+                    float z = Float.valueOf(splitLine[3]);
                     verts.add(new Vector3f(x, y, z));
                     /*
                      * float dev = (float) Math.random() * 0.05f; colors.add(new
@@ -85,19 +85,20 @@ public class Model {
                      */
 
                 } else if (currentLine.startsWith("vn ")) {
-                    float x = Float.valueOf(currentLine.split(" ")[1]);
-                    float y = Float.valueOf(currentLine.split(" ")[2]);
-                    float z = Float.valueOf(currentLine.split(" ")[3]);
+                    float x = Float.valueOf(splitLine[1]);
+                    float y = Float.valueOf(splitLine[2]);
+                    float z = Float.valueOf(splitLine[3]);
                     normals.add(new Vector3f(x, y, z));
                 } else if (currentLine.startsWith("f ")) {
-                    int[] vertexIndices = {Integer.parseInt(currentLine.split(" ")[1].split("/")[0]) - 1,
-                        Integer.parseInt(currentLine.split(" ")[2].split("/")[0]) - 1,
-                        Integer.parseInt(currentLine.split(" ")[3].split("/")[0]) - 1};
+		    String[][] splitSlash = { splitLine[1].split("/"),  splitLine[2].split("/"), splitLine[3].split("/") };
+                    int[] vertexIndices = {Integer.parseInt(splitSlash[1][0]) - 1,
+                        Integer.parseInt(splitSlash[2][0]) - 1,
+                        Integer.parseInt(splitSlash[3][0]) - 1};
                     int[] normalIndices = null;
                     try {
-                        normalIndices = new int[]{Integer.parseInt(currentLine.split(" ")[1].split("/")[2]) - 1,
-                            Integer.parseInt(currentLine.split(" ")[2].split("/")[2]) - 1,
-                            Integer.parseInt(currentLine.split(" ")[3].split("/")[2]) - 1};
+                        normalIndices = new int[]{Integer.parseInt(splitSlash[1][2]) - 1,
+                            Integer.parseInt(splitSlash[2][2]) - 1,
+                            Integer.parseInt(splitSlash[3][2]) - 1};
                     } catch (ArrayIndexOutOfBoundsException ee) {
                         System.out.println(currentLine);
                     }
