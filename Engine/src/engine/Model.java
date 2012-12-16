@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package engine;
+package event;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -91,14 +91,14 @@ public class Model {
                     normals.add(new Vector3f(x, y, z));
                 } else if (currentLine.startsWith("f ")) {
 		    String[][] splitSlash = { splitLine[1].split("/"),  splitLine[2].split("/"), splitLine[3].split("/") };
-                    int[] vertexIndices = {Integer.parseInt(splitSlash[1][0]) - 1,
-                        Integer.parseInt(splitSlash[2][0]) - 1,
-                        Integer.parseInt(splitSlash[3][0]) - 1};
+                    int[] vertexIndices = {Integer.parseInt(splitSlash[0][0]) - 1,
+                        Integer.parseInt(splitSlash[1][0]) - 1,
+                        Integer.parseInt(splitSlash[2][0]) - 1};
                     int[] normalIndices = null;
                     try {
-                        normalIndices = new int[]{Integer.parseInt(splitSlash[1][2]) - 1,
-                            Integer.parseInt(splitSlash[2][2]) - 1,
-                            Integer.parseInt(splitSlash[3][2]) - 1};
+                        normalIndices = new int[]{Integer.parseInt(splitSlash[0][2]) - 1,
+                            Integer.parseInt(splitSlash[1][2]) - 1,
+                            Integer.parseInt(splitSlash[2][2]) - 1};
                     } catch (ArrayIndexOutOfBoundsException ee) {
                         System.out.println(currentLine);
                     }

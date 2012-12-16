@@ -18,14 +18,14 @@ public class Player extends PhysicalEntity {
     
     ViewPoint v;
     float xAngle = 0, yAngle = 0;
-    float maxSpeed = 15;
+    float maxSpeed = 16;
     boolean collision = false;
     int count = 0;
     boolean space = false;
 
     public Player() {
 
-        super(new BoundingBox(new Vector3f(0, 10, 0), new Vector3f(0.5f, 1.5f, 0.5f)));
+        super(new BoundingBox(new Vector3f(0, 5, 0), new Vector3f(0.6f, 2f, 0.6f)));
         v = new ViewPoint();
         fg.add(new ForceGenerator() {
 
@@ -109,9 +109,12 @@ public class Player extends PhysicalEntity {
     public void update(int delta) {
 
         //Mouse
-        yAngle += (float) (-EventTest.getDx() / (Display.getWidth() / 360f) / 2) % 360;
+        yAngle += (float) (-EventTest.getDx() / (Display.getWidth() / 360f) / 2);
         xAngle += (float) EventTest.getDy() / (Display.getHeight() / 360f) / 2;
-
+        yAngle %= 360;
+        if(yAngle < 0) {
+            yAngle += 360;
+        }
         if (xAngle > 85) {
             xAngle = 85f;
         }

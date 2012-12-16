@@ -30,7 +30,7 @@ public class ViewPoint {
 
     public ViewPoint(Vector3f position, float xAngle, float yAngle, float zAngle) {
 
-        this(position, xAngle, yAngle, zAngle, 60, 1024f / 768f, 0.1f, 300f);
+        this(position, xAngle, yAngle, zAngle, 60, 1024f / 768f, 0.1f, 200f);
 
     }
 

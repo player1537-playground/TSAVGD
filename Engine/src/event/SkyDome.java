@@ -19,18 +19,18 @@ import static org.lwjgl.opengl.GL11.*;
 public class SkyDome implements DisplayableEntity {
 
     Sphere sphere;
-    Texture t;
+    //Texture t;
 
     public SkyDome() {
 
         this.sphere = new Sphere();
         sphere.setOrientation(GLU.GLU_INSIDE);
-        sphere.setTextureFlag(true);
-        try {
+        //sphere.setTextureFlag(true);
+        /*try {
             this.t = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("res/wall.png"));
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
 
     }
 
@@ -38,11 +38,14 @@ public class SkyDome implements DisplayableEntity {
 
         glPushMatrix();
         glLoadIdentity();
-        (new Color(0.4f, 0.6f, 0.8f)).bind();
-        glBindTexture(GL_TEXTURE_2D, t.getTextureID());
+        Color.white.bind();
+        (new Color(0.45f, 0.5f, 0.6f)).bind();
+        //glBindTexture(GL_TEXTURE_2D, t.getTextureID());
+        glDisable(GL_TEXTURE_2D);
         glDisable(GL_DEPTH_TEST);
         glDisable(GL_LIGHTING);
         sphere.draw(100, 10, 10);
+        glEnable(GL_TEXTURE_2D);
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_LIGHTING);
         glPopMatrix();

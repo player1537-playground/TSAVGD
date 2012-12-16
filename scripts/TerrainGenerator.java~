@@ -7,6 +7,7 @@ public class TerrainGenerator {
   static int sectionx = 9, sectionz = 9;
   
   public static void main(String[] args) {
+    long time = System.currentTimeMillis();
     try {
       BufferedReader reader = new BufferedReader(new FileReader(path + ".obj"));
       BufferedWriter writer = new BufferedWriter(new FileWriter(path + "_fixed.obj"));
@@ -21,9 +22,9 @@ public class TerrainGenerator {
         if (currentLine.startsWith("v ")) {
           vertCount++;
           String[] vertString = currentLine.split(" ");
-          float x = Float.valueOf(vertString[0]);
-          float y = Float.valueOf(vertString[1]);
-          float z = Float.valueOf(vertString[2]);
+          float x = Float.valueOf(vertString[1]);
+          float y = Float.valueOf(vertString[2]);
+          float z = Float.valueOf(vertString[3]);
           verts.add(new Vector3f(x, y, z));
           
           if (x < minX) {
@@ -127,10 +128,13 @@ public class TerrainGenerator {
       writer.newLine();
       writer.write("#faceCount " + faceCount);
       writer.newLine();
+      writer.write("#grid " + sectionx + " x " + sectionz);
+      writer.newLine();
       reader.close();
       writer.close();
     } catch (IOException ex) {
       ex.printStackTrace();
     }
+    System.out.println(System.currentTimeMillis() - time);
   }
 }

@@ -60,9 +60,9 @@ public class EventTest {
             //Mouse
             Mouse.setGrabbed(true);
             Mouse.create();
-
+            
             //OpenGL
-            glClearColor(0f, 0f, 0f, 0f);
+            glClearColor(0f, 0f, 0f, 1f);
 
             glEnable(GL_DEPTH_TEST);
 
@@ -91,11 +91,11 @@ public class EventTest {
             //glMateriali(GL_FRONT, GL_SHININESS, 30);
 
             glFogi(GL_FOG_MODE, GL_LINEAR);        // Fog Mode
-            glFog(GL_FOG_COLOR, asFloatBuffer(new float[]{0.5f, 0.5f, 0.4f, 1f}));            // Set Fog Color
+            glFog(GL_FOG_COLOR, asFloatBuffer(new float[]{0.45f, 0.5f, 0.6f, 1f}));            // Set Fog Color
             glFogf(GL_FOG_DENSITY, 0.35f);              // How Dense Will The Fog Be
             glHint(GL_FOG_HINT, GL_DONT_CARE);          // Fog Hint Value
-            glFogf(GL_FOG_START, 150f);             // Fog Start Depth
-            glFogf(GL_FOG_END, 300f);               // Fog End Depth
+            glFogf(GL_FOG_START, 100f);             // Fog Start Depth
+            glFogf(GL_FOG_END, 200f);               // Fog End Depth
             glEnable(GL_FOG);                   // Enables GL_FOG
 
             //Misc
@@ -109,7 +109,9 @@ public class EventTest {
                     return new Vector3f(0, -e.getMass() * 20, 0);
                 }
             });
-            ter = new Terrain();
+            System.out.println("Start");
+            ter = new Terrain(p);
+            System.out.println("DONE");
             SkyDome sky = new SkyDome();
             h = new Hud(width, height);
             e = new ArrayList<Entity>();
@@ -149,6 +151,7 @@ public class EventTest {
 
             int delta = getDelta();
             System.out.println("FPS " + 1000f / delta);
+            //System.out.println("Total " + delta);
 
             processInputs();
             
@@ -156,9 +159,7 @@ public class EventTest {
                 update(delta / 3);
             }
 
-            getDeltaBottleNeck();
             render();
-            
             Display.update();
             Display.sync(60);
 

@@ -13,20 +13,22 @@ import org.lwjgl.util.vector.Vector3f;
  */
 public class Terrain implements DisplayableEntity {
 
-    Model display;
+    TerrainModel display;
     int indice;
     CubeTree<Triangle> planes;
+    Player player;
 
-    public Terrain(Model display, Model navigation) {
+    public Terrain(TerrainModel display, Model navigation, Player player) {
 
         this.display = display;
+        this.player = player;
         init(navigation);
 
     }
 
-    public Terrain() {
+    public Terrain(Player p) {
 
-        this(Model.loadModel("village_disp.obj"), Model.loadModel("village_col.obj"));
+        this(TerrainModel.loadModel("village_disp_fixed.obj"), Model.loadModel("village_col.obj"), p);
 
     }
 
@@ -49,7 +51,9 @@ public class Terrain implements DisplayableEntity {
     @Override
     public void draw() {
 
-        display.draw();
+        Vector3f position = player.getMiddle();
+        float angle = player.yAngle;
+        display.draw(position.getX(), position.getZ(), angle);
 
     }
 

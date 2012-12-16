@@ -3,10 +3,11 @@ import java.util.ArrayList;
 
 public class TerrainGenerator {
   
-  static String path = "island";
-  static int sectionx = 9, sectionz = 9;
+  static String path = "village_disp";
+  static int sectionx = 20, sectionz = 20;
   
   public static void main(String[] args) {
+    long time = System.currentTimeMillis();
     try {
       BufferedReader reader = new BufferedReader(new FileReader(path + ".obj"));
       BufferedWriter writer = new BufferedWriter(new FileWriter(path + "_fixed.obj"));
@@ -119,7 +120,7 @@ public class TerrainGenerator {
       writer.newLine();
       writer.write("#max " + maxX + " " + maxY + " " + maxZ);
       writer.newLine();
-      writer.write("#vertexeCount " + vertCount);
+      writer.write("#vertexCount " + vertCount);
       writer.newLine();
       writer.write("#normalCount " + normCount);
       writer.newLine();
@@ -127,10 +128,13 @@ public class TerrainGenerator {
       writer.newLine();
       writer.write("#faceCount " + faceCount);
       writer.newLine();
+      writer.write("#gridsize " + sectionx + " x " + sectionz);
+      writer.newLine();
       reader.close();
       writer.close();
     } catch (IOException ex) {
       ex.printStackTrace();
     }
+    System.out.println(System.currentTimeMillis() - time);
   }
 }
