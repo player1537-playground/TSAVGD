@@ -21,9 +21,9 @@ public class TerrainGenerator {
         if (currentLine.startsWith("v ")) {
           vertCount++;
           String[] vertString = currentLine.split(" ");
-          float x = Float.valueOf(vertString[0]);
-          float y = Float.valueOf(vertString[1]);
-          float z = Float.valueOf(vertString[2]);
+          float x = Float.valueOf(vertString[1]);
+          float y = Float.valueOf(vertString[2]);
+          float z = Float.valueOf(vertString[3]);
           verts.add(new Vector3f(x, y, z));
           
           if (x < minX) {
