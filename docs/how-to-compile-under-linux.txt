@@ -1,0 +1,15 @@
+* There are 3 programs:
+** linux-init.sh
+*** To run this program, go to the top-level directory of TSAVGD and type:
+    source scripts/linux-init.sh
+*** This program sets your path variable so it's easier to run the commands
+** linux-compile.sh
+*** To run: cd into a directory that has source code in it, such as:
+    cd Engine/src/event/
+*** Then to compile all the code in the current directory do:
+    linux-compile.sh
+** linux-run.sh
+*** To run: cd into the Engine/ directory, like:
+    cd Engine/
+*** Then to run a class type `linux-run.sh packagename.ClassName`, for instance:
+    linux-run.sh event.EventTest
