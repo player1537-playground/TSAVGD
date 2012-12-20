@@ -3,10 +3,10 @@ import java.util.ArrayList;
 
 public class TerrainGenerator {
   
-  static String path = "village_disp";
   static int sectionx = 20, sectionz = 20;
   
   public static void main(String[] args) {
+      String path = args[0];
     long time = System.currentTimeMillis();
     try {
       BufferedReader reader = new BufferedReader(new FileReader(path + ".obj"));

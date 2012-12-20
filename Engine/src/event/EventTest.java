@@ -21,8 +21,8 @@ import static org.lwjgl.opengl.GL11.*;
  */
 public class EventTest {
 
-    static final float width = 1024;
-    static final float height = 768;
+    static final float width = 800;
+    static final float height = 640;
     static long lastFrame = 0;
     static long lastFrameBottleNeck = 0;
     static Hud h;
@@ -101,7 +101,7 @@ public class EventTest {
             //Misc
             p = new Player();
             p.init();
-            p.setPosition(new Vector3f(0, 100, 0));
+            p.setPosition(new Vector3f(0, 10, 0));
             p.fg.add(new ForceGenerator() {
 
                 @Override
@@ -151,6 +151,7 @@ public class EventTest {
 
             int delta = getDelta();
             System.out.println("FPS " + 1000f / delta);
+	    System.out.println("Position " + p.b.getMin());
             //System.out.println("Total " + delta);
 
             processInputs();
@@ -212,6 +213,7 @@ public class EventTest {
         if (!debounce && keyP) {
             paused = !paused;
             h.setPause(paused);
+	    Mouse.setGrabbed(!paused);
         }
         debounce = keyP;
     }
