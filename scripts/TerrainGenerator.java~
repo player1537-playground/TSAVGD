@@ -4,7 +4,7 @@ import java.util.ArrayList;
 public class TerrainGenerator {
   
   static String path = "island";
-  static int sectionx = 9, sectionz = 9;
+  static int sectionx = 20, sectionz = 20;
   
   public static void main(String[] args) {
     long time = System.currentTimeMillis();
@@ -120,7 +120,7 @@ public class TerrainGenerator {
       writer.newLine();
       writer.write("#max " + maxX + " " + maxY + " " + maxZ);
       writer.newLine();
-      writer.write("#vertexeCount " + vertCount);
+      writer.write("#vertexCount " + vertCount);
       writer.newLine();
       writer.write("#normalCount " + normCount);
       writer.newLine();
@@ -128,7 +128,7 @@ public class TerrainGenerator {
       writer.newLine();
       writer.write("#faceCount " + faceCount);
       writer.newLine();
-      writer.write("#grid " + sectionx + " x " + sectionz);
+      writer.write("#gridsize " + sectionx + " x " + sectionz);
       writer.newLine();
       reader.close();
       writer.close();
