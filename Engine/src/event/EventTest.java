@@ -74,7 +74,7 @@ public class EventTest {
             glMatrixMode(GL_PROJECTION);
             glOrtho(0, width, height, 0, 1, -1);
             glMatrixMode(GL_MODELVIEW);
-            (new Menu(100, 100, false, Hud.load("load.png"), true, null, null)).draw();
+            (new Menu(100, 100, false, Hud.load("res/load.png"), true, null, null)).draw();
             Display.update();
 
             

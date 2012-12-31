@@ -1,4 +1,5 @@
 * How to use git
+** 0) Almost all of these commands are used from the TSAVGD folder (exception being #1)
 ** 1) Firstly, to get all the code, do:
    git clone https://github.com/player1537/TSAVGD.git
    cd TSAVGD
@@ -11,6 +12,20 @@
    # Making sure to change YOURUSERNAME to whatever your github username is, and don't forget the @ sign
    # Then save the file and exit your editor
 ** 3) From here, you can start making changes to the source code
+*** Before you start making changes, it would be a good idea to either:
+    # Run this if you haven't changed any files since you last pulled the source code (this is usually what you want)
+    git pull origin master
+    # Run this if you might have changed some things
+    git checkout *
+*** If you don't know if you've added, changed, or whatever to any files:
+    git status
+    # This will list the status of the project
+    # Under "Changes to be commited" it lists things that will be commited, make sure they're correct
+    # Under "Changed but not updated" it lists things that will be commited, and are changed from the latest commit
+    # Under "Untracked files" it lists files which git currently isn't tracking.
+    #   The contents of this should be: files you've created, *.class, *~
+    #   It _should_ contain *.class and *.~ because we don't want class files saved and we don't want backup files saved
+    #   Anything besides class and ~ files should be added with `git add` (below)
 *** If you only changed existing files, then you just need to do these commands:
     git commit -m 'Your commit message here'
     # Change the message to something relevent to what you changed
