@@ -1,0 +1,44 @@
+* How to use git
+** 1) Firstly, to get all the code, do:
+   git clone https://github.com/player1537/TSAVGD.git
+   cd TSAVGD
+** 2) At this point, you will probably need to change remote/origin.  You can do this by saying:
+   $EDITOR .git/config
+   # Change the line that says
+   url = https://github.com/player1537/TSAVGD.git
+   # to:
+   url = https://YOURUSERNAME@github.com/player1537/TSAVGD.git
+   # Making sure to change YOURUSERNAME to whatever your github username is, and don't forget the @ sign
+   # Then save the file and exit your editor
+** 3) From here, you can start making changes to the source code
+*** If you only changed existing files, then you just need to do these commands:
+    git commit -m 'Your commit message here'
+    # Change the message to something relevent to what you changed
+    git push origin master
+    # Then type your github password
+*** If you added some files, it gets a little trickier
+**** If you created a new directory and added files in it, then just say:
+     git add path/to/my/directory/*
+**** If you added files to an existing directory:
+     git add path/to/dir/*
+**** For both of those, you'll have to go back and commit/push your code (from above)
+*** If you removed some files, it's even more annoying
+    # You'll probably have to get those files back (next section)
+    # Then you need to use git to remove them, like:
+    git rm path/to/file.ext
+    # Or if it's a full directory:
+    git rm path/to/dir
+    # `git rm` works the same as `rm` in Linux
+*** If you accidentally changed some files and need to revert them
+    # Go ahead and remove that file you were working on
+    rm path/to/file.ext
+    # Note: not using `git` here.
+    # Then we need to get it back
+    git checkout path/to/file.ext
+    # Or if you're lazy (That's me!)
+    git checkout path/
+** 4) You'll probably need to update your code every so often, this can be done by:
+   git pull origin master
+** 4a) But, if you changed some files that haven't been changed in the latest commit, you'll need to:
+   git checkout path/to/file.ext (like above)
+
