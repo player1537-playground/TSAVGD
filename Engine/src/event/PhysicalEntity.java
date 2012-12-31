@@ -9,15 +9,15 @@ import org.lwjgl.util.vector.Vector3f;
  */
 public abstract class PhysicalEntity implements Entity {
     
-    BoundingBox b;
-    Vector3f velocity;
-    Vector3f acceleration;
-    float invMass;
-    Vector3f forceAccum;
+    public BoundingBox b;
+    public Vector3f velocity;
+    public Vector3f acceleration;
+    public float invMass;
+    public Vector3f forceAccum;
     public ArrayList<ForceGenerator> fg;
-    float drag = 0.999f;
-    boolean isAwake;
-    float vAvg;
+    public float drag = 0.999f;
+    public boolean isAwake;
+    public float vAvg;
     
     public PhysicalEntity(BoundingBox b) {
 

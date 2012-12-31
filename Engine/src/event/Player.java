@@ -107,7 +107,6 @@ public class Player extends PhysicalEntity {
 
     @Override
     public void update(int delta) {
-
         //Mouse
         yAngle += (float) (-EventTest.getDx() / (Display.getWidth() / 360f) / 2);
         xAngle += (float) EventTest.getDy() / (Display.getHeight() / 360f) / 2;

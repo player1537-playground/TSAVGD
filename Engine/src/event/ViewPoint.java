@@ -14,13 +14,13 @@ import static org.lwjgl.util.glu.GLU.*;
  */
 public class ViewPoint {
 
-    private Vector3f position;
+    public Vector3f position;
     //Angle around said axis
     //pitch, yaw, roll
-    private float xAngle, yAngle, zAngle;
-    private float fieldOfView;
-    private float aspectRatio;
-    private float zNear, zFar;
+    public float xAngle, yAngle, zAngle;
+    public float fieldOfView;
+    public float aspectRatio;
+    public float zNear, zFar;
 
     public ViewPoint() {
 
@@ -104,19 +104,19 @@ public class ViewPoint {
 
     }
 
-    void setPosition(float x, float y, float z) {
+    public void setPosition(float x, float y, float z) {
 
         this.position = new Vector3f(x, y, z);
 
     }
 
-    void setPosition(Vector3f v) {
+    public void setPosition(Vector3f v) {
 
         this.position = v;
 
     }
 
-    void setAngle(float x, float y, float z) {
+    public void setAngle(float x, float y, float z) {
 
         this.xAngle = x;
         this.yAngle = y;

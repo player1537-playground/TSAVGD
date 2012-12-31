@@ -11,8 +11,8 @@ import org.lwjgl.util.vector.Vector3f;
  * @author Andy
  */
 public class Triangle implements Boundable {
-    BoundingBox bounds;
-    float a, b, c, d;
+    public BoundingBox bounds;
+    public float a, b, c, d;
 
     public Triangle(Vector3f[] v, Vector3f n) {
 

@@ -14,6 +14,7 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.util.vector.Vector3f;
 import static org.lwjgl.opengl.GL11.*;
+import character.*;
 
 /**
  *
@@ -21,8 +22,8 @@ import static org.lwjgl.opengl.GL11.*;
  */
 public class EventTest {
 
-    static final float width = 800;
-    static final float height = 640;
+    static final float width = 1024;
+    static final float height = 768;
     static long lastFrame = 0;
     static long lastFrameBottleNeck = 0;
     static Hud h;
@@ -64,12 +65,21 @@ public class EventTest {
             //OpenGL
             glClearColor(0f, 0f, 0f, 1f);
 
-            glEnable(GL_DEPTH_TEST);
 
             glEnable(GL_TEXTURE_2D);
-
             glEnable(GL_BLEND);
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+
+            glMatrixMode(GL_PROJECTION);
+            glOrtho(0, width, height, 0, 1, -1);
+            glMatrixMode(GL_MODELVIEW);
+            (new Menu(100, 100, false, Hud.load("load.png"), true, null, null)).draw();
+            Display.update();
+
+            
+            glEnable(GL_DEPTH_TEST);
+
 
             glEnable(GL_CULL_FACE);
 
@@ -113,19 +123,40 @@ public class EventTest {
             ter = new Terrain(p);
             System.out.println("DONE");
             SkyDome sky = new SkyDome();
+            //Vector3f waterPosition = ter.planes.boundary.getMin();
+            //waterPosition.setY(-5);
+            //Water water = new Water(waterPosition, ter.planes.boundary.getWidth(), ter.planes.boundary.getDepth(), 10, 200, 200);
+            //Vector3f waterPosition = new Vector3f(-50, 3, -50);
+            //Water water = new Water(waterPosition, 50, 50, 2, 100, 100);
             h = new Hud(width, height);
+            
+            Person per = new Person();
+            per.b.setPosition(new Vector3f(0, 20, 0));
+            per.fg.add(new ForceGenerator() {
+
+                @Override
+                public Vector3f getForce(PhysicalEntity e) {
+                    return new Vector3f(0, -e.getMass() * 20, 0);
+                }
+            });
+            
             e = new ArrayList<Entity>();
             e.add(sky);
             e.add(ter);
             e.add(p);
+            //e.add(water);
+            e.add(per);
             e.add(h);
 
             de = new ArrayList<DisplayableEntity>();
             de.add(sky);
             de.add(ter);
+            //de.add(water);
+            de.add(per);
             de.add(h);
 
             pe = new ArrayList<PhysicalEntity>();
+            pe.add(per);
             pe.add(p);
 
             w = new PhysicalWorld(ter, pe);
@@ -151,7 +182,6 @@ public class EventTest {
 
             int delta = getDelta();
             System.out.println("FPS " + 1000f / delta);
-	    System.out.println("Position " + p.b.getMin());
             //System.out.println("Total " + delta);
 
             processInputs();
@@ -213,7 +243,7 @@ public class EventTest {
         if (!debounce && keyP) {
             paused = !paused;
             h.setPause(paused);
-	    Mouse.setGrabbed(!paused);
+            Mouse.setGrabbed(!paused);
         }
         debounce = keyP;
     }

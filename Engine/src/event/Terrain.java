@@ -28,8 +28,7 @@ public class Terrain implements DisplayableEntity {
 
     public Terrain(Player p) {
 
-        this(TerrainModel.loadModel("island_fixed.obj"), Model.loadModel("island_fixed.obj"), p);
-	// Don't forget to change this back to the right model file!
+        this(TerrainModel.loadModel("village_disp_fixed.obj"), Model.loadModel("village_col.obj"), p);
 
     }
 

@@ -72,7 +72,7 @@ public class BoundingBox {
 
     }
 
-    Vector3f[] getVertexes() {
+    public Vector3f[] getVertexes() {
 
         Vector3f min = getMin();
         Vector3f max = getMax();
@@ -89,7 +89,7 @@ public class BoundingBox {
 
     }
 
-    Vector3f getCenter() {
+    public Vector3f getCenter() {
         return new Vector3f(min.getX() + max.getX() / 2, min.getY() + max.getY() / 2, min.getZ() + max.getZ() / 2);
     }
 

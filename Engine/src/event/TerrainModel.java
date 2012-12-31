@@ -91,6 +91,7 @@ public class TerrainModel {
                     ResourceLoader.getResourceAsStream("res/" + mPath)));
             String currentLine;
             while ((currentLine = reader.readLine()).startsWith("#")) {
+                System.out.println(currentLine);
                 String[] splitLine = currentLine.split(" ");
                 if (currentLine.startsWith("#min ")) {
                     min = new Vector3f(
@@ -283,7 +284,6 @@ public class TerrainModel {
         if (inBounds(angle, 315, 360) || inBounds(angle, 0, 45)) {
             s = Section.TOP;
         }
-        System.out.println("ANGLE " + angle + " Sect " + s);
         draw((int) ((x - min.getX()) * multx), (int) ((z - min.getZ()) * multz), s);
 
     }
