@@ -35,7 +35,7 @@ public class Model {
         this.normals = normals;
         this.faces = faces;
         this.textureCoords = new Vector3f[]{new Vector3f(0, 0, 0), new Vector3f(0, 1, 0), new Vector3f(1, 1, 0)};
-        System.out.println(t.getTextureID());
+        System.out.println("Model loaded " + t.getTextureID());
         tex = new Texture[]{t};
         indice = glGenLists(1);
         glNewList(indice, GL_COMPILE);

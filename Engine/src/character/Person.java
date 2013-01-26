@@ -8,6 +8,8 @@ import event.*;
 import java.util.ArrayList;
 import org.lwjgl.util.vector.Vector;
 import org.lwjgl.util.vector.Vector3f;
+import sound.*;
+import static org.lwjgl.openal.AL10.*;
 
 /**
  *
@@ -17,15 +19,18 @@ public class Person extends AbstractEntity {
 
     MovementPattern mp;
     //Conversation c;
+    static String soundPath = "res/ding.wav";
+    Sound s;
 
     public Person(Model m, MovementPattern mp) {
         super(m);
         this.mp = mp;
         this.fg.add(mp);
+        s = SoundManager.createSound(soundPath);
     }
 
     public Person() {
-        super(Model.loadModel("soldier.obj"));
+        super(Model.loadModel("soldier_small.obj"));
         this.mp = new MovementPattern() {
 
             Vector3f force;
@@ -49,14 +54,15 @@ public class Person extends AbstractEntity {
 
             @Override
             public void changeState() {
-                force.set((float) Math.random(), (float) Math.random(), (float) Math.random());
-                force.scale(20 * getMass() * 1.5f);
+                force.set((float) Math.random() - 0.5f, 0, (float) Math.random() - 0.5f);
+                force.scale(20 * getMass() * 2.5f);
                 counter = 1000;
             }
 
             @Override
             public void collide(PhysicalEntity p) {
                 changeState();
+                
             }
 
             @Override
@@ -69,6 +75,7 @@ public class Person extends AbstractEntity {
             }
         };
         this.fg.add(mp);
+        s = SoundManager.createSound(soundPath);
 
     }
 
@@ -80,6 +87,8 @@ public class Person extends AbstractEntity {
     @Override
     public void collide(PhysicalEntity col) {
         mp.collide(col);
+        s.setPosition(b.getCenter());
+        s.play();
     }
 
     @Override

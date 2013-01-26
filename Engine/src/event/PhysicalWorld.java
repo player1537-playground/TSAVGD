@@ -6,11 +6,11 @@ package event;
 
 import java.util.ArrayList;
 import org.lwjgl.util.vector.Vector3f;
+
 /**
  *
  * @author Andy
  */
-
 public class PhysicalWorld {
 
     Terrain t;
@@ -46,11 +46,11 @@ public class PhysicalWorld {
             e.forceAccum = new Vector3f();
 
         }
-        
+
         for (PhysicalEntity e : ents) {
 
             ArrayList<Triangle> collisions = t.getTriangles(e.b);
-            if (!collisions.isEmpty()) {
+            if (e.isCollidable() && !collisions.isEmpty()) {
                 Vector3f[] vertexes = e.getVertexes();
                 for (Vector3f v : vertexes) {
                     float lowestVelocity = Float.MAX_VALUE;
@@ -98,7 +98,7 @@ public class PhysicalWorld {
             }
             e.collide(collisions);
         }
-        
+
         ArrayList<PhysicalEntity> temporary = new ArrayList<PhysicalEntity>(ents);
 
         for (PhysicalEntity e : ents) {
@@ -107,26 +107,28 @@ public class PhysicalWorld {
                 PhysicalEntity tempEnt = temporary.get(i);
                 if (!e.equals(tempEnt)) {
                     if (e.b.intersects(tempEnt.b)) {
-                        Vector3f bounce = new Vector3f();
-                        Vector3f relativePosition = new Vector3f();
-                        Vector3f.sub(e.getMiddle(), tempEnt.getMiddle(), relativePosition);
-                        if (relativePosition.lengthSquared() < 0) {
-                            continue;
+                        if (e.isCollidable() && tempEnt.isCollidable()) {
+                            Vector3f bounce = new Vector3f();
+                            Vector3f relativePosition = new Vector3f();
+                            Vector3f.sub(e.getMiddle(), tempEnt.getMiddle(), relativePosition);
+                            if (relativePosition.lengthSquared() < 0) {
+                                continue;
+                            }
+                            if (relativePosition.lengthSquared() != 0) {
+                                relativePosition.normalise();
+                            }
+                            float sepVelocity = Vector3f.dot(Vector3f.sub(e.velocity, tempEnt.velocity, null), relativePosition);
+                            if (sepVelocity >= 0) {
+                                continue;
+                            }
+                            float totalInvMass = e.invMass + tempEnt.invMass;
+                            relativePosition.scale(sepVelocity * tempEnt.invMass / totalInvMass);
+                            Vector3f.add(tempEnt.velocity, relativePosition, tempEnt.velocity);
+                            relativePosition.normalise().scale(sepVelocity * e.invMass / totalInvMass);
+                            Vector3f.add(e.velocity, relativePosition, e.velocity);
+                            e.setAwake(true);
+                            tempEnt.setAwake(true);
                         }
-                        if (relativePosition.lengthSquared() != 0) {
-                            relativePosition.normalise();
-                        }
-                        float sepVelocity = Vector3f.dot(Vector3f.sub(e.velocity, tempEnt.velocity, null), relativePosition);
-                        if (sepVelocity >= 0) {
-                            continue;
-                        }
-                        float totalInvMass = e.invMass + tempEnt.invMass;
-                        relativePosition.scale(sepVelocity * tempEnt.invMass / totalInvMass);
-                        Vector3f.add(tempEnt.velocity, relativePosition, tempEnt.velocity);
-                        relativePosition.normalise().scale(sepVelocity * e.invMass / totalInvMass);
-                        Vector3f.add(e.velocity, relativePosition, e.velocity);
-                        e.setAwake(true);
-                        tempEnt.setAwake(true);
                         e.collide(tempEnt);
                         tempEnt.collide(e);
                     }

@@ -16,24 +16,24 @@ public class Menu implements DisplayableEntity {
 
     float x, y;
     float width, height;
-    Texture t;
+    DisplayableEntity de;
     Menu[] sub;
     boolean absolute;
     boolean show;
-    boolean showBranch;
+    boolean showChildren;
     Event event;
 
-    public Menu(float x, float y, boolean absolute, Texture t, boolean show, Menu[] sub, Event event) {
+    public Menu(float x, float y, boolean absolute, HudGraphic hg, boolean show, Menu[] sub, Event event) {
 
-        this(x, y, t.getImageWidth(), t.getImageHeight(), absolute, t, show, sub, event);
+        this(x, y, hg.getWidth(), hg.getHeight(), absolute, hg, show, sub, event);
 
     }
 
-    public Menu(float x, float y, float width, float height, boolean absolute, Texture t, boolean show, Menu[] sub, Event event) {
+    public Menu(float x, float y, float width, float height, boolean absolute, DisplayableEntity de, boolean show, Menu[] sub, Event event) {
 
         this.width = width;
         this.height = height;
-        this.t = t;
+        this.de = de;
         this.show = show;
         this.sub = sub;
         this.absolute = absolute;
@@ -43,26 +43,19 @@ public class Menu implements DisplayableEntity {
         }
         translate(x, y);
         this.event = event;
-        this.showBranch = true;
+        this.showChildren = true;
 
     }
 
     @Override
     public void draw() {
-        if (show && showBranch) {
-            glBindTexture(GL_TEXTURE_2D, t.getTextureID());
-            glBegin(GL_QUADS);
-            glTexCoord2f(0, 0);
-            glVertex2f(x, y);
-            glTexCoord2f(t.getWidth(), 0);
-            glVertex2f(x + width, y);
-            glTexCoord2f(t.getWidth(), t.getHeight());
-            glVertex2f(x + width, y + height);
-            glTexCoord2f(0, t.getHeight());
-            glVertex2f(x, y + height);
-            glEnd();
+        if (show) {
+            glPushMatrix();
+            glTranslatef(x, y, 0);
+            de.draw();
+            glPopMatrix();
         }
-        if (showBranch) {
+        if (showChildren) {
             if (sub != null) {
                 for (Menu m : sub) {
                     m.draw();
@@ -76,10 +69,10 @@ public class Menu implements DisplayableEntity {
     }
 
     public void mouseClick(int mx, int my) {
-        if (event != null && show && showBranch && inArea(mx, my)) {
+        if (event != null && show && inArea(mx, my)) {
             event.execute();
         }
-        if (showBranch && sub != null) {
+        if (showChildren && sub != null) {
             for (Menu m : sub) {
                 m.mouseClick(mx, my);
             }
@@ -94,12 +87,22 @@ public class Menu implements DisplayableEntity {
         show = true;
     }
 
+    void hideChildren() {
+        showChildren = false;
+    }
+
+    void showChildren() {
+        showChildren = true;
+    }
+
     void hideBranch() {
-        showBranch = false;
+        hide();
+        hideChildren();
     }
 
     void showBranch() {
-        showBranch = true;
+        show();
+        showChildren();
     }
 
     private boolean inArea(int mx, int my) {
@@ -122,7 +125,12 @@ public class Menu implements DisplayableEntity {
         this.show = show;
     }
 
+    void setShowChildren(boolean showChildren) {
+        this.showChildren = showChildren;
+    }
+
     void setShowBranch(boolean showBranch) {
-        this.showBranch = showBranch;
+        setShow(showBranch);
+        setShowChildren(showBranch);
     }
 }

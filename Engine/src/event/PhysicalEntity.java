@@ -18,6 +18,7 @@ public abstract class PhysicalEntity implements Entity {
     public float drag = 0.999f;
     public boolean isAwake;
     public float vAvg;
+    public boolean collidable;
     
     public PhysicalEntity(BoundingBox b) {
 
@@ -29,6 +30,7 @@ public abstract class PhysicalEntity implements Entity {
         fg = new ArrayList<ForceGenerator>();
         isAwake = true;
         vAvg = 100;
+        collidable = true;
 
     }
     
@@ -91,6 +93,10 @@ public abstract class PhysicalEntity implements Entity {
         vAvg += velocity.lengthSquared() * 0.9;
         vAvg /= 1.3;
         return vAvg < 0.05;
+    }
+    
+    public boolean isCollidable() {
+        return collidable;
     }
     
 }

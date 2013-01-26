@@ -26,7 +26,7 @@ public class Terrain implements DisplayableEntity {
 
     public Terrain() {
 
-        this(Model.loadModel("island.obj"), Model.loadModel("island.obj"));
+        this(Model.loadModel("island_fixed.obj"), Model.loadModel("island_fixed.obj"));
 
     }
 

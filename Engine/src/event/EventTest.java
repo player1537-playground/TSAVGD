@@ -15,6 +15,9 @@ import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.util.vector.Vector3f;
 import static org.lwjgl.opengl.GL11.*;
 import character.*;
+import org.newdawn.slick.UnicodeFont;
+import sound.Sound;
+import sound.SoundManager;
 
 /**
  *
@@ -22,12 +25,12 @@ import character.*;
  */
 public class EventTest {
 
-    static final float width = 1024;
-    static final float height = 768;
+    static float width;
+    static float height;
     static long lastFrame = 0;
     static long lastFrameBottleNeck = 0;
     static Hud h;
-    static Player p;
+    public static Player p;
     static Terrain ter;
     static ArrayList<Entity> e;
     static ArrayList<DisplayableEntity> de;
@@ -35,10 +38,17 @@ public class EventTest {
     static PhysicalWorld w;
     static boolean paused = false;
     static boolean debounce = true;
+    static boolean fpsDebounce;
     static float dx, dy;
 
     public static void main(String[] argv) {
+        create(1024, 768);
+    }
 
+    public static void create(float width, float height) {
+
+        EventTest.width = width;
+        EventTest.height = height;
         init();
         run();
         destroy();
@@ -61,7 +71,13 @@ public class EventTest {
             //Mouse
             Mouse.setGrabbed(true);
             Mouse.create();
-            
+
+            //OpenAL
+            SoundManager.create();
+            Sound loading = SoundManager.createSound("res/jazz.wav");
+            loading.repeat();
+            loading.play();
+
             //OpenGL
             glClearColor(0f, 0f, 0f, 1f);
 
@@ -74,10 +90,10 @@ public class EventTest {
             glMatrixMode(GL_PROJECTION);
             glOrtho(0, width, height, 0, 1, -1);
             glMatrixMode(GL_MODELVIEW);
-            (new Menu(100, 100, false, Hud.load("res/load.png"), true, null, null)).draw();
+            (new HudGraphic(null, "LOADING", HudGraphic.loadFont("Arial", 48), 300, 100)).draw();
             Display.update();
 
-            
+
             glEnable(GL_DEPTH_TEST);
 
 
@@ -109,6 +125,12 @@ public class EventTest {
             glEnable(GL_FOG);                   // Enables GL_FOG
 
             //Misc
+
+            e = new ArrayList<Entity>();
+            de = new ArrayList<DisplayableEntity>();
+            pe = new ArrayList<PhysicalEntity>();
+
+
             p = new Player();
             p.init();
             p.setPosition(new Vector3f(0, 10, 0));
@@ -119,7 +141,7 @@ public class EventTest {
                     return new Vector3f(0, -e.getMass() * 20, 0);
                 }
             });
-            System.out.println("Start");
+            System.out.println("Start Terrain");
             ter = new Terrain(p);
             System.out.println("DONE");
             SkyDome sky = new SkyDome();
@@ -129,7 +151,7 @@ public class EventTest {
             //Vector3f waterPosition = new Vector3f(-50, 3, -50);
             //Water water = new Water(waterPosition, 50, 50, 2, 100, 100);
             h = new Hud(width, height);
-            
+
             Person per = new Person();
             per.b.setPosition(new Vector3f(0, 20, 0));
             per.fg.add(new ForceGenerator() {
@@ -139,8 +161,7 @@ public class EventTest {
                     return new Vector3f(0, -e.getMass() * 20, 0);
                 }
             });
-            
-            e = new ArrayList<Entity>();
+
             e.add(sky);
             e.add(ter);
             e.add(p);
@@ -148,14 +169,12 @@ public class EventTest {
             e.add(per);
             e.add(h);
 
-            de = new ArrayList<DisplayableEntity>();
             de.add(sky);
             de.add(ter);
             //de.add(water);
             de.add(per);
             de.add(h);
 
-            pe = new ArrayList<PhysicalEntity>();
             pe.add(per);
             pe.add(p);
 
@@ -164,6 +183,9 @@ public class EventTest {
             //Timer
             getDelta();
             getDeltaBottleNeck();
+
+            DebugMessages.setShow(true);
+            loading.stop();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -174,23 +196,29 @@ public class EventTest {
 
     private static void run() {
 
+        Sound music = SoundManager.createSound("looping.wav");
+        music.repeat();
+        music.setVolume(0.4f);
+        music.play();
         while (!Display.isCloseRequested() && !Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
 
             getDeltaBottleNeck();
-            
+
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
             int delta = getDelta();
-            System.out.println("FPS " + 1000f / delta);
+ 
+            DebugMessages.addMessage("FPS", "" + 1000f / delta);
             //System.out.println("Total " + delta);
 
             processInputs();
-            
+
             for (int i = 0; i < 3; i++) {
                 update(delta / 3);
             }
 
             render();
+            SoundManager.update(delta);
             Display.update();
             Display.sync(60);
 
@@ -203,6 +231,7 @@ public class EventTest {
         Display.destroy();
         Keyboard.destroy();
         Mouse.destroy();
+        SoundManager.destroy();
         System.exit(0);
 
     }
@@ -246,6 +275,11 @@ public class EventTest {
             Mouse.setGrabbed(!paused);
         }
         debounce = keyP;
+        boolean keyF = Keyboard.isKeyDown(Keyboard.KEY_F);
+        if (!fpsDebounce && keyF) {
+            DebugMessages.setShow(!DebugMessages.getShow());
+        }
+        fpsDebounce = keyF;
     }
 
     private static void processMouse() {
@@ -290,5 +324,23 @@ public class EventTest {
 
     public static float getDy() {
         return dy;
+    }
+
+    public static void addEntity(Entity ent) {
+        e.add(ent);
+    }
+
+    public static void addDisplayableEntity(DisplayableEntity dEnt) {
+        de.add(dEnt);
+    }
+
+    public static void addPhysicalEntity(PhysicalEntity pEnt) {
+        pe.add(pEnt);
+    }
+
+    public static void addAbstractEntity(AbstractEntity aEnt) {
+        addEntity(aEnt);
+        addDisplayableEntity(aEnt);
+        addPhysicalEntity(aEnt);
     }
 }

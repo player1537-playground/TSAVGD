@@ -22,6 +22,8 @@ public class Player extends PhysicalEntity {
     boolean collision = false;
     int count = 0;
     boolean space = false;
+    PhysicalEntity[] rayCast;
+    int rayCastCounter;
 
     public Player() {
 
@@ -65,7 +67,7 @@ public class Player extends PhysicalEntity {
                     z *= 3;
                     if (!space && keySpace && count == 0) {
                         count = 80;
-                        y = 170;
+                        y = 100;
                     }
                 }
                 if (keyShift) {
@@ -93,6 +95,34 @@ public class Player extends PhysicalEntity {
                 return force;
             }
         });
+        
+        rayCast = new PhysicalEntity[6];
+        for(int i = 0; i < rayCast.length; i++) {
+            rayCast[i] = new PhysicalEntity(new BoundingBox(new Vector3f(), new Vector3f(.1f, .1f, .1f))) {
+
+                {
+                    invMass = 1000;
+                    collidable = false;
+                }
+                @Override
+                public void collide(ArrayList<Triangle> cols) {
+                }
+
+                @Override
+                public void collide(PhysicalEntity col) {
+                    if(!(col instanceof Player))
+                        System.out.println("CONVERSATION");
+                }
+
+                @Override
+                public void update(int delta) {
+                }
+            };
+            
+            //Raycasting not implemented!!!!!!!
+            //EventTest.addEntity(rayCast[i]);
+            //EventTest.addPhysicalEntity(rayCast[i]);
+        }
 
     }
 
@@ -122,6 +152,20 @@ public class Player extends PhysicalEntity {
         }
 
         v.setAngle(xAngle, yAngle, 0);
+        
+        rayCast[rayCastCounter].setPosition(getMiddle());
+        float rayCastSpeed = 100;
+        double radX = Math.toRadians(xAngle);
+        double radY = Math.toRadians(yAngle);
+        double horLength = Math.cos(radX);
+        Vector3f rayCastVel = (Vector3f)(new Vector3f((float)(horLength * -Math.sin(radY)),
+                (float)Math.sin(radX), (float)(horLength * Math.cos(radY)))).scale(rayCastSpeed);
+        Vector3f.add(rayCastVel, velocity, rayCastVel);
+        rayCast[rayCastCounter].setVelocity(rayCastVel);
+        rayCast[rayCastCounter].integrate(delta / 1000f);
+        if(++rayCastCounter == rayCast.length) {
+            rayCastCounter = 0;
+        }
 
     }
 

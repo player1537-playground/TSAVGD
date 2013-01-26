@@ -10,11 +10,11 @@ import org.lwjgl.input.Mouse;
 import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
 import org.newdawn.slick.util.ResourceLoader;
-import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.font.effects.ColorEffect;
 import static org.lwjgl.opengl.GL11.*;
 import org.lwjgl.util.vector.Vector3f;
 import org.newdawn.slick.SlickException;
+import sound.*;
 
 /**
  *
@@ -23,41 +23,57 @@ import org.newdawn.slick.SlickException;
 public class Hud implements DisplayableEntity {
 
     static float width, height;
-    Menu pauseMenu;
-    Menu itemBar;
+    static ArrayList<DisplayableEntity> graphics = new ArrayList<DisplayableEntity>();
+    static Menu pauseMenu;
+    static Menu itemBar;
     boolean debounce;
 
     public Hud(float width, float height) {
         this.width = width;
         this.height = height;
-        Texture menuTex = Hud.load("res/tree.png");
+        HudGraphic menu = new HudGraphic(Hud.load("res/tree.png"), null);
         Texture menuItemTex = Hud.load("res/test.png");
-        Texture itemBarTex = Hud.load("res/item_bar_test.png");
-        Texture itemTex = Hud.load("res/bullet.png");
+        HudGraphic itemBarGraphic = new HudGraphic(Hud.load("res/item_bar_test.png"), null);
+        HudGraphic item = new HudGraphic(Hud.load("res/bullet.png"), null);
+        final Sound ding = SoundManager.createSound("res/ding.wav");
 
         Menu[] menuItems = new Menu[6];
+        String[] subMenuText = {"Items", "Character", "Options", "Save", "Quit", "Continue"};
         for (int i = 0; i < menuItems.length; i++) {
-            menuItems[i] = new Menu(64, 100 + 96 * i, false, menuItemTex, true, null, new Event() {
+            menuItems[i] = new Menu(64, 100 + 96 * i, false, new HudGraphic(menuItemTex, subMenuText[i]), true, null, new Event() {
 
                 @Override
                 public void execute() {
                     pauseMenu.hide();
+                    Menu[] items = pauseMenu.sub;
+                    for (Menu m : items) {
+                        m.hide();
+                    }
+                    
+                    ding.play(true);
                 }
             });
         }
-        pauseMenu = new Menu(width - menuTex.getImageWidth(), 0, false, menuTex, true, menuItems, null);
+        pauseMenu = new Menu(width - menu.getWidth(), 0, false, menu, true, menuItems, null);
         pauseMenu.hideBranch();
 
         Menu[] items = new Menu[7];
         for (int i = 0; i < items.length; i++) {
-            items[i] = new Menu(16 + 72 * i, 10, false, itemTex, true, null, null);
+            items[i] = new Menu(16 + 72 * i, 10, false, item, true, null, null);
         }
-        itemBar = new Menu((width - itemBarTex.getImageWidth()) / 2, height - itemBarTex.getImageHeight(), false, itemBarTex, true, items, null);
-        
+        itemBar = new Menu((width - itemBarGraphic.getWidth()) / 2, height - itemBarGraphic.getHeight(), false, itemBarGraphic, true, items, null);
+
         debounce = true;
+        
+        graphics.add(pauseMenu);
+        graphics.add(itemBar);
 
     }
 
+    public static void addGraphic(DisplayableEntity d) {
+        graphics.add(d);
+    }
+    
     @Override
     public void draw() {
         glPushMatrix();
@@ -71,8 +87,10 @@ public class Hud implements DisplayableEntity {
         glOrtho(0, width, height, 0, 1, -1);
         glMatrixMode(GL_MODELVIEW);
 
-        pauseMenu.draw();
-        itemBar.draw();
+        for(DisplayableEntity d : graphics) {
+            d.draw();
+        }
+        DebugMessages.draw();
 
         glMatrixMode(GL_PROJECTION);
         glPopMatrix();
@@ -104,5 +122,16 @@ public class Hud implements DisplayableEntity {
     public void setPause(boolean paused) {
         pauseMenu.setShowBranch(paused);
         itemBar.setShowBranch(!paused);
+        if (!paused) {
+            resetMenu();
+        }
+    }
+
+    private void resetMenu() {
+        Menu[] items = pauseMenu.sub;
+        for (Menu m : items) {
+            m.hideChildren();
+            m.show = true;
+        }
     }
 }

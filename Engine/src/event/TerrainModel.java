@@ -31,7 +31,7 @@ public class TerrainModel {
     int indices;
     int sectionx, sectionz;
     Vector3f min, max;
-    static String defaultTexture = "terrain.png";
+    static String defaultTexture = "grass.png";
     private float multx, multz;
 
     public enum Section {
@@ -52,7 +52,7 @@ public class TerrainModel {
                 add(new Vector3f(1, 1, 0));
             }
         };
-        System.out.println(t.getTextureID());
+        System.out.println("Model loaded " + t.getTextureID());
         tex = new Texture[]{t};
         indices = glGenLists(faces.length * faces[0].length);
         sectionx = faces.length;
@@ -91,7 +91,6 @@ public class TerrainModel {
                     ResourceLoader.getResourceAsStream("res/" + mPath)));
             String currentLine;
             while ((currentLine = reader.readLine()).startsWith("#")) {
-                System.out.println(currentLine);
                 String[] splitLine = currentLine.split(" ");
                 if (currentLine.startsWith("#min ")) {
                     min = new Vector3f(
@@ -189,7 +188,6 @@ public class TerrainModel {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println(realvertCount);
         return new TerrainModel(verts, normals, faces, getTexture(tPath), min, max);
 
     }
