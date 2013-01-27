@@ -1,0 +1,70 @@
+#!/bin/bash
+
+function compile() {
+    LIB=../../lib
+    first=${1:-.}
+    shift
+    files=
+    for i in $first "$@"; do
+	for f in ${i%%/}/*.java; do
+	    files="${files} $f"
+	done
+    done
+    
+    javac -cp .:$LIB/lwjgl-2.8.4/res:$LIB/lwjgl-2.8.4/jar/lwjgl.jar:$LIB/lwjgl-2.8.4/jar/lwjgl_test.jar:$LIB/lwjgl-2.8.4/jar/lwjgl_util.jar:$LIB/lwjgl-2.8.4/jar/jinput.jar:$LIB/slick-util/slick-util.jar:$LIB/slick/slick.jar: $files
+}
+
+function run() {
+    if [ -z "$1" ]; then
+	echo "Usage: $(basename $0) package.ClassName"
+	echo "  Runs package.ClassName (if you are located in Engine/)"
+	exit 1
+    fi
+    
+    if ! [ -d lib -a -d src -a -d res ]; then
+	echo "You're in the wrong directory, move to Engine/"
+	exit 2
+    fi
+    
+    LIB=lib
+    java -cp src/:$LIB/lwjgl-2.8.4/jar/lwjgl.jar:$LIB/lwjgl-2.8.4/jar/lwjgl_util.jar:$LIB/lwjgl-2.8.4/jar/jinput.jar:$LIB/slick-util/slick-util.jar:$LIB/slick/slick.jar: -Djava.library.path=$LIB/lwjgl-2.8.4/native/linux/ event.EventTest
+}
+
+function install() {
+    if [ -d scripts ]; then
+	echo "Changed path"
+	export PATH=$PATH:$PWD/scripts/
+    else
+	echo "Wrong directory, move to the root directory (root/scripts/../)"
+	exit 1
+    fi
+}    
+
+function usage() {
+    echo "Usage: $(basename $0) [command] [args]"
+    echo "Commands:"
+    sed "$0" -ne 's/^[ \t]*do\([a-z]\{1,\}[ \t]*\)).*/   \1/p'
+}
+
+function edittsa() {
+    exec $EDITOR "$0"
+}
+
+function editcode() {
+    
+}
+
+function main() {
+    what="$1"
+    shift
+
+    case do$what in
+	docompile) compile "$@";;
+	doinstall) install "$@";;
+	dorun) run "$@";;
+	doedittsa) edittsa "$@";;
+	do*      ) usage "$@";;
+    esac
+}
+
+main "$@"
