@@ -6,6 +6,7 @@ package event;
 
 import java.util.HashMap;
 import java.util.Set;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.UnicodeFont;
 
 /**
@@ -44,7 +45,7 @@ public class DebugMessages {
             messages.keySet().toArray(names);
             for (int i = 0; i < names.length; i++) {
                 String name = names[i];
-                font.drawString(10, 10 + i * 10, name + ": " + messages.get(name));
+                font.drawString(10, 10 + i * 16, name + ": " + messages.get(name), Color.red);
             }
         }
     }

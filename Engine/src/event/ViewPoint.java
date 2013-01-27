@@ -106,13 +106,17 @@ public class ViewPoint {
 
     public void setPosition(float x, float y, float z) {
 
-        this.position = new Vector3f(x, y, z);
+        setPosition(new Vector3f(x, y, z));
 
     }
 
     public void setPosition(Vector3f v) {
 
         this.position = v;
+        DebugMessages.addMessage("Position", 
+                "" + String.format("%.4g", position.getX()) + 
+                " " + String.format("%.4g", position.getY()) + 
+                " " + String.format("%.4g", position.getZ()));
 
     }
 

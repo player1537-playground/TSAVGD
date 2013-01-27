@@ -15,6 +15,7 @@ import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.util.vector.Vector3f;
 import static org.lwjgl.opengl.GL11.*;
 import character.*;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.UnicodeFont;
 import sound.Sound;
 import sound.SoundManager;
@@ -37,12 +38,20 @@ public class EventTest {
     static ArrayList<PhysicalEntity> pe;
     static PhysicalWorld w;
     static boolean paused = false;
-    static boolean debounce = true;
-    static boolean fpsDebounce;
+    static boolean pauseDebounce;
+    static boolean debugDebounce;
+    static boolean muteDebounce;
     static float dx, dy;
+    
 
     public static void main(String[] argv) {
-        create(1024, 768);
+        if(argv == null || argv.length != 2) {
+            create(1024, 768);
+        } else {
+            int width = Integer.parseInt(argv[0]);
+            int height = Integer.parseInt(argv[1]);
+            create(width, height);
+        }
     }
 
     public static void create(float width, float height) {
@@ -61,6 +70,7 @@ public class EventTest {
 
             //Display
             Display.setDisplayMode(new DisplayMode((int) width, (int) height));
+            Display.setFullscreen(true);
             Display.setVSyncEnabled(true);
             Display.setTitle("Engine");
             Display.create();
@@ -79,8 +89,9 @@ public class EventTest {
             loading.play();
 
             //OpenGL
+            glViewport(0, 0, (int)width, (int)height);
+            
             glClearColor(0f, 0f, 0f, 1f);
-
 
             glEnable(GL_TEXTURE_2D);
             glEnable(GL_BLEND);
@@ -90,7 +101,7 @@ public class EventTest {
             glMatrixMode(GL_PROJECTION);
             glOrtho(0, width, height, 0, 1, -1);
             glMatrixMode(GL_MODELVIEW);
-            (new HudGraphic(null, "LOADING", HudGraphic.loadFont("Arial", 48), 300, 100)).draw();
+            (new HudGraphic(null, "LOADING", HudGraphic.loadFont("Arial", 48, "WHITE"), 300, 100)).draw();
             Display.update();
 
 
@@ -107,9 +118,12 @@ public class EventTest {
 
             glEnable(GL_LIGHTING);
             glEnable(GL_LIGHT0);
-            glLightModel(GL_LIGHT_MODEL_AMBIENT, asFloatBuffer(new float[]{0.4f, 0.4f, 0.3f, 1f}));
-            glLight(GL_LIGHT0, GL_DIFFUSE, asFloatBuffer(new float[]{.8f, .8f, .8f, 1}));
-            glLight(GL_LIGHT0, GL_POSITION, asFloatBuffer(new float[]{0f, 200f, 0f, 1}));
+            glLightModel(GL_LIGHT_MODEL_AMBIENT, asFloatBuffer(new float[]{0.2f, 0.2f, 0.15f, 1f}));
+            glLight(GL_LIGHT0, GL_DIFFUSE, asFloatBuffer(new float[]{.35f, .35f, .35f, 1}));
+            glLight(GL_LIGHT0, GL_POSITION, asFloatBuffer(new float[]{0f, 200f, -300f, 1}));
+            glEnable(GL_LIGHT1);
+            glLight(GL_LIGHT1, GL_DIFFUSE, asFloatBuffer(new float[]{.7f, .7f, .7f, 1}));
+            glLight(GL_LIGHT1, GL_POSITION, asFloatBuffer(new float[]{0f, 20f, 0f, 1}));
             glEnable(GL_COLOR_MATERIAL);
             glColorMaterial(GL_FRONT, GL_DIFFUSE);
             //float specReflection[] = {0.3f, 0.3f, 0.3f, 1f};
@@ -269,17 +283,24 @@ public class EventTest {
 
     private static void processKeyboard() {
         boolean keyP = Keyboard.isKeyDown(Keyboard.KEY_P);
-        if (!debounce && keyP) {
+        if (!pauseDebounce && keyP) {
             paused = !paused;
             h.setPause(paused);
             Mouse.setGrabbed(!paused);
         }
-        debounce = keyP;
+        pauseDebounce = keyP;
+        
         boolean keyF = Keyboard.isKeyDown(Keyboard.KEY_F);
-        if (!fpsDebounce && keyF) {
+        if (!debugDebounce && keyF) {
             DebugMessages.setShow(!DebugMessages.getShow());
         }
-        fpsDebounce = keyF;
+        debugDebounce = keyF;
+        
+        boolean keyM = Keyboard.isKeyDown(Keyboard.KEY_M);
+        if (!muteDebounce && keyM) {
+            SoundManager.mute(!SoundManager.isMuted());
+        }
+        muteDebounce = keyM;
     }
 
     private static void processMouse() {

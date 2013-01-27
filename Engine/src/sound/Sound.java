@@ -19,6 +19,7 @@ public class Sound {
     boolean playing;
     int delay;
     int counter;
+    float volume;
 
     Sound(int buffer, int delay) {
         System.out.println("Buffer " + buffer);
@@ -26,6 +27,7 @@ public class Sound {
         alSourcei(source, AL_BUFFER, buffer);
         this.playing = false;
         this.delay = delay;
+        this.volume = 1f;
     }
 
     Sound(int buffer, Vector3f pos, int delay) {
@@ -63,7 +65,16 @@ public class Sound {
     }
 
     public void setVolume(float volume) {
+        this.volume = volume;
         alSourcef(source, AL_GAIN, volume);
+    }
+
+    public void mute(boolean muted) {
+        if(muted) {
+            setVolume(0);
+        } else {
+            setVolume(volume);
+        }
     }
 
     void update(int delta) {

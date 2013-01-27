@@ -31,13 +31,17 @@ public class HudGraphic implements DisplayableEntity {
         fonts = new ArrayList<UnicodeFont>();
         fonts.add(loadFont("Times New Roman", 40));
     }
-    
+
     public static UnicodeFont loadFont(String name, float size) {
-        
+        return loadFont(name, size, "BLACK");
+    }
+    
+    public static UnicodeFont loadFont(String name, float size, String colorName) {
+
         Font awtFont = new Font(name, Font.BOLD, 24);
         UnicodeFont f = new UnicodeFont(awtFont.deriveFont(0, size));
         f.addAsciiGlyphs();
-        f.getEffects().add(new ColorEffect(java.awt.Color.BLACK));
+        f.getEffects().add(new ColorEffect(java.awt.Color.getColor(colorName)));
         try {
             f.loadGlyphs();
         } catch (SlickException ex) {
@@ -103,5 +107,13 @@ public class HudGraphic implements DisplayableEntity {
 
     public int getHeight() {
         return this.height;
+    }
+
+    public void setMessage(String text) {
+        this.text = text;
+    }
+
+    public String getMessage() {
+        return this.text;
     }
 }

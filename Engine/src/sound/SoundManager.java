@@ -29,6 +29,7 @@ public class SoundManager {
     static HashMap<String, Integer> buffers;
     static HashMap<String, Integer> lengths;
     static ArrayList<Sound> sounds;
+    private static boolean muted;
 
     public static void create() {
         try {
@@ -73,6 +74,13 @@ public class SoundManager {
         return s;
     }
     
+    public static void mute(boolean muted) {
+        SoundManager.muted = muted;
+        for(Sound s : sounds) {
+            s.mute(muted);
+        }
+    }
+    
     static private void loadSound(String path) {
         if (!buffers.containsKey(path)) {
             WaveData data = WaveData.create(new BufferedInputStream(
@@ -95,5 +103,9 @@ public class SoundManager {
     private static int lengthFromPath(String path) {
         loadSound(path);
         return lengths.get(path);
+    }
+
+    public static boolean isMuted() {
+        return muted;
     }
 }

@@ -23,6 +23,12 @@ public class Menu implements DisplayableEntity {
     boolean showChildren;
     Event event;
 
+    public Menu(float x, float y, boolean absolute, boolean show, Menu[] sub) {
+        
+        this(x, y, 0, 0, absolute, null, show, sub, null);
+        
+    }
+    
     public Menu(float x, float y, boolean absolute, HudGraphic hg, boolean show, Menu[] sub, Event event) {
 
         this(x, y, hg.getWidth(), hg.getHeight(), absolute, hg, show, sub, event);
@@ -49,7 +55,7 @@ public class Menu implements DisplayableEntity {
 
     @Override
     public void draw() {
-        if (show) {
+        if (show && de != null) {
             glPushMatrix();
             glTranslatef(x, y, 0);
             de.draw();
