@@ -6,9 +6,9 @@ This is a simple game being developed by the Farragut High School TSA team for t
 
 Description
 
-A work in progress, the game now features expansive maps, realistic lighting, a functional physics engine, support for sound, a 2d UI, a fledgling ai, and primitive character animation. The levels are lacking but the eventual plot is as follows:
+A work in progress, the game now features expansive maps, realistic lighting, a functional physics engine, support for sound, a 2d UI, a fledgling ai, and primitive character animation. The levels are lacking but the eventual plot is along the lines of:
 
-	The game features an immmersive three-dimensional first-person experience utilizing the Lightweight Java Game Library. The player wakes on a tropical island with no recollection of his arrival. Their adventure begins as they are found by the diminishing local tribe. They can choose to aid the village and return it to its former glory through challenging puzzle dynamics, or go at it alone and explore the deep secrets the island holds with realistic landscapes and formations. As the player uncovers their past, they are be forced choose their destiny.
+The game features an immmersive three-dimensional first-person experience utilizing the Lightweight Java Game Library. The player wakes on a tropical island with no recollection of his arrival. Their adventure begins as they are found by the diminishing local tribe. They can choose to aid the village and return it to its former glory through challenging puzzle dynamics, or go at it alone and explore the deep secrets the island holds with realistic landscapes and formations. As the player uncovers their past, they are be forced choose their destiny.
 
 Gameplay
 
