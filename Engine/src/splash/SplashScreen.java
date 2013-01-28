@@ -61,7 +61,7 @@ public class SplashScreen {
         glOrtho(0, width, height, 0, 1, -1);
         glMatrixMode(GL_MODELVIEW);
 
-        Texture button = Hud.load("play.png");
+        Texture button = Hud.load("res/play.png");
         HudGraphic play = new HudGraphic(button, "Play", HudGraphic.fonts.get(0), 65, 7);
         res = new HudGraphic(button, resolutions[resIndex], HudGraphic.loadFont("Times New Roman", 28), 16, 14);
         Menu playButton = new Menu(0, 0, false, play, true, null, new Event() {
@@ -77,7 +77,7 @@ public class SplashScreen {
             }
         });
         Menu[] menuWrapper = {new Menu((width - play.getWidth()) / 2, 200, false, true, new Menu[]{playButton, resButton})};
-        Menu m = new Menu(0, 0, true, new HudGraphic(Hud.load("splash_background.png"), null), true, menuWrapper, null);
+        Menu m = new Menu(0, 0, true, new HudGraphic(Hud.load("res/splash_background.png"), null), true, menuWrapper, null);
 
         SoundManager.create();
         Sound openingMusic = SoundManager.createSound("res/opening.wav");

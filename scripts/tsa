@@ -43,15 +43,51 @@ function install() {
 function usage() {
     echo "Usage: $(basename $0) [command] [args]"
     echo "Commands:"
-    sed "$0" -ne 's/^[ \t]*do\([a-z]\{1,\}[ \t]*\)).*/   \1/p'
+    sed "$0" -ne 's/^[ \t]*do\([a-z-]\{1,\}[ \t]*\)).*/   \1/p'
 }
 
 function edittsa() {
-    exec $EDITOR "$0"
+    editcode "$0"
 }
 
 function editcode() {
-    
+    local file dir curfile
+    file="$1"
+    if [ -f "$file" ]; then
+        emacsclient --no-wait "$file"
+    else
+	curfile=$(find src/ -name $file.java)
+	if [ -n "$curfile" ]; then
+	    editcode $curfile
+	fi
+	if [ -n "${file//[^.]/}" ]; then
+	    editcode "src/${file//\.//}.java"
+	fi
+    fi
+}
+
+function create-jar() {
+    if [ ! -d jar ]; then
+	echo "Move to Engine/"
+    fi
+    tsa compile-default && \
+	(cd jar; ./create-windows.sh) && \
+	echo "Done" && \
+	read && \
+	cp jar/fat-windows.jar /mnt/usb/
+}
+
+function compile-default() {
+    if [ ! -d src/ ]; then
+	echo "Move to Engine/"
+	exit 1
+    fi
+    cd src/event
+    compile ../{event,character,sound,splash}
+}
+
+function run-default() {
+    run event.EventTest
 }
 
 function main() {
@@ -62,8 +98,13 @@ function main() {
 	docompile) compile "$@";;
 	doinstall) install "$@";;
 	dorun) run "$@";;
+	doem) editcode "$@";;
 	doedittsa) edittsa "$@";;
-	do*      ) usage "$@";;
+	docompile-default) compile-default "$@";;
+	dojar) create-jar "$@";;
+	dorun-default) run-default "$@";;
+	do-h|do--help|do) usage "$@";;
+	do*) editcode "$what";;
     esac
 }
 

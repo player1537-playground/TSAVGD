@@ -203,14 +203,13 @@ public class EventTest {
 
         } catch (Exception e) {
             e.printStackTrace();
-            System.exit(0);
+            System.exit(1);
         }
-
     }
 
     private static void run() {
 
-        Sound music = SoundManager.createSound("looping.wav");
+        Sound music = SoundManager.createSound("res/looping.wav");
         music.repeat();
         music.setVolume(0.4f);
         music.play();
@@ -229,7 +228,7 @@ public class EventTest {
 
             for (int i = 0; i < 3; i++) {
                 update(delta / 3);
-            }
+	    }
 
             render();
             SoundManager.update(delta);

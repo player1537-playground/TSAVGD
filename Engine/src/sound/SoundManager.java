@@ -11,6 +11,7 @@ package sound;
 import event.Entity;
 import event.EventTest;
 import java.io.BufferedInputStream;
+import java.io.FileInputStream;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -82,12 +83,14 @@ public class SoundManager {
     }
     
     static private void loadSound(String path) {
+	WaveData data = null;
         if (!buffers.containsKey(path)) {
-            WaveData data = WaveData.create(new BufferedInputStream(
-                    ResourceLoader.getResourceAsStream(path)));
+	    data = WaveData.create(new BufferedInputStream(ResourceLoader.getResourceAsStream(path)));
             int buffer = alGenBuffers();
             alBufferData(buffer, data.format, data.data, data.samplerate);
-            int length = (int)((float)data.data.capacity() / (data.format == AL_FORMAT_STEREO16 ? 4 : 2) / data.samplerate * 1000);
+            int length = (int)((float)data.data.capacity() / 
+			       (data.format == AL_FORMAT_STEREO16 ? 4 : 2) /
+			       data.samplerate * 1000);
             System.out.println("Sound " + path);
             lengths.put(path, length);
             data.dispose();

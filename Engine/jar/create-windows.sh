@@ -19,7 +19,8 @@ jar cmfv0 manifest windows.jar \
     -C $src character \
     -C $src splash \
     -C $src event \
-    -C $root res 
+    -C $src sound \
+    -C $root res
 #    $lwjgl/lwjgl.jar \
 #    $lwjgl/lwjgl_util.jar \
 #    $lwjgl/jinput.jar \

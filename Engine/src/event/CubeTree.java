@@ -26,6 +26,10 @@ public class CubeTree<T extends Boundable> {
     int numChildren = 0;
     // TODO: Delete
     int max = -1;
+    static int total = 0;
+    static int timesCalled = 0;
+    static boolean alreadyCounting = false;
+    static int totalObjects = 0;
 
     public CubeTree(T[] objects, BoundingBox boundary) {
 
@@ -42,11 +46,12 @@ public class CubeTree<T extends Boundable> {
 
         this.boundary = boundary;
         this.objects = new ArrayList<T>();
-
+	total++;
     }
 
     public boolean insert(T object) {
-
+	totalObjects++;
+	boolean hasInserted = false;
         if (!boundary.contains(object.getBounds())) {
             return false;
         }
@@ -57,45 +62,54 @@ public class CubeTree<T extends Boundable> {
 
         if (northwesttop.insert(object)) {
             numChildren++;
-            return true;
+            hasInserted = true;
         }
         if (northeasttop.insert(object)) {
             numChildren++;
-            return true;
+            hasInserted = true;
         }
         if (southwesttop.insert(object)) {
             numChildren++;
-            return true;
+            hasInserted = true;
         }
         if (southeasttop.insert(object)) {
             numChildren++;
-            return true;
+            hasInserted = true;
         }
 
         if (northwestbottom.insert(object)) {
             numChildren++;
-            return true;
+            hasInserted = true;
         }
         if (northeastbottom.insert(object)) {
             numChildren++;
-            return true;
+            hasInserted = true;
         }
         if (southwestbottom.insert(object)) {
             numChildren++;
-            return true;
+            hasInserted = true;
         }
         if (southeastbottom.insert(object)) {
             numChildren++;
-            return true;
+            hasInserted = true;
         }
-
-        this.objects.add(object);
-
-        return true;
+	if (!hasInserted) {
+	    this.objects.add(object);
+	    
+	    return true;
+	}
+	return false;
 
     }
 
     public ArrayList<T> queryRange(BoundingBox range) {
+	boolean iStartedCounting = false;
+	if (!alreadyCounting) {
+	    timesCalled = 0;
+	    alreadyCounting = true;
+	    iStartedCounting = true;
+	}
+	timesCalled++;
 
         ArrayList<T> objectsInRange = new ArrayList<T>();
 
@@ -105,6 +119,7 @@ public class CubeTree<T extends Boundable> {
 
         }
 
+	/*
         for (int i = 0; i < objects.size(); i++) {
 
             if (range.intersects(objects.get(i).getBounds())) {
@@ -113,10 +128,11 @@ public class CubeTree<T extends Boundable> {
 
             }
 
-        }
+	    }
+	*/
 
         if (northwesttop == null) {
-
+	    System.out.println("Exiting early");
             return objectsInRange;
 
         }
@@ -150,8 +166,16 @@ public class CubeTree<T extends Boundable> {
             max = objectsInRange.size();
             System.out.println("Max: " + max);
         }
+	System.out.println("Max: " + max);
+	System.out.println("Total: " + total);
+	if (iStartedCounting) {
+	    System.out.println("Called " + timesCalled + " times");
+	    alreadyCounting = false;
+	}
+	System.out.println("timesCalled: " + timesCalled);
+	System.out.println("total objects: " + totalObjects);
+	System.out.println("this.objects.size(): " + objects.size());
         return objectsInRange;
-
     }
 
     private void subdivide() {
