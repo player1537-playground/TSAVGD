@@ -115,7 +115,7 @@ public class CubeTree<T extends Boundable> {
 				     (float)(min.getY() + mymax.getY()) / 2.0f,
 				     (float)(min.getZ() + mymax.getZ()) / 2.0f);
 	Vector3f max = boundary.getDimension();
-        Vector3f half = (Vector3f) new Vector3f(mymax).scale(0.5f);
+        Vector3f half = (Vector3f) new Vector3f(max).scale(0.5f);
 				    
 
 	System.out.println(myNumber + ": Subdividing" + boundary);
