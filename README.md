@@ -1,6 +1,5 @@
-TSAVGD
+TSAVGD Voyager
 ======
-Voyager
 
 This is a simple game being developed by the Farragut High School TSA team for the 2013 TSA competions. 
 
