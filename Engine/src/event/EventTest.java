@@ -292,6 +292,7 @@ public class EventTest {
         boolean keyF = Keyboard.isKeyDown(Keyboard.KEY_F);
         if (!debugDebounce && keyF) {
             DebugMessages.setShow(!DebugMessages.getShow());
+	    p.setPosition(new Vector3f(0, 20, 0));
         }
         debugDebounce = keyF;
         

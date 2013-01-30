@@ -13,17 +13,14 @@ import org.lwjgl.util.vector.Vector3f;
  */
 public class CubeTree<T extends Boundable> {
 
+    final int MAX_OBJECTS = 1000;
+
     ArrayList<T> objects;
-    CubeTree northwesttop;
-    CubeTree northeasttop;
-    CubeTree southwesttop;
-    CubeTree southeasttop;
-    CubeTree northwestbottom;
-    CubeTree northeastbottom;
-    CubeTree southwestbottom;
-    CubeTree southeastbottom;
+    boolean hasSubdivided = false;
+    CubeTree children[];
     BoundingBox boundary;
     int numChildren = 0;
+    int myNumber = 0;
     // TODO: Delete
     int max = -1;
     static int total = 0;
@@ -46,160 +43,102 @@ public class CubeTree<T extends Boundable> {
 
         this.boundary = boundary;
         this.objects = new ArrayList<T>();
-	total++;
+	this.hasSubdivided = false;
+	myNumber = total++;
     }
 
-    public boolean insert(T object) {
-	totalObjects++;
-	boolean hasInserted = false;
-        if (!boundary.contains(object.getBounds())) {
-            return false;
+    public void insert(T object) {
+        if (!boundary.intersects(object.getBounds())) {
+            return;
         }
-
-        if (northwesttop == null) {
-            subdivide();
-        }
-
-        if (northwesttop.insert(object)) {
-            numChildren++;
-            hasInserted = true;
-        }
-        if (northeasttop.insert(object)) {
-            numChildren++;
-            hasInserted = true;
-        }
-        if (southwesttop.insert(object)) {
-            numChildren++;
-            hasInserted = true;
-        }
-        if (southeasttop.insert(object)) {
-            numChildren++;
-            hasInserted = true;
-        }
-
-        if (northwestbottom.insert(object)) {
-            numChildren++;
-            hasInserted = true;
-        }
-        if (northeastbottom.insert(object)) {
-            numChildren++;
-            hasInserted = true;
-        }
-        if (southwestbottom.insert(object)) {
-            numChildren++;
-            hasInserted = true;
-        }
-        if (southeastbottom.insert(object)) {
-            numChildren++;
-            hasInserted = true;
-        }
-	if (!hasInserted) {
-	    this.objects.add(object);
-	    
-	    return true;
+	if (!hasSubdivided) {
+	    if (objects.size() > MAX_OBJECTS) {
+		subdivide();
+		ArrayList<T> oldObjects = objects;
+		objects = new ArrayList<T>();
+		for (T obj : oldObjects) {
+		    insert(obj);
+		}
+	    } else {
+		objects.add(object);
+	    }
+	} else {
+	    for (CubeTree cubeTree : children) {
+		if (cubeTree.boundary.intersects(object.getBounds())) {
+		    cubeTree.insert(object);
+		}
+	    }
 	}
-	return false;
-
     }
 
     public ArrayList<T> queryRange(BoundingBox range) {
-	boolean iStartedCounting = false;
-	if (!alreadyCounting) {
-	    timesCalled = 0;
-	    alreadyCounting = true;
-	    iStartedCounting = true;
-	}
-	timesCalled++;
-
-        ArrayList<T> objectsInRange = new ArrayList<T>();
-
-        if (!boundary.intersects(range)) {
-
-            return objectsInRange;
-
-        }
-
-	/*
-        for (int i = 0; i < objects.size(); i++) {
-
-            if (range.intersects(objects.get(i).getBounds())) {
-
-                objectsInRange.add(objects.get(i));
-
-            }
-
+	ArrayList<T> objectsInRange = new ArrayList<T>();
+	if (!hasSubdivided) {
+	    // Therefore, there are 0<x<MAX_OBJECTS objects in `objects`
+	    for (T obj : objects) {
+		if (range.intersects(obj.getBounds())) {
+		    objectsInRange.add(obj);
+		}
 	    }
-	*/
-
-        if (northwesttop == null) {
-	    System.out.println("Exiting early");
-            return objectsInRange;
-
-        }
-
-        if (northwesttop.numChildren != 0) {
-            objectsInRange.addAll(northwesttop.queryRange(range));
-        }
-        if (northeasttop.numChildren != 0) {
-            objectsInRange.addAll(northeasttop.queryRange(range));
-        }
-        if (southwesttop.numChildren != 0) {
-            objectsInRange.addAll(southwesttop.queryRange(range));
-        }
-        if (southeasttop.numChildren != 0) {
-            objectsInRange.addAll(southeasttop.queryRange(range));
-        }
-        if (northwestbottom.numChildren != 0) {
-            objectsInRange.addAll(northwestbottom.queryRange(range));
-        }
-        if (northeastbottom.numChildren != 0) {
-            objectsInRange.addAll(northeastbottom.queryRange(range));
-        }
-        if (southwestbottom.numChildren != 0) {
-            objectsInRange.addAll(southwestbottom.queryRange(range));
-        }
-        if (southeastbottom.numChildren != 0) {
-            objectsInRange.addAll(southeastbottom.queryRange(range));
-        }
-
-        if (objectsInRange.size() > max) {
-            max = objectsInRange.size();
-            System.out.println("Max: " + max);
-        }
-	System.out.println("Max: " + max);
-	System.out.println("Total: " + total);
-	if (iStartedCounting) {
-	    System.out.println("Called " + timesCalled + " times");
-	    alreadyCounting = false;
+	} else {
+	    for (CubeTree cubeTree : children) {
+		if (cubeTree.boundary.intersects(range)) {
+		    objectsInRange.addAll(cubeTree.queryRange(range));
+		}
+	    }
+	    System.out.println("objectsInRange.size(): " + objectsInRange.size() + "  || total: " + total + "  || totalObjects: " + getEntitiesLength());
 	}
-	System.out.println("timesCalled: " + timesCalled);
-	System.out.println("total objects: " + totalObjects);
-	System.out.println("this.objects.size(): " + objects.size());
         return objectsInRange;
     }
 
+    private int getEntitiesLength() {
+	int count = objects.size();
+	if (hasSubdivided) {
+	    for (CubeTree cubeTree : children) {
+		count += cubeTree.getEntitiesLength();
+	    }
+	}
+	return count;
+    }
+
     private void subdivide() {
+	if (hasSubdivided) {
+	    System.err.println("Error!  Trying to subdivide an already subdivided CubeTree");
+	    System.exit(1);
+	}
+	hasSubdivided = true;
+	System.out.println("Subdividing" + boundary);
         Vector3f min = boundary.getMin();
-        Vector3f max = boundary.getDimension();
-        Vector3f half = (Vector3f) new Vector3f(max).scale(0.5f);
+	Vector3f mymax = boundary.getMax();
+	Vector3f myhalf = new Vector3f((float)(min.getX() + mymax.getX()) / 2.0f,
+				     (float)(min.getY() + mymax.getY()) / 2.0f,
+				     (float)(min.getZ() + mymax.getZ()) / 2.0f);
+	Vector3f max = boundary.getDimension();
+        Vector3f half = (Vector3f) new Vector3f(mymax).scale(0.5f);
+				    
 
-        northwestbottom = new CubeTree(new BoundingBox(min,
-                new Vector3f(half.getX(), half.getY(), half.getZ())));
-        northeastbottom = new CubeTree(new BoundingBox(new Vector3f(half.getX(), min.getY(), min.getZ()),
-                new Vector3f(max.getX(), half.getY(), half.getZ())));
-        southwestbottom = new CubeTree(new BoundingBox(new Vector3f(min.getX(), min.getY(), half.getZ()),
-                new Vector3f(half.getX(), half.getY(), max.getZ())));
-        southeastbottom = new CubeTree(new BoundingBox(new Vector3f(half.getX(), min.getY(), half.getZ()),
-                new Vector3f(max.getX(), half.getY(), max.getZ())));
-
-        northwesttop = new CubeTree(new BoundingBox(new Vector3f(min.getX(), half.getY(), min.getZ()),
-                new Vector3f(half.getX(), max.getY(), half.getZ())));
-        northeasttop = new CubeTree(new BoundingBox(new Vector3f(half.getX(), half.getY(), min.getZ()),
-                new Vector3f(max.getX(), max.getY(), half.getZ())));
-        southwesttop = new CubeTree(new BoundingBox(new Vector3f(min.getX(), half.getY(), half.getZ()),
-                new Vector3f(half.getX(), max.getY(), max.getZ())));
-        southeasttop = new CubeTree(new BoundingBox(new Vector3f(half.getX(), half.getY(), half.getZ()),
-                new Vector3f(max.getX(), max.getY(), max.getZ())));
-
+	System.out.println(myNumber + ": Subdividing" + boundary);
+	System.out.println("min " + min);
+	System.out.println("half " + half);
+        children = new CubeTree[] {
+	    new CubeTree(new BoundingBox(min,
+					 new Vector3f(half.getX(), half.getY(), half.getZ())))
+	    ,new CubeTree(new BoundingBox(new Vector3f(half.getX() + min.getX(), min.getY(), min.getZ()),
+					  new Vector3f(max.getX(), half.getY(), half.getZ())))
+	    ,new CubeTree(new BoundingBox(new Vector3f(min.getX(), min.getY(), half.getZ() + min.getZ()),
+					  new Vector3f(half.getX(), half.getY(), max.getZ())))
+	    ,new CubeTree(new BoundingBox(new Vector3f(half.getX() + min.getX(), min.getY(), half.getZ() + min.getZ()),
+					  new Vector3f(max.getX(), half.getY(), max.getZ())))
+ 
+	    ,new CubeTree(new BoundingBox(new Vector3f(min.getX(), half.getY() + min.getY(), min.getZ()),
+					  new Vector3f(half.getX(), max.getY(), half.getZ())))
+	    ,new CubeTree(new BoundingBox(new Vector3f(half.getX() + min.getX(), half.getY() + min.getY(), min.getZ()),
+					  new Vector3f(max.getX(), max.getY(), half.getZ())))
+	    ,new CubeTree(new BoundingBox(new Vector3f(min.getX(), half.getY() + min.getY(), half.getZ() + min.getZ()),
+					  new Vector3f(half.getX(), max.getY(), max.getZ())))
+	    ,new CubeTree(new BoundingBox(new Vector3f(half.getX() + min.getX(), half.getY() + min.getY(), half.getZ() + min.getZ()),
+					  new Vector3f(max.getX(), max.getY(), max.getZ())))
+	};
+	
     }
 }
