@@ -13,7 +13,7 @@ import org.lwjgl.util.vector.Vector3f;
  */
 public class CubeTree<T extends Boundable> {
 
-    final int MAX_OBJECTS = 1000;
+    final int MAX_OBJECTS = 500;
 
     ArrayList<T> objects;
     boolean hasSubdivided = false;
@@ -29,18 +29,13 @@ public class CubeTree<T extends Boundable> {
     static int totalObjects = 0;
 
     public CubeTree(T[] objects, BoundingBox boundary) {
-
         this(boundary);
         for (T object : objects) {
-
             insert(object);
-
         }
-
     }
 
     public CubeTree(BoundingBox boundary) {
-
         this.boundary = boundary;
         this.objects = new ArrayList<T>();
 	this.hasSubdivided = false;
@@ -63,8 +58,16 @@ public class CubeTree<T extends Boundable> {
 		objects.add(object);
 	    }
 	} else {
+	    ArrayList<CubeTree> toAddTo = new ArrayList<CubeTree>(9);
 	    for (CubeTree cubeTree : children) {
 		if (cubeTree.boundary.intersects(object.getBounds())) {
+		    toAddTo.add(cubeTree);
+		}
+	    }
+	    if (toAddTo.size() == 8) {
+		this.objects.add(object);
+	    } else {
+		for (CubeTree cubeTree : toAddTo) {
 		    cubeTree.insert(object);
 		}
 	    }
@@ -73,14 +76,12 @@ public class CubeTree<T extends Boundable> {
 
     public ArrayList<T> queryRange(BoundingBox range) {
 	ArrayList<T> objectsInRange = new ArrayList<T>();
-	if (!hasSubdivided) {
-	    // Therefore, there are 0<x<MAX_OBJECTS objects in `objects`
-	    for (T obj : objects) {
-		if (range.intersects(obj.getBounds())) {
-		    objectsInRange.add(obj);
-		}
+	for (T obj : objects) {
+	    if (range.intersects(obj.getBounds())) {
+		objectsInRange.add(obj);
 	    }
-	} else {
+	}
+	if (hasSubdivided) {
 	    for (CubeTree cubeTree : children) {
 		if (cubeTree.boundary.intersects(range)) {
 		    objectsInRange.addAll(cubeTree.queryRange(range));

@@ -233,14 +233,13 @@ public class EventTest {
             render();
             SoundManager.update(delta);
             Display.update();
-            Display.sync(60);
+            Display.sync(30);
 
         }
 
     }
 
     private static void destroy() {
-
         Display.destroy();
         Keyboard.destroy();
         Mouse.destroy();
