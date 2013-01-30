@@ -13,6 +13,7 @@ import org.lwjgl.util.vector.Vector3f;
 public class BoundingBox {
 
     private Vector3f min, max;
+
     public BoundingBox(Vector3f min, Vector3f max) {
 
         this.min = min;
@@ -47,9 +48,10 @@ public class BoundingBox {
             }
 
         }
-            maxX -= minX;
-            maxY -= minY;
-            maxZ -= minZ;
+        
+        maxX -= minX;
+        maxY -= minY;
+        maxZ -= minZ;
         return new BoundingBox(new Vector3f(minX, minY, minZ), new Vector3f(maxX, maxY, maxZ));
 
     }
@@ -78,13 +80,13 @@ public class BoundingBox {
         Vector3f max = getMax();
         return new Vector3f[]{
                     min,
-                    new Vector3f(min.getX(), min.getY(), max.z),
-                    new Vector3f(min.getX(), max.y, max.z),
-                    new Vector3f(min.getX(), max.y, min.getZ()),
-                    new Vector3f(max.x, min.getY(), max.z),
-                    new Vector3f(max.x, max.y, max.z),
-                    new Vector3f(max.x, max.y, min.getZ()),
-                    new Vector3f(max.x, max.y, max.z)
+                    new Vector3f(min.getX(), min.getY(), max.getZ()),
+                    new Vector3f(min.getX(), max.getY(), max.getZ()),
+                    new Vector3f(min.getX(), max.getY(), min.getZ()),
+                    new Vector3f(max.getX(), min.getY(), max.getZ()),
+                    new Vector3f(max.getX(), min.getY(), min.getZ()),
+                    new Vector3f(max.getX(), max.getY(), min.getZ()),
+                    max
                 };
 
     }
@@ -94,6 +96,7 @@ public class BoundingBox {
     }
 
     public boolean contains(Vector3f v) {
+        Vector3f min = getMin();
         Vector3f max = getMax();
         if (valueInRange(v.getX(), min.getX(), max.getX())
                 && valueInRange(v.getY(), min.getY(), max.getY())
@@ -108,7 +111,10 @@ public class BoundingBox {
         Vector3f min = getMin();
         Vector3f max = getMax();
         Vector3f bMin = b.getMin();
-        if (valueInRange(bMin.getX(), min.getX(), max.getX() - b.getWidth())
+        //Vector3f bMax = b.getMax();
+        //System.out.println("Test Min " + bMin.getX() + " Max " + bMax.getX());
+        //System.out.println("BoBo Min " + min.getX() + " Max " + max.getX());
+        if (valueInRange(bMin.getX(), min.getX(), max.getX() - b.getWidth() )
                 && valueInRange(bMin.getY(), min.getY(), max.getY() - b.getHeight())
                 && valueInRange(bMin.getZ(), min.getZ(), max.getZ() - b.getDepth())) {
             return true;
@@ -147,7 +153,7 @@ public class BoundingBox {
     public Vector3f getMin() {
         return min;
     }
-    
+
     public float getWidth() {
         return max.x;
     }
@@ -163,5 +169,4 @@ public class BoundingBox {
     Vector3f getDimension() {
         return max;
     }
-    
 }
