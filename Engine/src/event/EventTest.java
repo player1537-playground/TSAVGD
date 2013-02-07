@@ -42,6 +42,7 @@ public class EventTest {
     static boolean debugDebounce;
     static boolean muteDebounce;
     static float dx, dy;
+    static UpdateThread updateThread = new UpdateThread();
     
 
     public static void main(String[] argv) {
@@ -61,7 +62,6 @@ public class EventTest {
         init();
         run();
         destroy();
-
     }
 
     private static void init() {
@@ -75,10 +75,9 @@ public class EventTest {
             Display.setTitle("Engine");
             Display.create();
 
-            //Keyboard
-            Keyboard.create();
-
-            //Mouse
+	    // Keyboard
+	    Keyboard.create();
+	    //Mouse
             Mouse.setGrabbed(true);
             Mouse.create();
 
@@ -166,31 +165,37 @@ public class EventTest {
             //Water water = new Water(waterPosition, 50, 50, 2, 100, 100);
             h = new Hud(width, height);
 
-            Person per = new Person();
-            per.b.setPosition(new Vector3f(0, 20, 0));
-            per.fg.add(new ForceGenerator() {
-
-                @Override
-                public Vector3f getForce(PhysicalEntity e) {
-                    return new Vector3f(0, -e.getMass() * 20, 0);
-                }
-            });
-
             e.add(sky);
             e.add(ter);
             e.add(p);
             //e.add(water);
-            e.add(per);
             e.add(h);
 
             de.add(sky);
             de.add(ter);
             //de.add(water);
-            de.add(per);
             de.add(h);
 
-            pe.add(per);
             pe.add(p);
+
+					       
+	    {
+		int i = 0;
+		for (; i < 10; i++) {
+		    Person per = new Person();
+		    per.b.setPosition(new Vector3f(0, 10*(i+1), 0));
+		    per.fg.add(new ForceGenerator() {
+			    
+			    @Override
+				public Vector3f getForce(PhysicalEntity e) {
+				return new Vector3f(0, -e.getMass() * 20, 0);
+			    }
+			});
+		    e.add(per);
+		    de.add(per);
+		    pe.add(per);
+		}
+	    }
 
             w = new PhysicalWorld(ter, pe);
 
@@ -200,6 +205,7 @@ public class EventTest {
 
             DebugMessages.setShow(true);
             loading.stop();
+	    updateThread.start();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -222,13 +228,16 @@ public class EventTest {
             int delta = getDelta();
  
             DebugMessages.addMessage("FPS", "" + 1000f / delta);
+	    processInputs();
+	    p.update(delta);
             //System.out.println("Total " + delta);
 
-            processInputs();
-
+            //processInputs();
+	    /*
             for (int i = 0; i < 3; i++) {
                 update(delta / 3);
 	    }
+	    */
 
             render();
             SoundManager.update(delta);
@@ -240,6 +249,7 @@ public class EventTest {
     }
 
     private static void destroy() {
+	updateThread.interrupt();
         Display.destroy();
         Keyboard.destroy();
         Mouse.destroy();
@@ -272,7 +282,7 @@ public class EventTest {
 
     }
 
-    private static void processInputs() {
+    public static void processInputs() {
 
         processKeyboard();
         processMouse();
@@ -307,7 +317,7 @@ public class EventTest {
         dy = Mouse.getDY();
     }
 
-    private static void update(int delta) {
+    public static void update(int delta) {
 
         if (paused) {
             h.update(delta);

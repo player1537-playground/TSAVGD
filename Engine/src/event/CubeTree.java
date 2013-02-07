@@ -13,7 +13,7 @@ import org.lwjgl.util.vector.Vector3f;
  */
 public class CubeTree<T extends Boundable> {
 
-    final int MAX_OBJECTS = 500;
+    final int MAX_OBJECTS = 250;
 
     ArrayList<T> objects;
     boolean hasSubdivided = false;
