@@ -26,6 +26,10 @@ public class Hud implements DisplayableEntity {
     static ArrayList<DisplayableEntity> graphics = new ArrayList<DisplayableEntity>();
     static Menu pauseMenu;
     static Menu itemBar;
+    static Menu messages;
+    static Menu debug;
+    static Menu conv;
+
     boolean debounce;
 
     public Hud(float width, float height) {
@@ -33,8 +37,10 @@ public class Hud implements DisplayableEntity {
         this.height = height;
         HudGraphic menu = new HudGraphic(Hud.load("res/tree.png"), null);
         Texture menuItemTex = Hud.load("res/test.png");
+
         HudGraphic itemBarGraphic = new HudGraphic(Hud.load("res/item_bar_test.png"), null);
         HudGraphic item = new HudGraphic(Hud.load("res/bullet.png"), null);
+
         final Sound ding = SoundManager.createSound("res/ding.wav");
 
         Menu[] menuItems = new Menu[6];
@@ -49,7 +55,7 @@ public class Hud implements DisplayableEntity {
                     for (Menu m : items) {
                         m.hide();
                     }
-                    
+
                     ding.play(true);
                 }
             });
@@ -63,17 +69,60 @@ public class Hud implements DisplayableEntity {
         }
         itemBar = new Menu((width - itemBarGraphic.getWidth()) / 2, height - itemBarGraphic.getHeight(), false, itemBarGraphic, true, items, null);
 
-        debounce = true;
+        MessageCenter.setAttributes(300, 100, 5);
+        messages = new Menu(30, height - 110, 300, 100, false, new DisplayableEntity() {
+
+            @Override
+            public void draw() {
+                MessageCenter.draw();
+            }
+
+            @Override
+            public void update(int delta) {
+                MessageCenter.update(delta);
+            }
+        }, true, null, null);
         
+        debug = new Menu(0, 0, 400, 100, false, new DisplayableEntity() {
+
+            @Override
+            public void draw() {
+                DebugMessages.draw();
+            }
+
+            @Override
+            public void update(int delta) {
+                DebugMessages.update(delta);
+            }
+        }, true, null, null);
+        
+        conv = new Menu(0, 0, 0, 0, false, new DisplayableEntity() {
+
+            @Override
+            public void draw() {
+                ConversationDisplay.draw();
+            }
+
+            @Override
+            public void update(int delta) {
+                ConversationDisplay.update(delta);
+            }
+        }, false, null, null);
+
+        debounce = true;
+
         graphics.add(pauseMenu);
         graphics.add(itemBar);
+        graphics.add(messages);
+        graphics.add(debug);
+        graphics.add(conv);
 
     }
 
     public static void addGraphic(DisplayableEntity d) {
         graphics.add(d);
     }
-    
+
     @Override
     public void draw() {
         glPushMatrix();
@@ -87,10 +136,9 @@ public class Hud implements DisplayableEntity {
         glOrtho(0, width, height, 0, 1, -1);
         glMatrixMode(GL_MODELVIEW);
 
-        for(DisplayableEntity d : graphics) {
+        for (DisplayableEntity d : graphics) {
             d.draw();
         }
-        DebugMessages.draw();
 
         glMatrixMode(GL_PROJECTION);
         glPopMatrix();
@@ -103,6 +151,9 @@ public class Hud implements DisplayableEntity {
 
     @Override
     public void update(int delta) {
+        for(Entity e : graphics) {
+            e.update(delta);
+        }
         boolean pressed = Mouse.isButtonDown(0);
         if (pressed && debounce) {
             pauseMenu.mouseClick(Mouse.getX(), (int) (height - Mouse.getY()));
@@ -133,5 +184,9 @@ public class Hud implements DisplayableEntity {
             m.hideChildren();
             m.show = true;
         }
+    }
+    
+    public static void setShowConversation(boolean show) {
+        conv.setShow(show);
     }
 }

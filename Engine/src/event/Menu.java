@@ -72,6 +72,7 @@ public class Menu implements DisplayableEntity {
 
     @Override
     public void update(int delta) {
+        de.update(delta);
     }
 
     public void mouseClick(int mx, int my) {

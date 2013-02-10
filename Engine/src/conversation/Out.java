@@ -1,3 +1,5 @@
+package conversation;
+
 class Out { public static void main(String[] args) {Person m = new Person("Martha") {
 	void init() {
 		setModel(new Model("martha.obj"));

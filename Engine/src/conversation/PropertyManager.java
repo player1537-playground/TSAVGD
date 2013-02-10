@@ -1,6 +1,8 @@
+package conversation;
+
 import java.util.*;
 
-class PropertyManager {
+public class PropertyManager {
     static HashMap<String, String> map = new HashMap<String, String>();
     private static String getRandomValue() {
 	switch ((int)(Math.random()*3)) {

@@ -1,4 +1,6 @@
-class Response {
+package conversation;
+
+public class Response {
   String text;
   Action act;
   public Response(String text, Action act) {

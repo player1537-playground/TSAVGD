@@ -10,12 +10,13 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
+
 /**
  *
  * @author Andy
  */
 public class Player extends PhysicalEntity {
-    
+
     ViewPoint v;
     float xAngle = 0, yAngle = 0;
     float maxSpeed = 16;
@@ -95,33 +96,39 @@ public class Player extends PhysicalEntity {
                 return force;
             }
         });
-        
-        rayCast = new PhysicalEntity[6];
-        for(int i = 0; i < rayCast.length; i++) {
+
+        rayCast = new PhysicalEntity[8];
+        for (int i = 0; i < rayCast.length; i++) {
             rayCast[i] = new PhysicalEntity(new BoundingBox(new Vector3f(), new Vector3f(.1f, .1f, .1f))) {
 
                 {
                     invMass = 1000;
                     collidable = false;
                 }
+
                 @Override
                 public void collide(ArrayList<Triangle> cols) {
                 }
 
                 @Override
                 public void collide(PhysicalEntity col) {
-                    if(!(col instanceof Player))
-                        System.out.println("CONVERSATION");
+                    if (col instanceof Activatable) {
+                        if (!MessageCenter.contains("Press E")) {
+                            MessageCenter.addMessage("Press E", 300);
+                        }
+                        if(EventTest.isActivate()) {
+                            ((Activatable)col).activate();
+                        }
+                    }
                 }
 
                 @Override
                 public void update(int delta) {
                 }
             };
-            
-            //Raycasting not implemented!!!!!!!
-            //EventTest.addEntity(rayCast[i]);
-            //EventTest.addPhysicalEntity(rayCast[i]);
+
+            EventTest.addEntity(rayCast[i]);
+            EventTest.addPhysicalEntity(rayCast[i]);
         }
 
     }
@@ -141,7 +148,7 @@ public class Player extends PhysicalEntity {
         yAngle += (float) (-EventTest.getDx() / (Display.getWidth() / 360f) / 2);
         xAngle += (float) EventTest.getDy() / (Display.getHeight() / 360f) / 2;
         yAngle %= 360;
-        if(yAngle < 0) {
+        if (yAngle < 0) {
             yAngle += 360;
         }
         if (xAngle > 85) {
@@ -152,18 +159,18 @@ public class Player extends PhysicalEntity {
         }
 
         v.setAngle(xAngle, yAngle, 0);
-        
-        rayCast[rayCastCounter].setPosition(getMiddle());
-        float rayCastSpeed = 100;
+
+        rayCast[rayCastCounter].setPosition(getMiddle().translate(0, b.getDimension().getY() / 2, 0));
+        float rayCastSpeed = 60;
         double radX = Math.toRadians(xAngle);
         double radY = Math.toRadians(yAngle);
         double horLength = Math.cos(radX);
-        Vector3f rayCastVel = (Vector3f)(new Vector3f((float)(horLength * -Math.sin(radY)),
-                (float)Math.sin(radX), (float)(horLength * Math.cos(radY)))).scale(rayCastSpeed);
+        Vector3f rayCastVel = (Vector3f) (new Vector3f((float) (horLength * -Math.sin(radY)),
+                (float) Math.sin(radX), (float) (horLength * -Math.cos(radY)))).scale(rayCastSpeed);
         Vector3f.add(rayCastVel, velocity, rayCastVel);
         rayCast[rayCastCounter].setVelocity(rayCastVel);
         rayCast[rayCastCounter].integrate(delta / 1000f);
-        if(++rayCastCounter == rayCast.length) {
+        if (++rayCastCounter == rayCast.length) {
             rayCastCounter = 0;
         }
 
@@ -199,5 +206,4 @@ public class Player extends PhysicalEntity {
     @Override
     public void collide(PhysicalEntity cols) {
     }
-    
 }

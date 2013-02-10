@@ -87,7 +87,7 @@ public class CubeTree<T extends Boundable> {
 		    objectsInRange.addAll(cubeTree.queryRange(range));
 		}
 	    }
-	    System.out.println("objectsInRange.size(): " + objectsInRange.size() + "  || total: " + total + "  || totalObjects: " + getEntitiesLength());
+	    //System.out.println("objectsInRange.size(): " + objectsInRange.size() + "  || total: " + total + "  || totalObjects: " + getEntitiesLength());
 	}
         return objectsInRange;
     }
@@ -108,7 +108,7 @@ public class CubeTree<T extends Boundable> {
 	    System.exit(1);
 	}
 	hasSubdivided = true;
-	System.out.println("Subdividing" + boundary);
+	//System.out.println("Subdividing" + boundary);
         Vector3f min = boundary.getMin();
 	Vector3f mymax = boundary.getMax();
 	Vector3f myhalf = new Vector3f((float)(min.getX() + mymax.getX()) / 2.0f,
@@ -118,9 +118,9 @@ public class CubeTree<T extends Boundable> {
         Vector3f half = (Vector3f) new Vector3f(max).scale(0.5f);
 				    
 
-	System.out.println(myNumber + ": Subdividing" + boundary);
-	System.out.println("min " + min);
-	System.out.println("half " + half);
+	//System.out.println(myNumber + ": Subdividing" + boundary);
+	//System.out.println("min " + min);
+	//System.out.println("half " + half);
         children = new CubeTree[] {
 	    new CubeTree(new BoundingBox(min,
 					 new Vector3f(half.getX(), half.getY(), half.getZ())))
