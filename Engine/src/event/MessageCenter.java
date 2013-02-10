@@ -77,6 +77,7 @@ public class MessageCenter {
         for (int i = 0; i < messages.size(); i++) {
             if(messages.get(i).text.equals(text)) {
                 messages.remove(i);
+		i--;
             }
         }
     }

@@ -48,6 +48,7 @@ public class EventTest {
     private static boolean activate;
     private static boolean inConversation;
     private static UpdateThread updateThread;
+    private static Object thelock = new Object(); // Used to synchronize render()/update()
     private static float dx, dy;
 
 
@@ -230,14 +231,14 @@ public class EventTest {
         music.play();
         while (!Display.isCloseRequested() && KeyboardWrapper.get(Keyboard.KEY_ESCAPE).isUp()) {
 	    
-		getDeltaBottleNeck();
+	    getDeltaBottleNeck();
 
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
-		processInputs();
-		//p.update(delta);
-		//System.out.println("Total " + delta);
+	    processInputs();
+	    //p.update(delta);
+	    //System.out.println("Total " + delta);
             int delta = getDelta();
 
             DebugMessages.addMessage("FPS", "" + 1000f / delta);
@@ -245,17 +246,19 @@ public class EventTest {
             DebugMessages.addMessage("Acti", "" + activate);
             //System.out.println("Total " + delta);
 
-		//processInputs();
-		/*
-		  for (int i = 0; i < 3; i++) {
-		  update(delta / 3);
-		  }
-		*/
+	    //processInputs();
+	    /*
+	      for (int i = 0; i < 3; i++) {
+	      update(delta / 3);
+	      }
+	    */
 
+	    synchronized (thelock) {
 		render();
-		SoundManager.update(delta);
-		Display.update();
-		Display.sync(30);
+	    }
+	    SoundManager.update(delta);
+	    Display.update();
+	    Display.sync(30);
 
 
 
@@ -355,19 +358,21 @@ public class EventTest {
 
     public static void update(int delta) {
 
-        setConversation(!ConversationDisplay.isFinished());
-        if (inConversation && isActivate()) {
-            ConversationDisplay.advance();
-        }
-
-        if (paused) {
-            h.update(delta);
-        } else {
-            for (Entity ee : e) {
-                ee.update(delta);
-            }
-            w.update(delta);
-        }
+	synchronized (thelock) {
+	    setConversation(!ConversationDisplay.isFinished());
+	    if (inConversation && isActivate()) {
+		ConversationDisplay.advance();
+	    }
+	    
+	    if (paused) {
+		h.update(delta);
+	    } else {
+		for (Entity ee : e) {
+		    ee.update(delta);
+		}
+		w.update(delta);
+	    }
+	}
 
     }
 

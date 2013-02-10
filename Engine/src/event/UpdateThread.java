@@ -11,7 +11,6 @@ class UpdateThread extends Thread {
     
     public void run() {
 	while (EventTest.isRunning()) {
-	    System.err.println("Keyboard: " + KeyboardWrapper.toAString());
 	    long deltaTime = EventTest.getTime() - lastTime;
 	    EventTest.update((int)deltaTime);
 	    lastTime = EventTest.getTime();

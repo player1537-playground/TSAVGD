@@ -89,6 +89,24 @@ function run-default() {
     run event.EventTest
 }
 
+function status() {
+    git status | grep -v class
+}
+
+function getchanges() {
+    git status -s | sed -ne '/\.class/ !{ s/ M \(.*\)/\1/p; }'
+}
+
+function addchanged() {
+    local list
+    list=$1
+    if [ "$list" = -l ]; then
+	getchanges
+    else
+	getchanges | xargs -I{} git add {}
+    fi
+}
+
 function main() {
     what="$1"
     shift
@@ -102,6 +120,8 @@ function main() {
 	docompile-default) compile-default "$@";;
 	dojar) create-jar "$@";;
 	dorun-default) run-default "$@";;
+	dostatus) status "$@";;
+	doaddchanged) addchanged "$@";;
 	do-h|do--help|do) usage "$@";;
 	do*) editcode "$what";;
     esac

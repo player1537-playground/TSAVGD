@@ -33,8 +33,6 @@ public class PhysicalWorld {
     }
 
     public void update(int delta) {
-	System.err.println("I'm updating!");
-
         float time = delta / 1000f;
 
         for (PhysicalEntity e : ents) {

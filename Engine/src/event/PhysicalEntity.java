@@ -38,8 +38,6 @@ public abstract class PhysicalEntity implements Entity {
     public abstract void collide(PhysicalEntity col);
     
     public void integrate(float time) {
-	System.err.println("integrate() is getting called on PhysicalEntity");
-
         Vector3f vCopy = (Vector3f) new Vector3f(velocity).scale(time);
         b.translate(vCopy);
         acceleration = (Vector3f) forceAccum.scale(invMass);
