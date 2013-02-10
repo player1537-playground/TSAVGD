@@ -55,7 +55,7 @@ public class Person extends AbstractEntity {
             @Override
             public void changeState() {
                 force.set((float) Math.random() - 0.5f, 0, (float) Math.random() - 0.5f);
-                force.scale(20 * getMass() * 2.5f);
+                force.scale(20 * getMass() * 6.0f);
                 counter = 1000;
             }
 

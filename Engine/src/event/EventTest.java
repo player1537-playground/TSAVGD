@@ -6,12 +6,12 @@ package event;
 
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
-import org.lwjgl.BufferUtils;
+import org.lwjgl.*;
 import org.lwjgl.Sys;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.DisplayMode;
+import org.lwjgl.opengl.*;
 import org.lwjgl.util.vector.Vector3f;
 import static org.lwjgl.opengl.GL11.*;
 import character.*;
@@ -41,8 +41,10 @@ public class EventTest {
     static boolean pauseDebounce;
     static boolean debugDebounce;
     static boolean muteDebounce;
+    static boolean hasProcessedInputs = false;
+    static boolean isRunning = true;
     static float dx, dy;
-    static UpdateThread updateThread = new UpdateThread();
+    static UpdateThread updateThread;
     
 
     public static void main(String[] argv) {
@@ -149,11 +151,11 @@ public class EventTest {
             p.setPosition(new Vector3f(0, 10, 0));
             p.fg.add(new ForceGenerator() {
 
-                @Override
-                public Vector3f getForce(PhysicalEntity e) {
-                    return new Vector3f(0, -e.getMass() * 20, 0);
-                }
-            });
+		    @Override
+			public Vector3f getForce(PhysicalEntity e) {
+			return new Vector3f(0, -e.getMass() * 20, 0);
+		    }
+		});
             System.out.println("Start Terrain");
             ter = new Terrain(p);
             System.out.println("DONE");
@@ -178,10 +180,10 @@ public class EventTest {
 
             pe.add(p);
 
-					       
+	    /*
 	    {
 		int i = 0;
-		for (; i < 10; i++) {
+		for (; i < 1; i++) {
 		    Person per = new Person();
 		    per.b.setPosition(new Vector3f(0, 10*(i+1), 0));
 		    per.fg.add(new ForceGenerator() {
@@ -196,6 +198,7 @@ public class EventTest {
 		    pe.add(per);
 		}
 	    }
+	    */
 
             w = new PhysicalWorld(ter, pe);
 
@@ -205,6 +208,7 @@ public class EventTest {
 
             DebugMessages.setShow(true);
             loading.stop();
+	    updateThread = new UpdateThread();
 	    updateThread.start();
 
         } catch (Exception e) {
@@ -219,153 +223,167 @@ public class EventTest {
         music.repeat();
         music.setVolume(0.4f);
         music.play();
-        while (!Display.isCloseRequested() && !Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
+        while (!Display.isCloseRequested() && KeyboardWrapper.get(Keyboard.KEY_ESCAPE).isUp()) {
+	    
+		getDeltaBottleNeck();
 
-            getDeltaBottleNeck();
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-            int delta = getDelta();
+		int delta = getDelta();
  
-            DebugMessages.addMessage("FPS", "" + 1000f / delta);
-	    processInputs();
-	    p.update(delta);
-            //System.out.println("Total " + delta);
+		DebugMessages.addMessage("FPS", "" + 1000f / delta);
+		processInputs();
+		//p.update(delta);
+		//System.out.println("Total " + delta);
 
-            //processInputs();
-	    /*
-            for (int i = 0; i < 3; i++) {
-                update(delta / 3);
-	    }
-	    */
+		//processInputs();
+		/*
+		  for (int i = 0; i < 3; i++) {
+		  update(delta / 3);
+		  }
+		*/
 
-            render();
-            SoundManager.update(delta);
-            Display.update();
-            Display.sync(30);
+		render();
+		SoundManager.update(delta);
+		Display.update();
+		Display.sync(30);
 
-        }
 
+
+	}
     }
 
     private static void destroy() {
-	updateThread.interrupt();
-        Display.destroy();
-        Keyboard.destroy();
-        Mouse.destroy();
-        SoundManager.destroy();
-        System.exit(0);
+	isRunning = false;
+	try { updateThread.join(); } catch (Exception e) { }
+	Display.destroy();
+	Keyboard.destroy();
+	Mouse.destroy();
+	SoundManager.destroy();
+	System.exit(0);
 
+    }
+
+    public static boolean isRunning() {
+	return isRunning;
     }
 
     public static long getTime() {
 
-        return (Sys.getTime() * 1000) / Sys.getTimerResolution();
+	return (Sys.getTime() * 1000) / Sys.getTimerResolution();
 
     }
 
     private static int getDelta() {
 
-        long currentTime = getTime();
-        int delta = (int) (currentTime - lastFrame);
-        lastFrame = getTime();
-        return delta;
+	long currentTime = getTime();
+	int delta = (int) (currentTime - lastFrame);
+	lastFrame = getTime();
+	return delta;
 
     }
 
     public static int getDeltaBottleNeck() {
 
-        long currentTime = getTime();
-        int delta = (int) (currentTime - lastFrameBottleNeck);
-        lastFrameBottleNeck = getTime();
-        return delta;
+	long currentTime = getTime();
+	int delta = (int) (currentTime - lastFrameBottleNeck);
+	lastFrameBottleNeck = getTime();
+	return delta;
 
     }
 
     public static void processInputs() {
 
-        processKeyboard();
-        processMouse();
+	processKeyboard();
+	processMouse();
+	hasProcessedInputs = true;
 
     }
 
     private static void processKeyboard() {
-        boolean keyP = Keyboard.isKeyDown(Keyboard.KEY_P);
-        if (!pauseDebounce && keyP) {
-            paused = !paused;
-            h.setPause(paused);
-            Mouse.setGrabbed(!paused);
-        }
-        pauseDebounce = keyP;
+	if (KeyboardWrapper.put(Keyboard.KEY_P).isPressed()) {
+	    paused = !paused;
+	    h.setPause(paused);
+	    Mouse.setGrabbed(!paused);
+	}
         
-        boolean keyF = Keyboard.isKeyDown(Keyboard.KEY_F);
-        if (!debugDebounce && keyF) {
-            DebugMessages.setShow(!DebugMessages.getShow());
+	if (KeyboardWrapper.put(Keyboard.KEY_F).isPressed()) {
+	    DebugMessages.setShow(!DebugMessages.getShow());
 	    p.setPosition(new Vector3f(0, 20, 0));
-        }
-        debugDebounce = keyF;
+	}
         
-        boolean keyM = Keyboard.isKeyDown(Keyboard.KEY_M);
-        if (!muteDebounce && keyM) {
-            SoundManager.mute(!SoundManager.isMuted());
-        }
-        muteDebounce = keyM;
+	if (KeyboardWrapper.put(Keyboard.KEY_M).isPressed()) {
+	    SoundManager.mute(!SoundManager.isMuted());
+	}
+
+	KeyboardWrapper.put(Keyboard.KEY_W);
+	KeyboardWrapper.put(Keyboard.KEY_A);
+	KeyboardWrapper.put(Keyboard.KEY_S);
+	KeyboardWrapper.put(Keyboard.KEY_D);
+	KeyboardWrapper.put(Keyboard.KEY_UP);
+	KeyboardWrapper.put(Keyboard.KEY_DOWN);
+	KeyboardWrapper.put(Keyboard.KEY_LEFT);
+	KeyboardWrapper.put(Keyboard.KEY_RIGHT);
+	KeyboardWrapper.put(Keyboard.KEY_SPACE);
+	KeyboardWrapper.put(Keyboard.KEY_LSHIFT);
+	KeyboardWrapper.put(Keyboard.KEY_ESCAPE);
+
     }
 
     private static void processMouse() {
-        dx = Mouse.getDX();
-        dy = Mouse.getDY();
+	dx = Mouse.getDX();
+	dy = Mouse.getDY();
     }
 
     public static void update(int delta) {
 
-        if (paused) {
-            h.update(delta);
-        } else {
-            for (Entity ee : e) {
-                ee.update(delta);
-            }
-            w.update(delta);
-        }
+	if (paused) {
+	    h.update(delta);
+	} else {
+	    for (Entity ee : e) {
+		ee.update(delta);
+	    }
+	    w.update(delta);
+	}
 
     }
 
     private static void render() {
 
-        //renderCode
-        p.adjust();
-        for (DisplayableEntity ent : de) {
-            ent.draw();
-        }
+	//renderCode
+	p.adjust();
+	for (DisplayableEntity ent : de) {
+	    ent.draw();
+	}
     }
 
     public static FloatBuffer asFloatBuffer(float... values) {
 
-        FloatBuffer buffer = BufferUtils.createFloatBuffer(values.length);
-        buffer.put(values);
-        buffer.flip();
-        return buffer;
+	FloatBuffer buffer = BufferUtils.createFloatBuffer(values.length);
+	buffer.put(values);
+	buffer.flip();
+	return buffer;
 
     }
 
     public static float getDx() {
-        return dx;
+	return dx;
     }
 
     public static float getDy() {
-        return dy;
+	return dy;
     }
 
     public static void addEntity(Entity ent) {
-        e.add(ent);
+	e.add(ent);
     }
 
     public static void addDisplayableEntity(DisplayableEntity dEnt) {
-        de.add(dEnt);
+	de.add(dEnt);
     }
 
     public static void addPhysicalEntity(PhysicalEntity pEnt) {
-        pe.add(pEnt);
+	pe.add(pEnt);
     }
 
     public static void addAbstractEntity(AbstractEntity aEnt) {
