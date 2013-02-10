@@ -1,7 +1,9 @@
+package conversation;
+
 import java.util.*;
 import java.io.*;
 
-class Conversation {
+public class Conversation {
     static void printConv(String conv) {
 	System.out.println("> " + conv);
     }

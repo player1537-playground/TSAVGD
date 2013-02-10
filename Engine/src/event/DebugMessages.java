@@ -16,7 +16,7 @@ import org.newdawn.slick.UnicodeFont;
 public class DebugMessages {
 
     static HashMap<String, String> messages = new HashMap<String, String>();
-    static final UnicodeFont font = HudGraphic.loadFont("Courier New", 20);
+    static final UnicodeFont font = HudGraphic.loadFont("Courier New", 20, java.awt.Color.RED);
     private static boolean show;
 
     public static void addMessage(String name, String text) {
@@ -45,8 +45,11 @@ public class DebugMessages {
             messages.keySet().toArray(names);
             for (int i = 0; i < names.length; i++) {
                 String name = names[i];
-                font.drawString(10, 10 + i * 16, name + ": " + messages.get(name), Color.red);
+                font.drawString(10, 10 + i * 16, name + ": " + messages.get(name));
             }
         }
+    }
+
+    public static void update(int delta) {
     }
 }

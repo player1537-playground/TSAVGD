@@ -1,4 +1,6 @@
-class Person {
+package conversation;
+
+public class Person {
   String name;
   Model model;
   public Person(String name) {

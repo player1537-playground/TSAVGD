@@ -70,8 +70,8 @@ public class Sound {
     }
 
     public void mute(boolean muted) {
-        if(muted) {
-            setVolume(0);
+        if (muted) {
+            alSourcef(source, AL_GAIN, 0);
         } else {
             setVolume(volume);
         }

@@ -38,17 +38,19 @@ public class EventTest {
     static ArrayList<PhysicalEntity> pe;
     static PhysicalWorld w;
     static boolean paused = false;
-    static boolean pauseDebounce;
-    static boolean debugDebounce;
-    static boolean muteDebounce;
-    static boolean hasProcessedInputs = false;
-    static boolean isRunning = true;
-    static float dx, dy;
-    static UpdateThread updateThread;
-    
+
+    private static boolean pauseDebounce;
+    private static boolean debugDebounce;
+    private static boolean muteDebounce;
+    private static boolean respawnDebounce;
+    private static boolean activateDebounce;
+    private static boolean activate;
+    private static boolean inConversation;
+    private static float dx, dy;
+
 
     public static void main(String[] argv) {
-        if(argv == null || argv.length != 2) {
+        if (argv == null || argv.length != 2) {
             create(1024, 768);
         } else {
             int width = Integer.parseInt(argv[0]);
@@ -87,11 +89,11 @@ public class EventTest {
             SoundManager.create();
             Sound loading = SoundManager.createSound("res/jazz.wav");
             loading.repeat();
-            loading.play();
+            //loading.play();
 
             //OpenGL
-            glViewport(0, 0, (int)width, (int)height);
-            
+            glViewport(0, 0, (int) width, (int) height);
+
             glClearColor(0f, 0f, 0f, 1f);
 
             glEnable(GL_TEXTURE_2D);
@@ -102,7 +104,7 @@ public class EventTest {
             glMatrixMode(GL_PROJECTION);
             glOrtho(0, width, height, 0, 1, -1);
             glMatrixMode(GL_MODELVIEW);
-            (new HudGraphic(null, "LOADING", HudGraphic.loadFont("Arial", 48, "WHITE"), 300, 100)).draw();
+            (new HudGraphic(null, "LOADING", HudGraphic.loadFont("Arial", 48, java.awt.Color.white), 300, 100)).draw();
             Display.update();
 
 
@@ -215,6 +217,7 @@ public class EventTest {
             e.printStackTrace();
             System.exit(1);
         }
+
     }
 
     private static void run() {
@@ -229,12 +232,16 @@ public class EventTest {
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		int delta = getDelta();
- 
-		DebugMessages.addMessage("FPS", "" + 1000f / delta);
+
 		processInputs();
 		//p.update(delta);
 		//System.out.println("Total " + delta);
+            int delta = getDelta();
+
+            DebugMessages.addMessage("FPS", "" + 1000f / delta);
+            DebugMessages.addMessage("Conv", "" + inConversation);
+            DebugMessages.addMessage("Acti", "" + activate);
+            //System.out.println("Total " + delta);
 
 		//processInputs();
 		/*
@@ -261,6 +268,7 @@ public class EventTest {
 	Mouse.destroy();
 	SoundManager.destroy();
 	System.exit(0);
+
 
     }
 
@@ -301,6 +309,7 @@ public class EventTest {
     }
 
     private static void processKeyboard() {
+<<<<<<< HEAD
 	if (KeyboardWrapper.put(Keyboard.KEY_P).isPressed()) {
 	    paused = !paused;
 	    h.setPause(paused);
@@ -309,7 +318,6 @@ public class EventTest {
         
 	if (KeyboardWrapper.put(Keyboard.KEY_F).isPressed()) {
 	    DebugMessages.setShow(!DebugMessages.getShow());
-	    p.setPosition(new Vector3f(0, 20, 0));
 	}
         
 	if (KeyboardWrapper.put(Keyboard.KEY_M).isPressed()) {
@@ -328,6 +336,16 @@ public class EventTest {
 	KeyboardWrapper.put(Keyboard.KEY_LSHIFT);
 	KeyboardWrapper.put(Keyboard.KEY_ESCAPE);
 
+        if (KeyboardWrapper.put(Keyboard.KEY_R).isPressed()) {
+            p.b.setPosition(new Vector3f(0, 20, 0));
+            MessageCenter.addMessage("RESPAWNED " + (int) (Math.random() * 100));
+        }
+
+	if (KeyboardWrapper.put(Keyboard.KEY_E).isPressed()) {
+            activate = true;
+        } else {
+            activate = false;
+        }
     }
 
     private static void processMouse() {
@@ -337,14 +355,19 @@ public class EventTest {
 
     public static void update(int delta) {
 
-	if (paused) {
-	    h.update(delta);
-	} else {
-	    for (Entity ee : e) {
-		ee.update(delta);
-	    }
-	    w.update(delta);
-	}
+        setConversation(!ConversationDisplay.isFinished());
+        if (inConversation && isActivate()) {
+            ConversationDisplay.advance();
+        }
+
+        if (paused) {
+            h.update(delta);
+        } else {
+            for (Entity ee : e) {
+                ee.update(delta);
+            }
+            w.update(delta);
+        }
 
     }
 
@@ -390,5 +413,22 @@ public class EventTest {
         addEntity(aEnt);
         addDisplayableEntity(aEnt);
         addPhysicalEntity(aEnt);
+    }
+
+    public static boolean isActivate() {
+        if (activate) {
+            activate = false;
+            return true;
+        }
+        return false;
+    }
+
+    public static void setConversation(boolean set) {
+        inConversation = set;
+        Hud.setShowConversation(set);
+    }
+
+    public static void toggleConversation() {
+        setConversation(!inConversation);
     }
 }
