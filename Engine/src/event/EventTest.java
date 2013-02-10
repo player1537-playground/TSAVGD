@@ -44,8 +44,10 @@ public class EventTest {
     private static boolean muteDebounce;
     private static boolean respawnDebounce;
     private static boolean activateDebounce;
+    private static boolean isRunning = true;
     private static boolean activate;
     private static boolean inConversation;
+    private static UpdateThread updateThread;
     private static float dx, dy;
 
 
@@ -182,10 +184,9 @@ public class EventTest {
 
             pe.add(p);
 
-	    /*
 	    {
 		int i = 0;
-		for (; i < 1; i++) {
+		for (; i < 2; i++) {
 		    Person per = new Person();
 		    per.b.setPosition(new Vector3f(0, 10*(i+1), 0));
 		    per.fg.add(new ForceGenerator() {
@@ -200,7 +201,6 @@ public class EventTest {
 		    pe.add(per);
 		}
 	    }
-	    */
 
             w = new PhysicalWorld(ter, pe);
 
@@ -210,6 +210,8 @@ public class EventTest {
 
             DebugMessages.setShow(true);
             loading.stop();
+	    ConversationDisplay.init();
+	    Message.init();
 	    updateThread = new UpdateThread();
 	    updateThread.start();
 
@@ -304,7 +306,6 @@ public class EventTest {
 
 	processKeyboard();
 	processMouse();
-	hasProcessedInputs = true;
 
     }
 

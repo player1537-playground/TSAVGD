@@ -59,6 +59,7 @@ public class MessageCenter {
             m.update(delta);
             if (m.timeout < 0) {
                 messages.remove(i);
+		i--;
             }
         }
     }
@@ -86,7 +87,11 @@ class Message implements DisplayableEntity {
     String text;
     int timeout;
     HudGraphic hg;
-    private static UnicodeFont uf = HudGraphic.loadFont("Comic Sans", 16);
+    private static UnicodeFont uf;
+    
+    public static void init() {
+	uf = HudGraphic.loadFont("Comic Sans", 16);
+    }
 
     public Message(String text, int timeout) {
         this.text = text;

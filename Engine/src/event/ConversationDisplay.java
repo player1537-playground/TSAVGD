@@ -16,13 +16,21 @@ public class ConversationDisplay {
 
     static Person author;
     static String text;
-    static final Texture back = Hud.load("conversation.png");
-    static final Texture circle = Hud.load("circle.png");
-    static HudGraphic textDisp = new HudGraphic(back, null, HudGraphic.loadFont("Comic Sans", 18, Color.white), 90, 36);
-    static Menu disp = new Menu(0, Hud.height - 350, false, textDisp, true, new Menu[]{
+    static  Texture back;
+    static  Texture circle;
+    static HudGraphic textDisp;
+    static Menu disp;
+    private static boolean finished;
+
+    public static void init() {
+	back = Hud.load("res/conversation.png");
+	circle = Hud.load("res/circle.png");
+	textDisp = new HudGraphic(back, null, HudGraphic.loadFont("Comic Sans", 18, Color.white), 90, 36);
+	disp = new Menu(0, Hud.height - 350, false, textDisp, true, new Menu[]{
                 new Menu(Hud.width / 2 - 32, 220, false, new HudGraphic(circle, null), true, null, null)
             }, null);
-    private static boolean finished = true;
+	finished = true;
+    }
 
     public static void startConversation(Person author, String text) {
         finished = false;

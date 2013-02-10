@@ -72,7 +72,7 @@ function create-jar() {
     fi
     tsa compile-default && \
 	(cd jar; ./create-windows.sh) && \
-	java -jar jar/jarsplice-0.40-CLI.jar -fat jar/fat-windows.jar -jars lib/lwjgl-2.8.4/jar/jinput.jar\;lib/lwjgl-2.8.4/jar/lwjgl.jar\;lib/lwjgl-2.8.4/jar/lwjgl_util.jar\;lib/slick/slick.jar\;jar/windows.jar -nats lib/lwjgl-2.8.4/native/windows/jinput-dx8_64.dll\;lib/lwjgl-2.8.4/native/windows/jinput-dx8.dll\;lib/lwjgl-2.8.4/native/windows/jinput-raw_64.dll\;lib/lwjgl-2.8.4/native/windows/jinput-raw.dll\;lib/lwjgl-2.8.4/native/windows/lwjgl64.dll\;lib/lwjgl-2.8.4/native/windows/lwjgl.dll\;lib/lwjgl-2.8.4/native/windows/OpenAL32.dll\;lib/lwjgl-2.8.4/native/windows/OpenAL64.dll -main SplashScreen && \
+	java -jar jar/jarsplice-0.40-CLI.jar -fat jar/fat-windows.jar -jars lib/lwjgl-2.8.4/jar/jinput.jar\;lib/lwjgl-2.8.4/jar/lwjgl.jar\;lib/lwjgl-2.8.4/jar/lwjgl_util.jar\;lib/slick/slick.jar\;jar/windows.jar -nats lib/lwjgl-2.8.4/native/windows/jinput-dx8_64.dll\;lib/lwjgl-2.8.4/native/windows/jinput-dx8.dll\;lib/lwjgl-2.8.4/native/windows/jinput-raw_64.dll\;lib/lwjgl-2.8.4/native/windows/jinput-raw.dll\;lib/lwjgl-2.8.4/native/windows/lwjgl64.dll\;lib/lwjgl-2.8.4/native/windows/lwjgl.dll\;lib/lwjgl-2.8.4/native/windows/OpenAL32.dll\;lib/lwjgl-2.8.4/native/windows/OpenAL64.dll -main splash.SplashScreen && \
 	cp jar/fat-windows.jar /mnt/usb/
 }
 

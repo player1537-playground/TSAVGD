@@ -24,10 +24,10 @@ slick=$org/slick
 slick_util=$org/slick-util
 
 jar cmfv0 manifest windows.jar \
-    $(getclasses $src/character) \
-    $(getclasses $src/splash) \
-    $(getclasses $src/event) \
-    $(getclasses $src/sound) \
+    -C $src character \
+    -C $src splash \
+    -C $src event \
+    -C $src sound \
     -C $root res
 #    $lwjgl/lwjgl.jar \
 #    $lwjgl/lwjgl_util.jar \
