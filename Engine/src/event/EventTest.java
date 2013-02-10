@@ -309,7 +309,6 @@ public class EventTest {
     }
 
     private static void processKeyboard() {
-<<<<<<< HEAD
 	if (KeyboardWrapper.put(Keyboard.KEY_P).isPressed()) {
 	    paused = !paused;
 	    h.setPause(paused);
