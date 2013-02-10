@@ -19,8 +19,9 @@ public class Player extends PhysicalEntity {
 
     ViewPoint v;
     float xAngle = 0, yAngle = 0;
-    float maxSpeed = 16;
+    float maxSpeed = 14;
     boolean collision = false;
+    boolean verticalCollision = false;
     int count = 0;
     boolean space = false;
     PhysicalEntity[] rayCast;
@@ -161,7 +162,7 @@ public class Player extends PhysicalEntity {
         v.setAngle(xAngle, yAngle, 0);
 
         rayCast[rayCastCounter].setPosition(getMiddle().translate(0, b.getDimension().getY() / 2, 0));
-        float rayCastSpeed = 60;
+        float rayCastSpeed = 20;
         double radX = Math.toRadians(xAngle);
         double radY = Math.toRadians(yAngle);
         double horLength = Math.cos(radX);
@@ -193,17 +194,20 @@ public class Player extends PhysicalEntity {
 
     }
 
-    public void collide(ArrayList<Triangle> collisions) {
+    @Override
+    public void collide(ArrayList<Triangle> cols) {
         collision = false;
-        for (Triangle col : collisions) {
-            if (col.b > .71) {
+        verticalCollision = false;
+        for (Triangle col : cols) {
+            collision = true;
+            if (col.b < .71) {
                 collision = true;
-                break;
             }
         }
     }
 
     @Override
-    public void collide(PhysicalEntity cols) {
+    public void collide(PhysicalEntity col) {
     }
+
 }

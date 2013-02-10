@@ -38,7 +38,6 @@ public class EventTest {
     static ArrayList<PhysicalEntity> pe;
     static PhysicalWorld w;
     static boolean paused = false;
-
     private static boolean pauseDebounce;
     private static boolean debugDebounce;
     private static boolean muteDebounce;
@@ -50,7 +49,6 @@ public class EventTest {
     private static UpdateThread updateThread;
     private static Object thelock = new Object(); // Used to synchronize render()/update()
     private static float dx, dy;
-
 
     public static void main(String[] argv) {
         if (argv == null || argv.length != 2) {
@@ -82,9 +80,9 @@ public class EventTest {
             Display.setTitle("Engine");
             Display.create();
 
-	    // Keyboard
-	    Keyboard.create();
-	    //Mouse
+            // Keyboard
+            Keyboard.create();
+            //Mouse
             Mouse.setGrabbed(true);
             Mouse.create();
 
@@ -156,11 +154,14 @@ public class EventTest {
             p.setPosition(new Vector3f(0, 10, 0));
             p.fg.add(new ForceGenerator() {
 
-		    @Override
-			public Vector3f getForce(PhysicalEntity e) {
-			return new Vector3f(0, -e.getMass() * 20, 0);
-		    }
-		});
+                @Override
+                public Vector3f getForce(PhysicalEntity e) {
+                    if (!((Player) e).collision) {
+                        e.setAwake(true);
+                    }
+                    return new Vector3f(0, -e.getMass() * 20, 0);
+                }
+            });
             System.out.println("Start Terrain");
             ter = new Terrain(p);
             System.out.println("DONE");
@@ -181,27 +182,30 @@ public class EventTest {
             de.add(sky);
             de.add(ter);
             //de.add(water);
-            de.add(h);
+            //de.add(h);
 
             pe.add(p);
 
-	    {
-		int i = 0;
-		for (; i < 2; i++) {
-		    Person per = new Person();
-		    per.b.setPosition(new Vector3f(0, 10*(i+1), 0));
-		    per.fg.add(new ForceGenerator() {
-			    
-			    @Override
-				public Vector3f getForce(PhysicalEntity e) {
-				return new Vector3f(0, -e.getMass() * 20, 0);
-			    }
-			});
-		    e.add(per);
-		    de.add(per);
-		    pe.add(per);
-		}
-	    }
+            {
+                int i = 0;
+                for (; i < 2; i++) {
+                    Person per = new Person();
+                    per.b.setPosition(new Vector3f(0, 10 * (i + 1), 0));
+                    per.fg.add(new ForceGenerator() {
+
+                        @Override
+                        public Vector3f getForce(PhysicalEntity e) {
+                            if (!((Person) e).isCollision()) {
+                                e.setAwake(true);
+                            }
+                            return new Vector3f(0, -e.getMass() * 20, 0);
+                        }
+                    });
+                    e.add(per);
+                    de.add(per);
+                    pe.add(per);
+                }
+            }
 
             w = new PhysicalWorld(ter, pe);
 
@@ -211,10 +215,10 @@ public class EventTest {
 
             DebugMessages.setShow(true);
             loading.stop();
-	    ConversationDisplay.init();
-	    Message.init();
-	    updateThread = new UpdateThread();
-	    updateThread.start();
+            ConversationDisplay.init();
+            Message.init();
+            updateThread = new UpdateThread();
+            updateThread.start();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -230,15 +234,15 @@ public class EventTest {
         music.setVolume(0.4f);
         music.play();
         while (!Display.isCloseRequested() && KeyboardWrapper.get(Keyboard.KEY_ESCAPE).isUp()) {
-	    
-	    getDeltaBottleNeck();
 
-	    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            getDeltaBottleNeck();
+
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
-	    processInputs();
-	    //p.update(delta);
-	    //System.out.println("Total " + delta);
+            processInputs();
+            //p.update(delta);
+            //System.out.println("Total " + delta);
             int delta = getDelta();
 
             DebugMessages.addMessage("FPS", "" + 1000f / delta);
@@ -246,105 +250,106 @@ public class EventTest {
             DebugMessages.addMessage("Acti", "" + activate);
             //System.out.println("Total " + delta);
 
-	    //processInputs();
+            //processInputs();
 	    /*
-	      for (int i = 0; i < 3; i++) {
-	      update(delta / 3);
-	      }
-	    */
+             * for (int i = 0; i < 3; i++) { update(delta / 3); }
+             */
 
-	    synchronized (thelock) {
-		render();
-	    }
-	    SoundManager.update(delta);
-	    Display.update();
-	    Display.sync(30);
+            synchronized (thelock) {
+                render();
+            }
+            SoundManager.update(delta);
+            Display.update();
+            Display.sync(30);
 
 
 
-	}
+        }
     }
 
     private static void destroy() {
-	isRunning = false;
-	try { updateThread.join(); } catch (Exception e) { }
-	Display.destroy();
-	Keyboard.destroy();
-	Mouse.destroy();
-	SoundManager.destroy();
-	System.exit(0);
+        isRunning = false;
+        try {
+            updateThread.join();
+        } catch (Exception e) {
+        }
+        Display.destroy();
+        Keyboard.destroy();
+        Mouse.destroy();
+        SoundManager.destroy();
+        System.exit(0);
 
 
     }
 
     public static boolean isRunning() {
-	return isRunning;
+        return isRunning;
     }
 
     public static long getTime() {
 
-	return (Sys.getTime() * 1000) / Sys.getTimerResolution();
+        return (Sys.getTime() * 1000) / Sys.getTimerResolution();
 
     }
 
     private static int getDelta() {
 
-	long currentTime = getTime();
-	int delta = (int) (currentTime - lastFrame);
-	lastFrame = getTime();
-	return delta;
+        long currentTime = getTime();
+        int delta = (int) (currentTime - lastFrame);
+        lastFrame = getTime();
+        return delta;
 
     }
 
     public static int getDeltaBottleNeck() {
 
-	long currentTime = getTime();
-	int delta = (int) (currentTime - lastFrameBottleNeck);
-	lastFrameBottleNeck = getTime();
-	return delta;
+        long currentTime = getTime();
+        int delta = (int) (currentTime - lastFrameBottleNeck);
+        lastFrameBottleNeck = getTime();
+        return delta;
 
     }
 
     public static void processInputs() {
 
-	processKeyboard();
-	processMouse();
+        processKeyboard();
+        processMouse();
 
     }
 
     private static void processKeyboard() {
-	if (KeyboardWrapper.put(Keyboard.KEY_P).isPressed()) {
-	    paused = !paused;
-	    h.setPause(paused);
-	    Mouse.setGrabbed(!paused);
-	}
-        
-	if (KeyboardWrapper.put(Keyboard.KEY_F).isPressed()) {
-	    DebugMessages.setShow(!DebugMessages.getShow());
-	}
-        
-	if (KeyboardWrapper.put(Keyboard.KEY_M).isPressed()) {
-	    SoundManager.mute(!SoundManager.isMuted());
-	}
+        if (KeyboardWrapper.put(Keyboard.KEY_P).isPressed()) {
+            paused = !paused;
+            h.setPause(paused);
+            Mouse.setGrabbed(!paused);
+        }
 
-	KeyboardWrapper.put(Keyboard.KEY_W);
-	KeyboardWrapper.put(Keyboard.KEY_A);
-	KeyboardWrapper.put(Keyboard.KEY_S);
-	KeyboardWrapper.put(Keyboard.KEY_D);
-	KeyboardWrapper.put(Keyboard.KEY_UP);
-	KeyboardWrapper.put(Keyboard.KEY_DOWN);
-	KeyboardWrapper.put(Keyboard.KEY_LEFT);
-	KeyboardWrapper.put(Keyboard.KEY_RIGHT);
-	KeyboardWrapper.put(Keyboard.KEY_SPACE);
-	KeyboardWrapper.put(Keyboard.KEY_LSHIFT);
-	KeyboardWrapper.put(Keyboard.KEY_ESCAPE);
+        if (KeyboardWrapper.put(Keyboard.KEY_F).isPressed()) {
+            DebugMessages.setShow(!DebugMessages.getShow());
+        }
+
+        if (KeyboardWrapper.put(Keyboard.KEY_M).isPressed()) {
+            SoundManager.mute(!SoundManager.isMuted());
+        }
+
+        KeyboardWrapper.put(Keyboard.KEY_W);
+        KeyboardWrapper.put(Keyboard.KEY_A);
+        KeyboardWrapper.put(Keyboard.KEY_S);
+        KeyboardWrapper.put(Keyboard.KEY_D);
+        KeyboardWrapper.put(Keyboard.KEY_UP);
+        KeyboardWrapper.put(Keyboard.KEY_DOWN);
+        KeyboardWrapper.put(Keyboard.KEY_LEFT);
+        KeyboardWrapper.put(Keyboard.KEY_RIGHT);
+        KeyboardWrapper.put(Keyboard.KEY_SPACE);
+        KeyboardWrapper.put(Keyboard.KEY_LSHIFT);
+        KeyboardWrapper.put(Keyboard.KEY_ESCAPE);
 
         if (KeyboardWrapper.put(Keyboard.KEY_R).isPressed()) {
             p.b.setPosition(new Vector3f(0, 20, 0));
             MessageCenter.addMessage("RESPAWNED " + (int) (Math.random() * 100));
         }
 
-	if (KeyboardWrapper.put(Keyboard.KEY_E).isPressed()) {
+        if (KeyboardWrapper.put(Keyboard.KEY_E).isPressed()) {
             activate = true;
         } else {
             activate = false;
@@ -352,66 +357,67 @@ public class EventTest {
     }
 
     private static void processMouse() {
-	dx = Mouse.getDX();
-	dy = Mouse.getDY();
+        dx = Mouse.getDX();
+        dy = Mouse.getDY();
     }
 
     public static void update(int delta) {
 
-	synchronized (thelock) {
-	    setConversation(!ConversationDisplay.isFinished());
-	    if (inConversation && isActivate()) {
-		ConversationDisplay.advance();
-	    }
-	    
-	    if (paused) {
-		h.update(delta);
-	    } else {
-		for (Entity ee : e) {
-		    ee.update(delta);
-		}
-		w.update(delta);
-	    }
-	}
+        synchronized (thelock) {
+            setConversation(!ConversationDisplay.isFinished());
+            if (inConversation && isActivate()) {
+                ConversationDisplay.advance();
+            }
+
+            if (paused) {
+                h.update(delta);
+            } else {
+                for (Entity ee : e) {
+                    ee.update(delta);
+                }
+                w.update(delta);
+            }
+        }
 
     }
 
     private static void render() {
 
-	//renderCode
-	p.adjust();
-	for (DisplayableEntity ent : de) {
-	    ent.draw();
-	}
+        //renderCode
+        p.adjust();
+        for (DisplayableEntity ent : de) {
+            ent.draw();
+        }
+        h.draw();
     }
 
     public static FloatBuffer asFloatBuffer(float... values) {
 
-	FloatBuffer buffer = BufferUtils.createFloatBuffer(values.length);
-	buffer.put(values);
-	buffer.flip();
-	return buffer;
+        FloatBuffer buffer = BufferUtils.createFloatBuffer(values.length);
+        buffer.put(values);
+        buffer.flip();
+        return buffer;
 
     }
 
     public static float getDx() {
-	return dx;
+        return dx;
     }
 
     public static float getDy() {
-	return dy;
+        return dy;
     }
 
     public static void addEntity(Entity ent) {
-	e.add(ent);
+        e.add(ent);
     }
 
     public static void addDisplayableEntity(DisplayableEntity dEnt) {
-	de.add(dEnt);
+        de.add(dEnt);
     }
 
     public static void addPhysicalEntity(PhysicalEntity pEnt) {
-	pe.add(pEnt);
+        pe.add(pEnt);
     }
 
     public static void addAbstractEntity(AbstractEntity aEnt) {
