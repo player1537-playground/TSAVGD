@@ -103,7 +103,9 @@ function addchanged() {
     if [ "$list" = -l ]; then
 	getchanges
     else
+	set -x
 	getchanges | xargs -I{} git add {}
+	set +x
     fi
 }
 
@@ -121,7 +123,7 @@ function main() {
 	dojar) create-jar "$@";;
 	dorun-default) run-default "$@";;
 	dostatus) status "$@";;
-	doaddchanged) addchanged "$@";;
+	dochanges) addchanged "$@";;
 	do-h|do--help|do) usage "$@";;
 	do*) editcode "$what";;
     esac
