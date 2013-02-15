@@ -37,6 +37,7 @@ public class ConversationDisplay {
         finished = false;
         ConversationDisplay.author = author;
         author.setConversation(true);
+        EventTest.p.startConversation(author);
         ConversationDisplay.text = text;
         textDisp.setMessage(author.toString() + " - \n         " + text);
     }
@@ -55,6 +56,7 @@ public class ConversationDisplay {
     public static void finish() {
         finished = true;
         author.setConversation(false);
+        EventTest.p.endConversation();
     }
 
     public static boolean isFinished() {
