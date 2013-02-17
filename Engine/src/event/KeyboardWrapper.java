@@ -49,7 +49,7 @@ class KeyboardWrapper {
 	if (map.containsKey(key)) {
 	    return map.get(key);
 	} else {
-	    System.err.println(key + " is not found in the keymap");
+	    //System.err.println(key + " is not found in the keymap");
 	    return new KeyStatus(false);
 	}
     }

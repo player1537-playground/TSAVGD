@@ -88,7 +88,7 @@ public class PhysicalWorld {
                     Vector3f impulseVec = (Vector3f) tri.getNormal().scale(-lowestVelocity);
                     Vector3f.add(e.velocity, impulseVec, e.velocity);
 
-                    e.addForce((Vector3f) new Vector3f(e.velocity).normalise().scale(-1f * 10 / e.invMass * tri.getNormal().getY()));
+                    e.addForce((Vector3f) new Vector3f(e.velocity).normalise().scale(-1f * 20 / e.invMass * tri.getNormal().getY()));
                     //System.out.println((Vector3f) copy(e.velocity).normalise().scale(-1f * 50 / e.invMass));
                     impulseVec = (Vector3f) tri.getNormal().scale(newVelocity);
                     Vector3f.add(e.velocity, impulseVec, e.velocity);

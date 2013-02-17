@@ -2,9 +2,13 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package event;
+package conversation;
 
 import character.Person;
+import event.EventTest;
+import event.Hud;
+import event.HudGraphic;
+import event.Menu;
 import java.awt.Color;
 import org.newdawn.slick.opengl.Texture;
 
@@ -33,9 +37,11 @@ public class ConversationDisplay {
     }
 
     public static void startConversation(Person author, String text) {
+        EventTest.p.velocity.set(0, 0, 0);
         finished = false;
         ConversationDisplay.author = author;
         author.setConversation(true);
+        EventTest.p.startConversation(author);
         ConversationDisplay.text = text;
         textDisp.setMessage(author.toString() + " - \n         " + text);
     }
@@ -54,6 +60,7 @@ public class ConversationDisplay {
     public static void finish() {
         finished = true;
         author.setConversation(false);
+        EventTest.p.endConversation();
     }
 
     public static boolean isFinished() {

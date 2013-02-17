@@ -4,6 +4,7 @@
  */
 package character;
 
+import conversation.ConversationDisplay;
 import event.*;
 import java.util.ArrayList;
 import org.lwjgl.util.vector.Vector;
@@ -22,6 +23,7 @@ public class Person extends AbstractEntity implements Activatable {
     static String soundPath = "res/ding.wav";
     Sound s;
     boolean conversation = false;
+    private boolean collision;
 
     public Person(Model m, MovementPattern mp) {
         super(m);
@@ -40,6 +42,7 @@ public class Person extends AbstractEntity implements Activatable {
 
     @Override
     public void collide(ArrayList<Triangle> cols) {
+        collision = cols.size() > 0;
         mp.collide(cols);
     }
 
@@ -80,13 +83,16 @@ public class Person extends AbstractEntity implements Activatable {
     public boolean isInConversation() {
         return conversation;
     }
+    public boolean isCollision() {
+        return collision;
+    }
 }
 
 class PersonMovement extends MovementPattern {
 
     Vector3f force;
     Vector3f zero = new Vector3f();
-    float maxSpeed = 10;
+    float maxSpeed = 8;
     final Person person;
 
     public PersonMovement(final Person person) {
@@ -96,7 +102,7 @@ class PersonMovement extends MovementPattern {
 
             @Override
             public Vector3f getForce(PhysicalEntity p) {
-                if(!person.isInConversation()) {
+                if (!person.isInConversation()) {
                     p.setAwake(true);
                 }
                 if (person.velocity.lengthSquared() > maxSpeed * maxSpeed) {
@@ -117,8 +123,8 @@ class PersonMovement extends MovementPattern {
             person.setAngle((float) (newAngle * 180 / Math.PI) - 90);
             force.set(x, 0, z);
             force.normalise();
-            force.scale(20 * person.getMass() * 2.5f);
-        } else  {
+            force.scale(20 * person.getMass() * 2.0f);
+        } else {
             force.set(zero);
         }
         counter = 1000;
