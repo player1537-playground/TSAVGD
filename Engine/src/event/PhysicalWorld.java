@@ -106,7 +106,7 @@ public class PhysicalWorld {
                 PhysicalEntity tempEnt = temporary.get(i);
                 if (!e.equals(tempEnt)) {
                     if (e.b.intersects(tempEnt.b)) {
-                        if (e.isCollidable() && tempEnt.isCollidable()) {
+                        if (e.isCollidable() == tempEnt.isCollidable()) {
                             Vector3f bounce = new Vector3f();
                             Vector3f relativePosition = new Vector3f();
                             Vector3f.sub(e.getMiddle(), tempEnt.getMiddle(), relativePosition);
