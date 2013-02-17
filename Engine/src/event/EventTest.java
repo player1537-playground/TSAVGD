@@ -20,7 +20,7 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.UnicodeFont;
 import sound.Sound;
 import sound.SoundManager;
-import levels.Level;
+import levels.*;
 
 /**
  *
@@ -172,7 +172,7 @@ public class EventTest {
             });
             System.out.println("Start Terrain");
             ter = new Terrain(TerrainModel.loadModel(terrainDisplayableModelPath), 
-			      TerrainModel.loadModel(terrainCollidableModelPath),
+			      Model.loadModel(terrainCollidableModelPath),
 			      p);
             System.out.println("DONE");
             SkyDome sky = new SkyDome();

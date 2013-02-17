@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package conversation;
+package levels;
 
 import character.Person;
 import event.EventTest;

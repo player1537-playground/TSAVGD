@@ -120,7 +120,7 @@ class Compile:
             "list": lambda: args,
             "say": lambda: "System.out.println(" + args[0] + ");",
             "begin": lambda: ";".join(args),
-            "level": lambda: "void init() { EventTest.init(%s); }" % ",".join(args),
+            "level": lambda: "public void init() { EventTest.init(%s); }" % ",".join(args),
             "terrain-model": lambda: "EventTest.terrainModel( %s );",
             "character": lambda: "new Person(%s) { void init() { setModel(%s); } void conversation() { %s } };" % (args[0], args[1], args[2]),
             "model": lambda: "new Model(%s)" % args[0],
