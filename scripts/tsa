@@ -112,7 +112,7 @@ function addchanged() {
 	getchanges
     else
 	set -x
-	getchanges | xargs -I{} GIT add {}
+	getchanges | xargs -I{} git add {}
 	set +x
     fi
 }

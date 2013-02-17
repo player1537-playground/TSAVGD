@@ -4,7 +4,7 @@
  */
 package event;
 
-import conversation.ConversationDisplay;
+import levels.ConversationDisplay;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import org.lwjgl.*;
@@ -20,7 +20,7 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.UnicodeFont;
 import sound.Sound;
 import sound.SoundManager;
-import levels.*;
+import levels.Level;
 
 /**
  *
@@ -171,8 +171,8 @@ public class EventTest {
                 }
             });
             System.out.println("Start Terrain");
-            ter = new Terrain(TerrainModel.load(terrainDisplayableModelPath), 
-			      TerrainModel.load(terrainCollidableModelPath),
+            ter = new Terrain(TerrainModel.loadModel(terrainDisplayableModelPath), 
+			      TerrainModel.loadModel(terrainCollidableModelPath),
 			      p);
             System.out.println("DONE");
             SkyDome sky = new SkyDome();

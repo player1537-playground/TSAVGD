@@ -4,7 +4,7 @@
  */
 package event;
 
-import conversation.ConversationDisplay;
+import levels.ConversationDisplay;
 import java.io.IOException;
 import java.util.ArrayList;
 import org.lwjgl.input.Mouse;
