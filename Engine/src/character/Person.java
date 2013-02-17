@@ -4,6 +4,7 @@
  */
 package character;
 
+import conversation.ConversationDisplay;
 import event.*;
 import java.util.ArrayList;
 import org.lwjgl.util.vector.Vector;

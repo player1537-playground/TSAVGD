@@ -160,37 +160,40 @@ public class Player extends PhysicalEntity {
                 stopTransition();
             }
         } else {
+            float xAngle = this.xAngle, yAngle = this.yAngle;
             if (!conversation) {
-                yAngle += (float) (-EventTest.getDx() / (Display.getWidth() / 360f) / 2);
                 xAngle += (float) EventTest.getDy() / (Display.getHeight() / 360f) / 2;
+                yAngle += (float) (-EventTest.getDx() / (Display.getWidth() / 360f) / 2);
+                if (xAngle > 85 && xAngle < 180) {
+                    xAngle = 85f;
+                }
+                if (xAngle > 180 && xAngle < 275) {
+                    xAngle = 275;
+                }
+
             } else {
                 float dx = (float) EventTest.getDy() / (Display.getHeight() / 360f) / 6;
                 float dy = (float) (-EventTest.getDx() / (Display.getWidth() / 360f) / 6);
-                if(desiredXAngle - xAngle < 30 && dx < 0) {
-                    xAngle += dx;
+                xAngle += dx;
+                yAngle += dy;
+                float diffX = coerceMath(desiredXAngle - xAngle);
+                float diffY = coerceMath(desiredYAngle - yAngle);
+                if (diffX > 30) {
+                    xAngle = desiredXAngle - 30;
                 }
-                if(desiredXAngle - xAngle > -15 && dx > 0) {
-                    xAngle += dx;
+                if (diffX < -15) {
+                    xAngle = desiredXAngle + 15;
                 }
-                if(desiredYAngle - yAngle < 30 && dy < 0) {
-                    yAngle += dy;
+                if (diffY > 30) {
+                    yAngle = desiredYAngle - 30;
                 }
-                if(desiredYAngle - yAngle > -30 && dy > 0) {
-                    yAngle += dy;
+                if (diffY < -30) {
+                    yAngle = desiredYAngle + 30;
                 }
             }
-            yAngle %= 360;
-            xAngle %= 360;
-            
-            if (yAngle < 0) {
-                yAngle += 360;
-            }
-            if (xAngle > 85) {
-                xAngle = 85f;
-            }
-            if (xAngle < -85) {
-                xAngle = -85;
-            }
+
+            xAngle = coerceNormal(xAngle);
+            yAngle = coerceNormal(yAngle);
 
             setAngle(xAngle, yAngle);
 
@@ -255,16 +258,13 @@ public class Player extends PhysicalEntity {
         Vector3f myPosition = getMiddle().translate(0, b.getDimension().getY() / 2, 0);
         Vector3f.sub(pePosition, myPosition, pePosition);
         float hypot = (float) Math.pow(Math.pow(pePosition.getX(), 2) + Math.pow(pePosition.getZ(), 2), .5f);
-        float xAngle = (float) Math.toDegrees(Math.atan2(pePosition.getY(), hypot));
-        float yAngle = (float) Math.toDegrees(Math.atan2(-pePosition.getX(), -pePosition.getZ()));
-        if(yAngle < 0) {
-            yAngle+=360;
-        }
-        transition(xAngle, yAngle, 1000);
+        float newXAngle = coerceNormal((float) Math.toDegrees(Math.atan2(pePosition.getY(), hypot)));
+        float newYAngle = coerceNormal((float) Math.toDegrees(Math.atan2(-pePosition.getX(), -pePosition.getZ())));
+        transition(newXAngle, newYAngle, 1000);
 
     }
 
-    void endConversation() {
+    public void endConversation() {
         conversation = false;
     }
 
@@ -272,8 +272,8 @@ public class Player extends PhysicalEntity {
         this.transitioning = true;
         this.desiredXAngle = desiredXAngle;
         this.desiredYAngle = desiredYAngle;
-        this.dXAngle = (desiredXAngle - xAngle) / duration;
-        this.dYAngle = (desiredYAngle - yAngle) / duration;
+        this.dXAngle = coerceMath(desiredXAngle - xAngle) / duration;
+        this.dYAngle = coerceMath(desiredYAngle - yAngle) / duration;
         this.duration = duration;
     }
 
@@ -285,5 +285,20 @@ public class Player extends PhysicalEntity {
         this.xAngle = xAngle;
         this.yAngle = yAngle;
         v.setAngle(xAngle, yAngle, 0);
+    }
+
+    public float coerceNormal(float angle) {
+        angle %= 360;
+        angle += 360;
+        angle %= 360;
+        return angle;
+    }
+
+    public float coerceMath(float angle) {
+        angle = coerceNormal(angle);
+        if (angle > 180) {
+            angle -= 360;
+        }
+        return angle;
     }
 }

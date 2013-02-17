@@ -8,13 +8,15 @@ class Out { public static void main(String[] args) {Person m = new Person("Marth
 		if (!((PropertyManager.getValue("burned-down-house") != null && !PropertyManager.getValue("burned-down-house").equals("")))) {
 			Conversation.printConv("Do you love me?");
 			Conversation.getResponse(new Response("No", new Action() {
-				void doAction() {
+                                @Override
+				public void doAction() {
 					PropertyManager.setValue("burned-house-down");
 					PropertyManager.setValue("destroyed-love-life");
 				}
 			}
 			),new Response("Yes", new Action() {
-				void doAction() {
+                                @Override
+				public void doAction() {
 					PropertyManager.setValue("dtf");
 				}
 			}

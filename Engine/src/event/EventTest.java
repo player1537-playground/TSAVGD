@@ -4,6 +4,7 @@
  */
 package event;
 
+import conversation.ConversationDisplay;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import org.lwjgl.*;

@@ -4,6 +4,7 @@
  */
 package event;
 
+import conversation.ConversationDisplay;
 import java.io.IOException;
 import java.util.ArrayList;
 import org.lwjgl.input.Mouse;
@@ -22,7 +23,7 @@ import sound.*;
  */
 public class Hud implements DisplayableEntity {
 
-    static float width, height;
+    public static float width, height;
     static ArrayList<DisplayableEntity> graphics = new ArrayList<DisplayableEntity>();
     static Menu pauseMenu;
     static Menu itemBar;
@@ -173,6 +174,7 @@ public class Hud implements DisplayableEntity {
     public void setPause(boolean paused) {
         pauseMenu.setShowBranch(paused);
         itemBar.setShowBranch(!paused);
+        conv.setShowBranch(!paused);
         if (!paused) {
             resetMenu();
         }

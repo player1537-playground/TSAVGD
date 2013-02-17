@@ -2,9 +2,13 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package event;
+package conversation;
 
 import character.Person;
+import event.EventTest;
+import event.Hud;
+import event.HudGraphic;
+import event.Menu;
 import java.awt.Color;
 import org.newdawn.slick.opengl.Texture;
 
