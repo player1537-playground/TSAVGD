@@ -19,6 +19,7 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.UnicodeFont;
 import sound.Sound;
 import sound.SoundManager;
+import levels.*;
 
 /**
  *
@@ -53,26 +54,32 @@ public class EventTest {
 
 
     public static void main(String[] argv) {
+	Level initialLevel = new IslandLevel();
         if (argv == null || argv.length != 2) {
-            create(1024, 768);
+            create(1024, 768, initialLevel);
         } else {
             int width = Integer.parseInt(argv[0]);
             int height = Integer.parseInt(argv[1]);
-            create(width, height);
+            create(width, height, initialLevel);
         }
     }
 
-    public static void create(float width, float height) {
+    public static void create(float width, float height, Level level) {
 
         EventTest.width = width;
         EventTest.height = height;
-        init();
+	level.init(); // calls EventTest.init() for us
         run();
         destroy();
     }
 
     private static void init() {
+	init("village_disp_fixed.obj", "village_col.obj");
+    }
 
+    public static void init(String terrainDisplayableModelPath,
+			    String terrainCollidableModelPath) {
+	
         try {
 
             //Display
@@ -162,7 +169,9 @@ public class EventTest {
 		    }
 		});
             System.out.println("Start Terrain");
-            ter = new Terrain(p);
+            ter = new Terrain(TerrainModel.load(terrainDisplayableModelPath), 
+			      TerrainModel.load(terrainCollidableModelPath),
+			      p);
             System.out.println("DONE");
             SkyDome sky = new SkyDome();
             //Vector3f waterPosition = ter.planes.boundary.getMin();

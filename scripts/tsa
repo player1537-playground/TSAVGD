@@ -10,12 +10,14 @@ function compile() {
 	    files="${files} $f"
 	done
     done
-    
-    javac -cp .:$LIB/lwjgl-2.8.4/res:$LIB/lwjgl-2.8.4/jar/lwjgl.jar:$LIB/lwjgl-2.8.4/jar/lwjgl_test.jar:$LIB/lwjgl-2.8.4/jar/lwjgl_util.jar:$LIB/lwjgl-2.8.4/jar/jinput.jar:$LIB/slick-util/slick-util.jar:$LIB/slick/slick.jar: $files
+    echo $files
+    javac -cp .:$LIB/lwjgl-2.8.4/res:$LIB/lwjgl-2.8.4/jar/lwjgl.jar:$LIB/lwjgl-2.8.4/jar/lwjgl_test.jar:$LIB/lwjgl-2.8.4/jar/lwjgl_util.jar:$LIB/lwjgl-2.8.4/jar/jinput.jar:$LIB/slick-util/slick-util.jar:$LIB/slick/slick.jar: $files 2>&1 | sed -e '1 s/.*/\o033[0;36m&\o033[0m/; /\^/ { n; s/.*/\o033[0;36m&\o033[0m/; }'
 }
 
 function run() {
-    if [ -z "$1" ]; then
+    local toRun
+    toRun=$1
+    if [ -z "$toRun" ]; then
 	echo "Usage: $(basename $0) package.ClassName"
 	echo "  Runs package.ClassName (if you are located in Engine/)"
 	exit 1
@@ -27,7 +29,7 @@ function run() {
     fi
     
     LIB=lib
-    java -cp src/:$LIB/lwjgl-2.8.4/jar/lwjgl.jar:$LIB/lwjgl-2.8.4/jar/lwjgl_util.jar:$LIB/lwjgl-2.8.4/jar/jinput.jar:$LIB/slick-util/slick-util.jar:$LIB/slick/slick.jar: -Djava.library.path=$LIB/lwjgl-2.8.4/native/linux/ event.EventTest
+    java -cp src/:$LIB/lwjgl-2.8.4/jar/lwjgl.jar:$LIB/lwjgl-2.8.4/jar/lwjgl_util.jar:$LIB/lwjgl-2.8.4/jar/jinput.jar:$LIB/slick-util/slick-util.jar:$LIB/slick/slick.jar: -Djava.library.path=$LIB/lwjgl-2.8.4/native/linux/ $toRun
 }
 
 function install() {
@@ -82,7 +84,7 @@ function compile-default() {
 	exit 1
     fi
     cd src/event
-    compile ../{event,character,sound,splash}
+    compile ../{event,character,sound,splash,levels}
 }
 
 function run-default() {
@@ -97,6 +99,12 @@ function getchanges() {
     git status -s | sed -ne '/\.class/ !{ s/ M \(.*\)/\1/p; }'
 }
 
+# Prints out what it's doing
+function GIT() {
+    echo "git $@"
+    git "$@"
+}
+
 function addchanged() {
     local list
     list=$1
@@ -104,7 +112,7 @@ function addchanged() {
 	getchanges
     else
 	set -x
-	getchanges | xargs -I{} git add {}
+	getchanges | xargs -I{} GIT add {}
 	set +x
     fi
 }

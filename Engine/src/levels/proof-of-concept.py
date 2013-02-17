@@ -8,14 +8,16 @@ import re
 import sys
 
 #s = "(if (< 4 5) (say \"true\") (say \"false\")"
-s = sys.argv[1]
+s = ""
+with open(sys.argv[1]) as f:
+    s = "".join([line.strip("\n") for line in f.readlines()])
 regexp = re.compile(r"([()])")
 array = sum([filter(lambda x: x != "", re.split(regexp, a)) for a in re.findall(r'(?:"(?:\\"|[^"])+"|[^ ])+', s)], [])
 #array = re.split('([()])', s)
 print("Original: " + s)
 print("  " + str(array))
 
-output_file = open("Out.java", "w")
+output_file = open(sys.argv[2] + ".java", "w")
 
 def fprint(s):
     output_file.write(str(s) + "\n")
@@ -118,6 +120,8 @@ class Compile:
             "list": lambda: args,
             "say": lambda: "System.out.println(" + args[0] + ");",
             "begin": lambda: ";".join(args),
+            "level": lambda: "void init() { EventTest.init(%s); }" % ",".join(args),
+            "terrain-model": lambda: "EventTest.terrainModel( %s );",
             "character": lambda: "new Person(%s) { void init() { setModel(%s); } void conversation() { %s } };" % (args[0], args[1], args[2]),
             "model": lambda: "new Model(%s)" % args[0],
             "set": lambda: "PropertyManager.setValue(%s%s)" % (args[0], "," + args[1] if len(args) > 1 else ""),
@@ -173,7 +177,11 @@ sexpr = parser.parse_sexpr()
 print("sexpr is " + str(sexpr))
 print("sexpr type is " + str(type(sexpr)))
 compiler = Compile(sexpr)
+fprint("package levels;")
+fprint("import event.*;")
+fprint("public class " + sys.argv[2] + " extends Level {")
 fprint(compiler.eval())
+fprint("}")
 #data_streamer = DataStreamer(array)
 #for x in data_streamer.nextIter():
 #    print ">> " + x
