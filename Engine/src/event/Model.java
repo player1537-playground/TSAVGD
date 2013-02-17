@@ -21,12 +21,12 @@ import org.lwjgl.util.glu.Util.*;
  */
 public class Model {
     
-    Vector3f[] verts;
-    Vector3f[] normals;
-    Vector3f[] textureCoords;
-    Face[] faces;
-    Texture[] tex;
-    int indice;
+    public Vector3f[] verts;
+    public Vector3f[] normals;
+    public Vector3f[] textureCoords;
+    public Face[] faces;
+    public Texture[] tex;
+    private int indice;
     static String defaultTexture = "test.png";
 
     public Model(Vector3f[] verts, Vector3f[] normals, Face[] faces, Texture t) {

@@ -21,6 +21,7 @@ import org.newdawn.slick.UnicodeFont;
 import sound.Sound;
 import sound.SoundManager;
 import levels.*;
+import util.SelectTerrain;
 
 /**
  *
@@ -152,7 +153,7 @@ public class EventTest {
 
             //Misc
 
-            e = new ArrayList<Entity>();
+            e = new ArrayList();
             de = new ArrayList<DisplayableEntity>();
             pe = new ArrayList<PhysicalEntity>();
 
@@ -171,9 +172,12 @@ public class EventTest {
                 }
             });
             System.out.println("Start Terrain");
+	    ///Change terrain when not selecting doors
+            //ter = new SelectTerrain(p);
             ter = new Terrain(TerrainModel.loadModel(terrainDisplayableModelPath), 
 			      Model.loadModel(terrainCollidableModelPath),
 			      p);
+            
             System.out.println("DONE");
             SkyDome sky = new SkyDome();
             //Vector3f waterPosition = ter.planes.boundary.getMin();
@@ -434,6 +438,24 @@ public class EventTest {
         addEntity(aEnt);
         addDisplayableEntity(aEnt);
         addPhysicalEntity(aEnt);
+    }
+
+    public static void removeEntity(Entity ent) {
+        if(e.contains(ent)) {
+            e.remove(ent);
+        }
+    }
+
+    public static void removeDisplayableEntity(DisplayableEntity dEnt) {
+        if(de.contains(dEnt)) {
+            de.remove(dEnt);
+        }
+    }
+
+    public static void removePhysicalEntity(PhysicalEntity pEnt) {
+        if(pe.contains(pEnt)) {
+            pe.remove(pEnt);
+        }
     }
 
     public static boolean isActivate() {

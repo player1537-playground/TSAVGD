@@ -10,9 +10,9 @@ package event;
  */
 public class Face {
 
-    int[] verts;
-    int[] normals;
-    int[] texCoords;
+    public int[] verts;
+    public int[] normals;
+    public int[] texCoords;
     int textureIndice;
     int numOfVerts;
 

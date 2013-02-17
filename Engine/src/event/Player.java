@@ -11,6 +11,7 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
+import util.SelectTriangle;
 
 /**
  *
@@ -19,7 +20,7 @@ import org.lwjgl.util.vector.Vector3f;
 public class Player extends PhysicalEntity {
 
     ViewPoint v;
-    float xAngle = 0, yAngle = 0;
+    public float xAngle = 0, yAngle = 0;
     float maxSpeed = 14;
     boolean collision = false;
     boolean verticalCollision = false;
@@ -106,9 +107,9 @@ public class Player extends PhysicalEntity {
             }
         });
 
-        rayCast = new PhysicalEntity[8];
+        rayCast = new PhysicalEntity[30];
         for (int i = 0; i < rayCast.length; i++) {
-            rayCast[i] = new PhysicalEntity(new BoundingBox(new Vector3f(), new Vector3f(.1f, .1f, .1f))) {
+            rayCast[i] = new PhysicalEntity(new BoundingBox(new Vector3f(), new Vector3f(.2f, .2f, .2f))) {
 
                 {
                     invMass = 1000;
@@ -117,6 +118,14 @@ public class Player extends PhysicalEntity {
 
                 @Override
                 public void collide(ArrayList<Triangle> cols) {
+                    /*
+                    ///Commment this out when not selecting doors
+                    if (EventTest.isActivate()) {
+                        for (Triangle t : cols) {
+                            ((SelectTriangle) t).activate();
+                        }
+                        SelectTriangle.print();
+                    }*/
                 }
 
                 @Override
@@ -199,7 +208,7 @@ public class Player extends PhysicalEntity {
 
             if (!conversation) {
                 rayCast[rayCastCounter].setPosition(getMiddle().translate(0, b.getDimension().getY() / 2, 0));
-                float rayCastSpeed = 20;
+                float rayCastSpeed = 8;
                 double radX = Math.toRadians(xAngle);
                 double radY = Math.toRadians(yAngle);
                 double horLength = Math.cos(radX);

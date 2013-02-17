@@ -13,11 +13,12 @@ import org.lwjgl.util.vector.Vector3f;
  */
 public class Terrain implements DisplayableEntity {
 
-    TerrainModel display;
+    public TerrainModel display;
     int indice;
-    CubeTree<Triangle> planes;
-    Player player;
+    public CubeTree<Triangle> planes;
+    public Player player;
 
+    public Terrain() {}
     public Terrain(TerrainModel display, Model navigation, Player player) {
 
         this.display = display;

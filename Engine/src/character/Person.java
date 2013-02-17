@@ -142,6 +142,7 @@ class PersonMovement extends MovementPattern {
         for (Triangle col : collisions) {
             if (col.b < .71) {
                 changeState();
+            MessageCenter.addMessage("CHANGE");
             }
         }
     }
