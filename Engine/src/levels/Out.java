@@ -1,31 +1,40 @@
-package conversation;
-
-class Out { public static void main(String[] args) {Person m = new Person("Martha") {
-	void init() {
-		setModel(new Model("martha.obj"));
-	}
-	void conversation() {
-		if (!((PropertyManager.getValue("burned-down-house") != null && !PropertyManager.getValue("burned-down-house").equals("")))) {
-			Conversation.printConv("Do you love me?");
-			Conversation.getResponse(new Response("No", new Action() {
-                                @Override
-				public void doAction() {
-					PropertyManager.setValue("burned-house-down");
-					PropertyManager.setValue("destroyed-love-life");
-				}
-			}
-			),new Response("Yes", new Action() {
-                                @Override
-				public void doAction() {
-					PropertyManager.setValue("dtf");
-				}
-			}
-			));
-		}
-		else {
-			Conversation.printConv("I dislike you, foul person");
-		}
-	}
+class Out
+{
+  void init() 
+  {
+     EventTest.addEntity((new Person()
+    {
+      void init() 
+      {
+        this.setModel("martha.obj");
+        this.setPosition(0.5,1.0,3.1);
+        this.setConversation("martha.conv");
+        
+      }
+      
+    }
+    ));
+    EventTest.addEntity((new Person()
+    {
+      void init() 
+      {
+        this.setModel("sebastiin.obj");
+        this.setPosition(0.1,3.1,66.6);
+        this.setConversation("sebastiin.conv");
+        
+      }
+      
+    }
+    ));
+    EventTest.setTerrainModel("island-level.obj");
+    EventTest.setCollideModel("island-level-col.obj");
+    EventTest.setPlaylist((new Song[] 
+    {
+        "ding.wav","jazz.wav","ding.wav" 
+    }
+    ),5000);
+    
+  }
+  
 }
-;
- m.init(); m.conversation(); PropertyManager.printMap(); }}
+
