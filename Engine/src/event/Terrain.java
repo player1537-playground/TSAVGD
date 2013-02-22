@@ -5,36 +5,32 @@
 package event;
 
 import java.util.ArrayList;
+import levels.Resource;
 import org.lwjgl.util.vector.Vector3f;
 
 /**
  *
  * @author Andy
  */
-public class Terrain implements DisplayableEntity {
+public class Terrain implements DisplayableEntity, Resource {
 
     public TerrainModel display;
-    int indice;
+    public Model navigation;
     public CubeTree<Triangle> planes;
     public Player player;
 
-    public Terrain() {}
+    public Terrain() {
+    }
+
     public Terrain(TerrainModel display, Model navigation, Player player) {
 
         this.display = display;
+        this.navigation = navigation;
         this.player = player;
-        init(navigation);
-
-    }
-
-    public Terrain(Player p) {
-
-        this(TerrainModel.loadModel("village_disp_fixed.obj"), Model.loadModel("village_col.obj"), p);
 
     }
 
     public void init(Model navigation) {
-
         planes = new CubeTree<Triangle>(navigation.getBounds());
         for (Face face : navigation.faces) {
 
@@ -67,5 +63,14 @@ public class Terrain implements DisplayableEntity {
     @Override
     public void update(int delta) {
     }
-    
+
+    @Override
+    public String getName() {
+        return "retean;";
+    }
+
+    @Override
+    public void load() {
+        init(navigation);
+    }
 }

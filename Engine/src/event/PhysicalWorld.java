@@ -150,4 +150,8 @@ public class PhysicalWorld {
     void add(PhysicalEntity e) {
         ents.add(e);
     }
+
+    void setTerrain(Terrain t) {
+        this.t = t;
+    }
 }

@@ -69,16 +69,13 @@ public class EventTest {
         EventTest.width = width;
         EventTest.height = height;
 	level.init(); // calls EventTest.init() for us
+        level.load();
+        System.out.println("DONE LOADING");
         run();
         destroy();
     }
 
-    private static void init() {
-	init("village_disp_fixed.obj", "village_col.obj");
-    }
-
-    public static void init(String terrainDisplayableModelPath,
-			    String terrainCollidableModelPath) {
+    public static void init() {
 	
         try {
 
@@ -174,9 +171,9 @@ public class EventTest {
             System.out.println("Start Terrain");
 	    ///Change terrain when not selecting doors
             //ter = new SelectTerrain(p);
-            ter = new Terrain(TerrainModel.loadModel(terrainDisplayableModelPath), 
+            /*ter = new Terrain(TerrainModel.loadModel(terrainDisplayableModelPath), 
 			      Model.loadModel(terrainCollidableModelPath),
-			      p);
+			      p);*/
             
             System.out.println("DONE");
             SkyDome sky = new SkyDome();
@@ -188,13 +185,13 @@ public class EventTest {
             h = new Hud(width, height);
 
             e.add(sky);
-            e.add(ter);
+            //e.add(ter);
             e.add(p);
             //e.add(water);
             e.add(h);
 
             de.add(sky);
-            de.add(ter);
+            //de.add(ter);
             //de.add(water);
             //de.add(h);
 
@@ -203,13 +200,13 @@ public class EventTest {
             {
                 int i = 0;
                 for (; i < 2; i++) {
-                    Person per = new Person();
+                    character.Person per = new character.Person();
                     per.b.setPosition(new Vector3f(0, 10 * (i + 1), 0));
                     per.fg.add(new ForceGenerator() {
 
                         @Override
                         public Vector3f getForce(PhysicalEntity e) {
-                            if (!((Person) e).isCollision()) {
+                            if (!((character.Person) e).isCollision()) {
                                 e.setAwake(true);
                             }
                             return new Vector3f(0, -e.getMass() * 20, 0);
@@ -231,8 +228,6 @@ public class EventTest {
             loading.stop();
             ConversationDisplay.init();
             Message.init();
-            updateThread = new UpdateThread();
-            updateThread.start();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -243,6 +238,8 @@ public class EventTest {
 
     private static void run() {
 
+            updateThread = new UpdateThread();
+            updateThread.start();
         Sound music = SoundManager.createSound("res/looping.wav");
         music.repeat();
         music.setVolume(0.4f);
@@ -387,7 +384,11 @@ public class EventTest {
                 h.update(delta);
             } else {
                 for (Entity ee : e) {
+                    try {
                     ee.update(delta);
+                    } catch (Exception err) {
+                        System.err.print(ee);
+                    }
                 }
                 w.update(delta);
             }
@@ -473,5 +474,10 @@ public class EventTest {
 
     public static void toggleConversation() {
         setConversation(!inConversation);
+    }
+    
+    public static void setTerrain(Terrain t) {
+        EventTest.ter = t;
+        w.setTerrain(t);
     }
 }

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import levels.Resource;
 import static org.lwjgl.opengl.GL11.*;
 import org.lwjgl.util.vector.Vector3f;
 import org.newdawn.slick.Color;
@@ -21,7 +22,7 @@ import org.lwjgl.util.glu.Util.*;
  *
  * @author Andy
  */
-public class TerrainModel {
+public class TerrainModel implements Resource {
 
     ArrayList verts;
     ArrayList normals;
@@ -33,50 +34,22 @@ public class TerrainModel {
     Vector3f min, max;
     static String defaultTexture = "grass.png";
     private float multx, multz;
+    private final String name;
+    private final String mpath, tpath;
 
     public enum Section {
 
         TOP, LEFT, BOTTOM, RIGHT, ALL
     }
 
-    public TerrainModel(ArrayList verts, ArrayList normals, ArrayList[][] faces, Texture t, Vector3f min, Vector3f max) {
-
-        this.verts = verts;
-        this.normals = normals;
-        this.faces = faces;
-        this.textureCoords = new ArrayList() {
-
-            {
-                add(new Vector3f(0, 0, 0));
-                add(new Vector3f(0, 1, 0));
-                add(new Vector3f(1, 1, 0));
-            }
-        };
-        System.out.println("Model loaded " + t.getTextureID());
-        tex = new Texture[]{t};
-        indices = glGenLists(faces.length * faces[0].length);
-        sectionx = faces.length;
-        sectionz = faces[0].length;
-        multx = sectionx / (max.getX() - min.getX());
-        multz = sectionz / (max.getZ() - min.getZ());
-        Vector3f.sub(max, min, max);
-        this.min = min;
-        this.max = max;
-        for (int i = 0; i < faces.length; i++) {
-            for (int j = 0; j < faces[i].length; j++) {
-                glNewList(indices + i * faces[i].length + j, GL_COMPILE);
-                initDraw(i, j);
-                glEndList();
-            }
-        }
-
+    public TerrainModel(String name, String path) {
+        this.name = name;
+        this.mpath = path;
+        this.tpath = defaultTexture;
     }
 
-    public static TerrainModel loadModel(String path) {
-        return TerrainModel.loadModel(path, defaultTexture);
-    }
-
-    public static TerrainModel loadModel(String mPath, String tPath) {
+    @Override
+    public void load() {
         int gridx = 0, gridz = 0;
         Vector3f min = null;
         Vector3f max = null;
@@ -88,7 +61,7 @@ public class TerrainModel {
         try {
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(
-                    ResourceLoader.getResourceAsStream("res/" + mPath)));
+                    ResourceLoader.getResourceAsStream("res/" + mpath)));
             String currentLine;
             while ((currentLine = reader.readLine()).startsWith("#")) {
                 String[] splitLine = currentLine.split(" ");
@@ -188,8 +161,47 @@ public class TerrainModel {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return new TerrainModel(verts, normals, faces, getTexture(tPath), min, max);
+        this.verts = verts;
+        this.normals = normals;
+        this.faces = faces;
+        Texture t = getTexture(tpath);
+        this.textureCoords = new ArrayList() {
 
+            {
+                add(new Vector3f(0, 0, 0));
+                add(new Vector3f(0, 1, 0));
+                add(new Vector3f(1, 1, 0));
+            }
+        };
+        System.out.println("Model loaded " + t.getTextureID());
+        tex = new Texture[]{t};
+        indices = glGenLists(faces.length * faces[0].length);
+        this.sectionx = faces.length;
+        this.sectionz = faces[0].length;
+        multx = sectionx / (max.getX() - min.getX());
+        multz = sectionz / (max.getZ() - min.getZ());
+        Vector3f.sub(max, min, max);
+        this.min = min;
+        this.max = max;
+        for (int i = 0; i < faces.length; i++) {
+            for (int j = 0; j < faces[i].length; j++) {
+                glNewList(indices + i * faces[i].length + j, GL_COMPILE);
+                initDraw(i, j);
+                glEndList();
+            }
+        }
+
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    public static TerrainModel loadModel(String path) {
+        TerrainModel m = new TerrainModel(path, path);
+        m.load();
+        return m;
     }
 
     public void initDraw(int x, int z) {

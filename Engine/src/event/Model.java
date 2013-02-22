@@ -8,6 +8,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import levels.Resource;
 import static org.lwjgl.opengl.GL11.*;
 import org.lwjgl.util.vector.Vector3f;
 import org.newdawn.slick.Color;
@@ -19,7 +20,7 @@ import org.lwjgl.util.glu.Util.*;
  *
  * @author Andy
  */
-public class Model {
+public class Model implements Resource {
     
     public Vector3f[] verts;
     public Vector3f[] normals;
@@ -28,48 +29,24 @@ public class Model {
     public Texture[] tex;
     private int indice;
     static String defaultTexture = "test.png";
+    private final String name;
+    private final String mpath, tpath;
 
-    public Model(Vector3f[] verts, Vector3f[] normals, Face[] faces, Texture t) {
-
-        this.verts = verts;
-        this.normals = normals;
-        this.faces = faces;
-        this.textureCoords = new Vector3f[]{new Vector3f(0, 0, 0), new Vector3f(0, 1, 0), new Vector3f(1, 1, 0)};
-        System.out.println("Model loaded " + t.getTextureID());
-        tex = new Texture[]{t};
-        indice = glGenLists(1);
-        glNewList(indice, GL_COMPILE);
-        initDraw();
-        glEndList();
-
-    }
-
-    public Model(Vector3f[] verts, Vector3f[] normals, Vector3f[] textureArray, Face[] faces, Texture[] tex) {
-
-        this.verts = verts;
-        this.normals = normals;
-        this.textureCoords = textureArray;
-        this.faces = faces;
-        this.tex = tex;
-        indice = glGenLists(1);
-        glNewList(indice, GL_COMPILE);
-        initDraw();
-        glEndList();
-    }
-
-    public static Model loadModel(String path) {
-        return Model.loadModel(path, defaultTexture);
+    public Model(String name, String path) {
+        this.name = name;
+        this.mpath = path;
+        this.tpath = defaultTexture;
     }
     
-    public static Model loadModel(String mPath, String tPath) {
-
-        ArrayList verts = new ArrayList(1000);
-        ArrayList normals = new ArrayList(1000);
-        ArrayList faces = new ArrayList(1000);
+    public void load() {
+        ArrayList vertexList = new ArrayList(1000);
+        ArrayList normalList = new ArrayList(1000);
+        ArrayList faceList = new ArrayList(1000);
+        
         try {
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(
-                    ResourceLoader.getResourceAsStream("res/" + mPath)));
+                    ResourceLoader.getResourceAsStream("res/" + mpath)));
             String currentLine;
             while ((currentLine = reader.readLine()) != null) {
 		String[] splitLine = currentLine.split(" ");
@@ -78,7 +55,7 @@ public class Model {
                     float x = Float.valueOf(splitLine[1]);
                     float y = Float.valueOf(splitLine[2]);
                     float z = Float.valueOf(splitLine[3]);
-                    verts.add(new Vector3f(x, y, z));
+                    vertexList.add(new Vector3f(x, y, z));
                     /*
                      * float dev = (float) Math.random() * 0.05f; colors.add(new
                      * Color(.725f - dev, .525f - dev, .325f - dev));
@@ -88,7 +65,7 @@ public class Model {
                     float x = Float.valueOf(splitLine[1]);
                     float y = Float.valueOf(splitLine[2]);
                     float z = Float.valueOf(splitLine[3]);
-                    normals.add(new Vector3f(x, y, z));
+                    normalList.add(new Vector3f(x, y, z));
                 } else if (currentLine.startsWith("f ")) {
 		    String[][] splitSlash = { splitLine[1].split("/"),  splitLine[2].split("/"), splitLine[3].split("/") };
                     int[] vertexIndices = {Integer.parseInt(splitSlash[0][0]) - 1,
@@ -105,7 +82,7 @@ public class Model {
 
                     int[] textureCoordinates = {0, 1, 2};
                     int textureIndice = 0;
-                    faces.add(new Face(vertexIndices, normalIndices, textureCoordinates, textureIndice));
+                    faceList.add(new Face(vertexIndices, normalIndices, textureCoordinates, textureIndice));
 
                 }
 
@@ -117,17 +94,31 @@ public class Model {
             e.printStackTrace();
         }
 
-        Vector3f[] vertArray = new Vector3f[verts.size()];
-        verts.toArray(vertArray);
-        Vector3f[] normalArray = new Vector3f[normals.size()];
-        normals.toArray(normalArray);
-        Face[] faceArray = new Face[faces.size()];
-        faces.toArray(faceArray);
-        return new Model(vertArray, normalArray, faceArray, getTexture(tPath));
-
+        this.verts = new Vector3f[vertexList.size()];
+        vertexList.toArray(this.verts);
+        this.normals = new Vector3f[normalList.size()];
+        normalList.toArray(this.normals);
+        this.faces = new Face[faceList.size()];
+        faceList.toArray(faces);
+        
+        Texture t = getTexture(tpath);
+        this.textureCoords = new Vector3f[]{new Vector3f(0, 0, 0), new Vector3f(0, 1, 0), new Vector3f(1, 1, 0)};
+        System.out.println("Model loaded " + t.getTextureID());
+        tex = new Texture[]{t};
+        indice = glGenLists(1);
+        glNewList(indice, GL_COMPILE);
+        initDraw();
+        glEndList();
+        
+    }
+    
+    public static Model loadModel(String path) {
+        Model m = new Model(path, path);
+        m.load();
+        return m;
     }
 
-    public static Model loadModel(String path, boolean texture) {
+    /*public static Model loadModel(String path, boolean texture) {
 
         ArrayList verts = new ArrayList();
         ArrayList normals = new ArrayList();
@@ -214,7 +205,7 @@ public class Model {
         Material.textures.toArray(textureArray);
         return new Model(vertArray, normalArray, textureCArray, faceArray, textureArray);
 
-    }
+    }*/
 
     public void initDraw() {
 
@@ -284,5 +275,10 @@ public class Model {
         }
         return t;
 
+    }
+
+    @Override
+    public String getName() {
+        return name;
     }
 }

@@ -1,4 +1,6 @@
-package conversation;
+package levels;
+
+import engine.Model;
 
 public class Person {
   String name;
