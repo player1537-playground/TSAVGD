@@ -159,19 +159,6 @@ public class EventTest {
             pe = new ArrayList<PhysicalEntity>();
 
 
-            p = new Player();
-            p.init();
-            p.setPosition(new Vector3f(0, 10, 0));
-            p.fg.add(new ForceGenerator() {
-
-                @Override 
-               public Vector3f getForce(PhysicalEntity e) {
-                    if (!((Player) e).collision) {
-                        e.setAwake(true);
-                    }
-                    return new Vector3f(0, -e.getMass() * 20, 0);
-                }
-            });
             System.out.println("Start Terrain");
 	    ///Change terrain when not selecting doors
             //ter = new SelectTerrain(p);
@@ -243,6 +230,7 @@ public class EventTest {
             DebugMessages.addMessage("Conv", "" + inConversation);
             DebugMessages.addMessage("Acti", "" + activate);
 	    DebugMessages.addMessage("Brightness", "" + brightness);
+	    DebugMessages.addMessage("Player's name", p.getName());
             //System.out.println("Total " + delta);
 	    float temp = brightness * 0.35f;
 	    temp = temp < 0 ? 0 : temp > 1 ? 1 : temp;

@@ -322,7 +322,7 @@ public class Player extends PhysicalEntity implements Resource {
 
     @Override
     public String getName() {
-        return PropertyManager.getValue(nameKey);
+        return PropertyManager.getString(nameKey);
     }
 
     @Override
