@@ -120,6 +120,14 @@ public class PropertyManager {
 	return utilInvName(slot) + "-count";
     }
 
+    private static String utilGetInventoryName(int slot) {
+	return getString(utilInvName(slot), "");
+    }
+
+    private static int utilGetInventoryCount(int slot) {
+	return getInteger(utilInvCount(slot), 0);
+    }
+
     public static ArrayList<InventoryItem> utilGetInventoryItems() {
 	ArrayList<InventoryItem> toReturn = new ArrayList<InventoryItem>();
 	for (int i=1; i<=NUM_ITEMS; i++) {
@@ -130,5 +138,32 @@ public class PropertyManager {
 	    }
 	}
 	return toReturn;
+    }
+
+    public static void utilSetInventorySlot(int slot, String name) {
+	utilSetInventorySlot(slot, name, 1);
+    }
+
+    public static void utilSetInventorySlot(int slot, String name, int count) {
+	setValue(utilInvName(slot), name);
+	setValue(utilInvCount(slot), count);
+    }
+
+    public static void utilIncreaseInventorySlot(int slot) {
+	utilIncreaseInventorySlot(slot, 1);
+    }
+
+    public static void utilIncreaseInventorySlot(int slot, int increaseBy) {
+	utilSetInventorySlot(slot, 
+			     utilGetInventoryName(slot), 
+			     utilGetInventoryCount(slot) + increaseBy);
+    }
+
+    public static void utilDecreaseInventorySlot(int slot) {
+	utilDecreaseInventorySlot(slot, 1);
+    }
+
+    public static void utilDecreaseInventorySlot(int slot, int decreaseBy) {
+	utilIncreaseInventorySlot(slot, -decreaseBy);
     }
 }
