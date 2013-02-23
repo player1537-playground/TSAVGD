@@ -59,12 +59,17 @@ function editcode() {
         emacsclient --no-wait "$file"
     else
 	curfile=$(find src/ -name $file.java)
+	if [ -z "$curfile" ]; then
+	    curfile=$(find src/ -name $file)
+	fi
 	if [ -n "$curfile" ]; then
 	    editcode $curfile
+	    return
 	fi
-	if [ -n "${file//[^.]/}" ]; then
-	    editcode "src/${file//\.//}.java"
-	fi
+	case $file in
+	    */*) return;;
+	    *.*) editcode "$src/${file//\.//}.java";;
+	esac
     fi
 }
 
@@ -84,7 +89,7 @@ function compile-default() {
 	exit 1
     fi
     cd src/event
-    compile ../{event,character,sound,splash,levels}
+    compile ../{event,character,sound,splash,levels,util}
 }
 
 function run-default() {

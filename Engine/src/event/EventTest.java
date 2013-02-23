@@ -53,6 +53,8 @@ public class EventTest {
     private static Object thelock = new Object(); // Used to synchronize render()/update()
     private static float dx, dy;
 
+    private static float brightness = 0.5f;
+
     public static void main(String[] argv) {
 	Level initialLevel = new IslandLevel();
         if (argv == null || argv.length != 2) {
@@ -68,6 +70,7 @@ public class EventTest {
 
         EventTest.width = width;
         EventTest.height = height;
+	PropertyManager.setValue("rawr");
 	level.init(); // calls EventTest.init() for us
         level.load();
         System.out.println("DONE LOADING");
@@ -160,8 +163,8 @@ public class EventTest {
             p.setPosition(new Vector3f(0, 10, 0));
             p.fg.add(new ForceGenerator() {
 
-                @Override
-                public Vector3f getForce(PhysicalEntity e) {
+                @Override 
+               public Vector3f getForce(PhysicalEntity e) {
                     if (!((Player) e).collision) {
                         e.setAwake(true);
                     }
@@ -259,7 +262,14 @@ public class EventTest {
             DebugMessages.addMessage("FPS", "" + 1000f / delta);
             DebugMessages.addMessage("Conv", "" + inConversation);
             DebugMessages.addMessage("Acti", "" + activate);
+	    DebugMessages.addMessage("Brightness", "" + brightness);
             //System.out.println("Total " + delta);
+	    float temp = brightness * 0.35f;
+	    temp = temp < 0 ? 0 : temp > 1 ? 1 : temp;
+	    glLight(GL_LIGHT0, GL_DIFFUSE, asFloatBuffer(new float[]{temp, temp, temp, 1}));
+	    temp = brightness * 0.7f;
+	    temp = temp < 0 ? 0 : temp > 1 ? 1 : temp;
+	    glLight(GL_LIGHT1, GL_DIFFUSE, asFloatBuffer(new float[]{temp, temp, temp, 1}));
 
             //processInputs();
 	    /*
@@ -342,6 +352,14 @@ public class EventTest {
         if (KeyboardWrapper.put(Keyboard.KEY_M).isPressed()) {
             SoundManager.mute(!SoundManager.isMuted());
         }
+
+	if (KeyboardWrapper.put(Keyboard.KEY_K).isDown()) {
+	    brightness += 0.005f;
+	}
+
+	if (KeyboardWrapper.put(Keyboard.KEY_J).isDown()) {
+	    brightness -= 0.005f;
+	}
 
         KeyboardWrapper.put(Keyboard.KEY_W);
         KeyboardWrapper.put(Keyboard.KEY_A);

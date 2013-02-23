@@ -28,6 +28,8 @@ jar cmfv0 manifest windows.jar \
     -C $src splash \
     -C $src event \
     -C $src sound \
+    -C $src levels \
+    -C $src util \
     -C $root res
 #    $lwjgl/lwjgl.jar \
 #    $lwjgl/lwjgl_util.jar \
