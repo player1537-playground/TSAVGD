@@ -21,6 +21,7 @@ import org.newdawn.slick.UnicodeFont;
 import sound.Sound;
 import sound.SoundManager;
 import levels.*;
+import util.FlagDropper;
 import util.SelectTerrain;
 
 /**
@@ -198,6 +199,7 @@ public class EventTest {
             loading.stop();
             ConversationDisplay.init();
             Message.init();
+            FlagDropper.init();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -257,6 +259,7 @@ public class EventTest {
     }
 
     private static void destroy() {
+        FlagDropper.destroy();
         isRunning = false;
         try {
             updateThread.join();
@@ -377,6 +380,7 @@ public class EventTest {
                     }
                 }
                 w.update(delta);
+                FlagDropper.update(delta);
             }
         }
 

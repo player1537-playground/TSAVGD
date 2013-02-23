@@ -43,14 +43,14 @@ public class Player extends PhysicalEntity implements Resource {
         v = new ViewPoint();
         fg.add(new ForceGenerator() {
 
-                @Override
-                public Vector3f getForce(PhysicalEntity e) {
-                    if (!((Player) e).collision) {
-                        e.setAwake(true);
-                    }
-                    return new Vector3f(0, -e.getMass() * EventTest.getGravity(), 0);
+            @Override
+            public Vector3f getForce(PhysicalEntity e) {
+                if (!((Player) e).collision) {
+                    e.setAwake(true);
                 }
-            });
+                return new Vector3f(0, -e.getMass() * EventTest.getGravity(), 0);
+            }
+        });
         fg.add(new ForceGenerator() {
 
             @Override
@@ -62,10 +62,14 @@ public class Player extends PhysicalEntity implements Resource {
 
                     float x = 0, y = 0, z = 0;
 
-                    boolean keyUp = KeyboardWrapper.get(Keyboard.KEY_UP).isDown() || KeyboardWrapper.get(Keyboard.KEY_W).isDown();
-                    boolean keyDown = KeyboardWrapper.get(Keyboard.KEY_DOWN).isDown() || KeyboardWrapper.get(Keyboard.KEY_S).isDown();
-                    boolean keyLeft = KeyboardWrapper.get(Keyboard.KEY_LEFT).isDown() || KeyboardWrapper.get(Keyboard.KEY_A).isDown();
-                    boolean keyRight = KeyboardWrapper.get(Keyboard.KEY_RIGHT).isDown() || KeyboardWrapper.get(Keyboard.KEY_D).isDown();
+                    boolean keyUp = KeyboardWrapper.get(Keyboard.KEY_UP).isDown()
+                            || KeyboardWrapper.get(Keyboard.KEY_W).isDown();
+                    boolean keyDown = KeyboardWrapper.get(Keyboard.KEY_DOWN).isDown()
+                            || KeyboardWrapper.get(Keyboard.KEY_S).isDown();
+                    boolean keyLeft = KeyboardWrapper.get(Keyboard.KEY_LEFT).isDown()
+                            || KeyboardWrapper.get(Keyboard.KEY_A).isDown();
+                    boolean keyRight = KeyboardWrapper.get(Keyboard.KEY_RIGHT).isDown()
+                            || KeyboardWrapper.get(Keyboard.KEY_D).isDown();
                     boolean keyShift = KeyboardWrapper.get(Keyboard.KEY_LSHIFT).isDown();
 
 
@@ -122,7 +126,8 @@ public class Player extends PhysicalEntity implements Resource {
 
         rayCast = new PhysicalEntity[30];
         for (int i = 0; i < rayCast.length; i++) {
-            rayCast[i] = new PhysicalEntity(new BoundingBox(new Vector3f(), new Vector3f(.2f, .2f, .2f))) {
+            rayCast[i] = new PhysicalEntity(new BoundingBox(new Vector3f(), new Vector3f(.2f, .2f,
+                    .2f))) {
 
                 {
                     invMass = 1000;
@@ -132,13 +137,11 @@ public class Player extends PhysicalEntity implements Resource {
                 @Override
                 public void collide(ArrayList<Triangle> cols) {
                     /*
-                    ///Commment this out when not selecting doors
-                    if (EventTest.isActivate()) {
-                        for (Triangle t : cols) {
-                            ((SelectTriangle) t).activate();
-                        }
-                        SelectTriangle.print();
-                    }*/
+                     * ///Commment this out when not selecting doors if
+                     * (EventTest.isActivate()) { for (Triangle t : cols) {
+                     * ((SelectTriangle) t).activate(); }
+                     * SelectTriangle.print(); }
+                     */
                 }
 
                 @Override
@@ -163,7 +166,8 @@ public class Player extends PhysicalEntity implements Resource {
         }
 
         v.applyPerspectiveMatrix();
-        
+        PropertyManager.setValue(nameKey, "Zenith");
+
     }
 
     public void draw() {
@@ -216,7 +220,8 @@ public class Player extends PhysicalEntity implements Resource {
             setAngle(xAngle, yAngle);
 
             if (!conversation) {
-                rayCast[rayCastCounter].setPosition(getMiddle().translate(0, b.getDimension().getY() / 2, 0));
+                rayCast[rayCastCounter].setPosition(getMiddle().translate(0, b.getDimension().getY()
+                        / 2, 0));
                 float rayCastSpeed = 8;
                 double radX = Math.toRadians(xAngle);
                 double radY = Math.toRadians(yAngle);
@@ -275,7 +280,8 @@ public class Player extends PhysicalEntity implements Resource {
         Vector3f pePosition = pe.b.getCenter().translate(0, b.getDimension().getY() / 2.5f, 0);
         Vector3f myPosition = getMiddle().translate(0, b.getDimension().getY() / 2, 0);
         Vector3f.sub(pePosition, myPosition, pePosition);
-        float hypot = (float) Math.pow(Math.pow(pePosition.getX(), 2) + Math.pow(pePosition.getZ(), 2), .5f);
+        float hypot = (float) Math.pow(Math.pow(pePosition.getX(), 2) + Math.pow(pePosition.getZ(), 2),
+                .5f);
         float newXAngle = coerceNormal((float) Math.toDegrees(Math.atan2(pePosition.getY(), hypot)));
         float newYAngle = coerceNormal((float) Math.toDegrees(Math.atan2(-pePosition.getX(), -pePosition.getZ())));
         transition(newXAngle, newYAngle, 1000);
