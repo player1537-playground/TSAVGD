@@ -13,7 +13,12 @@ import org.lwjgl.util.vector.Vector3f;
 public class BoundingBox {
 
     private Vector3f min, max;
+    static BoundingBox defaultBox = new BoundingBox(new Vector3f(), new Vector3f());
 
+    public BoundingBox() {
+        set(defaultBox);
+    }
+    
     public BoundingBox(Vector3f min, Vector3f max) {
 
         this.min = min;
@@ -168,5 +173,10 @@ public class BoundingBox {
 
     Vector3f getDimension() {
         return max;
+    }
+
+    public void set(BoundingBox box) {
+        this.min = box.getMin();
+        this.max = box.getMax();
     }
 }

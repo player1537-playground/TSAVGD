@@ -7,6 +7,7 @@ package character;
 import levels.ConversationDisplay;
 import event.*;
 import java.util.ArrayList;
+import levels.Resource;
 import org.lwjgl.util.vector.Vector;
 import org.lwjgl.util.vector.Vector3f;
 import sound.*;
@@ -25,19 +26,19 @@ public class Person extends AbstractEntity implements Activatable {
     boolean conversation = false;
     private boolean collision;
 
-    public Person(Model m, MovementPattern mp) {
-        super(m);
-        this.mp = mp;
-        this.fg.add(mp);
-        s = SoundManager.createSound(soundPath);
-    }
+    public Person(String name) {
+        super(name);
+        fg.add(new ForceGenerator() {
 
-    public Person() {
-        super(Model.loadModel("soldier_small.obj"));
-        this.mp = new PersonMovement(this);
-        this.fg.add(mp);
-        s = SoundManager.createSound(soundPath);
-
+            @Override
+            public Vector3f getForce(PhysicalEntity e) {
+                if (!((character.Person) e).isCollision()) {
+                    e.setAwake(true);
+                }
+                return new Vector3f(0, -e.getMass() * EventTest.getGravity(), 0);
+            }
+        });
+        setMovementPattern(new PersonMovement(this));
     }
 
     @Override
@@ -83,8 +84,24 @@ public class Person extends AbstractEntity implements Activatable {
     public boolean isInConversation() {
         return conversation;
     }
+
     public boolean isCollision() {
         return collision;
+    }
+
+    @Override
+    public void load() {
+        super.load();
+        s = SoundManager.createSound(soundPath);
+    }
+
+    public void setModel(Model m) {
+        super.setModel(m);
+    }
+
+    public void setMovementPattern(MovementPattern mp) {
+        this.mp = mp;
+        fg.add(mp);
     }
 }
 
@@ -94,6 +111,7 @@ class PersonMovement extends MovementPattern {
     Vector3f zero = new Vector3f();
     float maxSpeed = 8;
     final Person person;
+    static int reset = 500;
 
     public PersonMovement(final Person person) {
         this.person = person;
@@ -116,18 +134,20 @@ class PersonMovement extends MovementPattern {
 
     @Override
     public void changeState() {
-        if (!person.isInConversation()) {
-            float x = (float) Math.random() - 0.5f;
-            float z = (float) Math.random() - 0.5f;
-            float newAngle = (float) Math.atan2(x, z);
-            person.setAngle((float) (newAngle * 180 / Math.PI) - 90);
-            force.set(x, 0, z);
-            force.normalise();
-            force.scale(20 * person.getMass() * 2.0f);
-        } else {
-            force.set(zero);
+        if (counter < reset * .95) {
+            if (!person.isInConversation()) {
+                float x = (float) Math.random() - 0.5f;
+                float z = (float) Math.random() - 0.5f;
+                float newAngle = (float) Math.atan2(x, z);
+                person.setAngle((float) (newAngle * 180 / Math.PI) - 90);
+                force.set(x, 0, z);
+                force.normalise();
+                force.scale(20 * person.getMass() * 2.0f);
+            } else {
+                force.set(zero);
+            }
+            counter = reset;
         }
-        counter = 1000;
     }
 
     @Override
@@ -142,7 +162,7 @@ class PersonMovement extends MovementPattern {
         for (Triangle col : collisions) {
             if (col.b < .71) {
                 changeState();
-            MessageCenter.addMessage("CHANGE");
+                MessageCenter.addMessage("CHANGE");
             }
         }
     }

@@ -6,6 +6,8 @@ package event;
 
 import character.Person;
 import java.util.ArrayList;
+import levels.PropertyManager;
+import levels.Resource;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
@@ -17,7 +19,7 @@ import util.SelectTriangle;
  *
  * @author Andy
  */
-public class Player extends PhysicalEntity {
+public class Player extends PhysicalEntity implements Resource {
 
     ViewPoint v;
     public float xAngle = 0, yAngle = 0;
@@ -33,11 +35,22 @@ public class Player extends PhysicalEntity {
     private boolean transitioning;
     private float duration;
     private float desiredXAngle, desiredYAngle;
+    private String nameKey = "player-name";
 
     public Player() {
 
         super(new BoundingBox(new Vector3f(0, 5, 0), new Vector3f(0.6f, 2f, 0.6f)));
         v = new ViewPoint();
+        fg.add(new ForceGenerator() {
+
+                @Override
+                public Vector3f getForce(PhysicalEntity e) {
+                    if (!((Player) e).collision) {
+                        e.setAwake(true);
+                    }
+                    return new Vector3f(0, -e.getMass() * EventTest.getGravity(), 0);
+                }
+            });
         fg.add(new ForceGenerator() {
 
             @Override
@@ -149,15 +162,11 @@ public class Player extends PhysicalEntity {
             EventTest.addPhysicalEntity(rayCast[i]);
         }
 
+        v.applyPerspectiveMatrix();
+        
     }
 
     public void draw() {
-    }
-
-    public void init() {
-
-        v.applyPerspectiveMatrix();
-
     }
 
     @Override
@@ -309,5 +318,15 @@ public class Player extends PhysicalEntity {
             angle -= 360;
         }
         return angle;
+    }
+
+    @Override
+    public String getName() {
+        return PropertyManager.getValue(nameKey);
+    }
+
+    @Override
+    public void load() {
+        //todo: Maybe add a player model or sounds?
     }
 }
