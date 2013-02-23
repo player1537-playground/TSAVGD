@@ -5,6 +5,7 @@
 package event;
 
 import java.util.ArrayList;
+import levels.Resource;
 import org.lwjgl.util.vector.Vector3f;
 import static org.lwjgl.opengl.GL11.*;
 
@@ -12,20 +13,28 @@ import static org.lwjgl.opengl.GL11.*;
  *
  * @author Andy
  */
-public abstract class AbstractEntity extends PhysicalEntity implements DisplayableEntity {
+public abstract class AbstractEntity extends PhysicalEntity implements DisplayableEntity, Resource {
 
     Model m;
     Vector3f origin;
     float angle;
+    private String name;
 
-    public AbstractEntity(Model m) {
-
-        super(m.getBounds());
+    public AbstractEntity(String name) {
+        this.name = name;
+    }
+    
+    @Override
+    public void load() {
+        super.setBounds(m.getBounds());
         this.m = m;
         Vector3f myMin = b.getMin();
         this.origin = new Vector3f(-myMin.getX(), -myMin.getY(), -myMin.getZ());
         this.angle = 0;
-
+    }
+    
+    public String getName() {
+        return this.name;
     }
     
     @Override
@@ -86,6 +95,10 @@ public abstract class AbstractEntity extends PhysicalEntity implements Displayab
     
     public void rotate(float angle) {
         this.angle += angle;
+    }
+    
+    public void setModel(Model m) {
+        this.m = m;
     }
     
     

@@ -18,18 +18,23 @@ public class Terrain implements DisplayableEntity, Resource {
     public Model navigation;
     public CubeTree<Triangle> planes;
     public Player player;
+    private String name;
 
     public Terrain() {
     }
 
-    public Terrain(TerrainModel display, Model navigation, Player player) {
-
-        this.display = display;
-        this.navigation = navigation;
-        this.player = player;
-
+    public Terrain(String name) {
+        this.name = name;
     }
 
+    public void setDisplay(TerrainModel display) {
+        this.display = display;
+    }
+    
+    public void setNavigation(Model navigation) {
+        this.navigation = navigation;
+    }
+    
     public void init(Model navigation) {
         planes = new CubeTree<Triangle>(navigation.getBounds());
         for (Face face : navigation.faces) {
@@ -48,6 +53,7 @@ public class Terrain implements DisplayableEntity, Resource {
     @Override
     public void draw() {
 
+        Player player = EventTest.p;
         Vector3f position = player.getMiddle();
         float angle = player.yAngle;
         display.draw(position.getX(), position.getZ(), angle);
@@ -66,7 +72,7 @@ public class Terrain implements DisplayableEntity, Resource {
 
     @Override
     public String getName() {
-        return "retean;";
+        return name;
     }
 
     @Override

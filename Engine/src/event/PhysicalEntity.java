@@ -20,6 +20,10 @@ public abstract class PhysicalEntity implements Entity {
     public float vAvg;
     public boolean collidable;
 
+    public PhysicalEntity() {
+        this(new BoundingBox());
+    }
+
     public PhysicalEntity(BoundingBox b) {
 
         this.b = b;
@@ -102,5 +106,9 @@ public abstract class PhysicalEntity implements Entity {
 
     public boolean isCollidable() {
         return collidable;
+    }
+
+    void setBounds(BoundingBox bounds) {
+        this.b = bounds;
     }
 }

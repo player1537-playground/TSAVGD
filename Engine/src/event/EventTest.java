@@ -40,6 +40,7 @@ public class EventTest {
     static ArrayList<DisplayableEntity> de;
     static ArrayList<PhysicalEntity> pe;
     static PhysicalWorld w;
+    private static float gravity;
     static boolean paused = false;
     private static boolean pauseDebounce;
     private static boolean debugDebounce;
@@ -189,7 +190,7 @@ public class EventTest {
 
             e.add(sky);
             //e.add(ter);
-            e.add(p);
+            //e.add(p);
             //e.add(water);
             e.add(h);
 
@@ -198,28 +199,7 @@ public class EventTest {
             //de.add(water);
             //de.add(h);
 
-            pe.add(p);
-
-            {
-                int i = 0;
-                for (; i < 2; i++) {
-                    character.Person per = new character.Person();
-                    per.b.setPosition(new Vector3f(0, 10 * (i + 1), 0));
-                    per.fg.add(new ForceGenerator() {
-
-                        @Override
-                        public Vector3f getForce(PhysicalEntity e) {
-                            if (!((character.Person) e).isCollision()) {
-                                e.setAwake(true);
-                            }
-                            return new Vector3f(0, -e.getMass() * 20, 0);
-                        }
-                    });
-                    e.add(per);
-                    de.add(per);
-                    pe.add(per);
-                }
-            }
+            //pe.add(p);
 
             w = new PhysicalWorld(ter, pe);
 
@@ -497,5 +477,17 @@ public class EventTest {
     public static void setTerrain(Terrain t) {
         EventTest.ter = t;
         w.setTerrain(t);
+    }
+    
+    public static void setPlayer(Player player) {
+        p = player;
+    }
+
+    public static float getGravity() {
+        return gravity;
+    }
+
+    public static void setGravity(float g) {
+        gravity = g;
     }
 }
