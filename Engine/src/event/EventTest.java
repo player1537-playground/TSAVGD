@@ -32,6 +32,7 @@ public class EventTest {
 
     static float width;
     static float height;
+    static DisplayMode diplayMode;
     static long lastFrame = 0;
     static long lastFrameBottleNeck = 0;
     static Hud h;
@@ -54,26 +55,31 @@ public class EventTest {
     private static UpdateThread updateThread;
     private static Object thelock = new Object(); // Used to synchronize render()/update()
     private static float dx, dy;
-
     private static float brightness = 0.5f;
 
     public static void main(String[] argv) {
-	Level initialLevel = new IslandLevel();
         if (argv == null || argv.length != 2) {
-            create(1024, 768, initialLevel);
+            main(new DisplayMode(1024, 768));
         } else {
             int width = Integer.parseInt(argv[0]);
             int height = Integer.parseInt(argv[1]);
-            create(width, height, initialLevel);
+            main(new DisplayMode(width, height));
         }
     }
 
-    public static void create(float width, float height, Level level) {
+    public static void main(DisplayMode dm) {
+        Level initialLevel = new IslandLevel();
+            System.out.println("W " + dm.getWidth() + " H " + dm.getHeight());
+        create(dm, initialLevel);
+    }
 
-        EventTest.width = width;
-        EventTest.height = height;
-	PropertyManager.setValue("rawr");
-	level.init(); // calls EventTest.init() for us
+    public static void create(DisplayMode dm, Level level) {
+
+        EventTest.width = dm.getWidth();
+        EventTest.height = dm.getHeight();
+        EventTest.diplayMode = dm;
+        PropertyManager.setValue("rawr");
+        level.init(); // calls EventTest.init() for us
         level.load();
         System.out.println("DONE LOADING");
         run();
@@ -81,12 +87,14 @@ public class EventTest {
     }
 
     public static void init() {
-	
+
         try {
 
             //Display
-            Display.setDisplayMode(new DisplayMode((int) width, (int) height));
-            Display.setFullscreen(true);
+            Display.setDisplayMode(diplayMode);
+            if (diplayMode.isFullscreenCapable()) {
+                Display.setFullscreen(true);
+            }
             Display.setVSyncEnabled(true);
             Display.setTitle("Engine");
             Display.create();
@@ -102,6 +110,7 @@ public class EventTest {
             Sound loading = SoundManager.createSound("res/jazz.wav");
             loading.repeat();
             //loading.play();
+            HudGraphic.init();
 
             //OpenGL
             glViewport(0, 0, (int) width, (int) height);
@@ -161,12 +170,15 @@ public class EventTest {
 
 
             System.out.println("Start Terrain");
-	    ///Change terrain when not selecting doors
+            ///Change terrain when not selecting doors
             //ter = new SelectTerrain(p);
-            /*ter = new Terrain(TerrainModel.loadModel(terrainDisplayableModelPath), 
-			      Model.loadModel(terrainCollidableModelPath),
-			      p);*/
-            
+            /*
+             * ter = new
+             * Terrain(TerrainModel.loadModel(terrainDisplayableModelPath),
+             * Model.loadModel(terrainCollidableModelPath),
+			      p);
+             */
+
             System.out.println("DONE");
             SkyDome sky = new SkyDome();
             //Vector3f waterPosition = ter.planes.boundary.getMin();
@@ -210,8 +222,8 @@ public class EventTest {
 
     private static void run() {
 
-            updateThread = new UpdateThread();
-            updateThread.start();
+        updateThread = new UpdateThread();
+        updateThread.start();
         Sound music = SoundManager.createSound("res/looping.wav");
         music.repeat();
         music.setVolume(0.4f);
@@ -231,15 +243,15 @@ public class EventTest {
             DebugMessages.addMessage("FPS", "" + 1000f / delta);
             DebugMessages.addMessage("Conv", "" + inConversation);
             DebugMessages.addMessage("Acti", "" + activate);
-	    DebugMessages.addMessage("Brightness", "" + brightness);
-	    DebugMessages.addMessage("Player's name", p.getName());
+            DebugMessages.addMessage("Brightness", "" + brightness);
+            DebugMessages.addMessage("Player's name", p.getName());
             //System.out.println("Total " + delta);
-	    float temp = brightness * 0.35f;
-	    temp = temp < 0 ? 0 : temp > 1 ? 1 : temp;
-	    glLight(GL_LIGHT0, GL_DIFFUSE, asFloatBuffer(new float[]{temp, temp, temp, 1}));
-	    temp = brightness * 0.7f;
-	    temp = temp < 0 ? 0 : temp > 1 ? 1 : temp;
-	    glLight(GL_LIGHT1, GL_DIFFUSE, asFloatBuffer(new float[]{temp, temp, temp, 1}));
+            float temp = brightness * 0.35f;
+            temp = temp < 0 ? 0 : temp > 1 ? 1 : temp;
+            glLight(GL_LIGHT0, GL_DIFFUSE, asFloatBuffer(new float[]{temp, temp, temp, 1}));
+            temp = brightness * 0.7f;
+            temp = temp < 0 ? 0 : temp > 1 ? 1 : temp;
+            glLight(GL_LIGHT1, GL_DIFFUSE, asFloatBuffer(new float[]{temp, temp, temp, 1}));
 
             //processInputs();
 	    /*
@@ -324,13 +336,13 @@ public class EventTest {
             SoundManager.mute(!SoundManager.isMuted());
         }
 
-	if (KeyboardWrapper.put(Keyboard.KEY_K).isDown()) {
-	    brightness += 0.005f;
-	}
+        if (KeyboardWrapper.put(Keyboard.KEY_K).isDown()) {
+            brightness += 0.005f;
+        }
 
-	if (KeyboardWrapper.put(Keyboard.KEY_J).isDown()) {
-	    brightness -= 0.005f;
-	}
+        if (KeyboardWrapper.put(Keyboard.KEY_J).isDown()) {
+            brightness -= 0.005f;
+        }
 
         KeyboardWrapper.put(Keyboard.KEY_W);
         KeyboardWrapper.put(Keyboard.KEY_A);
@@ -374,7 +386,7 @@ public class EventTest {
             } else {
                 for (Entity ee : e) {
                     try {
-                    ee.update(delta);
+                        ee.update(delta);
                     } catch (Exception err) {
                         System.err.print(ee);
                     }
@@ -394,6 +406,7 @@ public class EventTest {
             ent.draw();
         }
         h.draw();
+        
     }
 
     public static FloatBuffer asFloatBuffer(float... values) {
@@ -432,19 +445,19 @@ public class EventTest {
     }
 
     public static void removeEntity(Entity ent) {
-        if(e.contains(ent)) {
+        if (e.contains(ent)) {
             e.remove(ent);
         }
     }
 
     public static void removeDisplayableEntity(DisplayableEntity dEnt) {
-        if(de.contains(dEnt)) {
+        if (de.contains(dEnt)) {
             de.remove(dEnt);
         }
     }
 
     public static void removePhysicalEntity(PhysicalEntity pEnt) {
-        if(pe.contains(pEnt)) {
+        if (pe.contains(pEnt)) {
             pe.remove(pEnt);
         }
     }
@@ -465,12 +478,12 @@ public class EventTest {
     public static void toggleConversation() {
         setConversation(!inConversation);
     }
-    
+
     public static void setTerrain(Terrain t) {
         EventTest.ter = t;
         w.setTerrain(t);
     }
-    
+
     public static void setPlayer(Player player) {
         p = player;
     }

@@ -15,6 +15,7 @@ import org.newdawn.slick.font.effects.ColorEffect;
 import static org.lwjgl.opengl.GL11.*;
 import org.lwjgl.util.vector.Vector3f;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.UnicodeFont;
 import sound.*;
 
 /**
@@ -36,6 +37,7 @@ public class Hud implements DisplayableEntity {
     public Hud(float width, float height) {
         this.width = width;
         this.height = height;
+        UnicodeFont uf = HudGraphic.loadFont("Comic Sans", 16);
         HudGraphic menu = new HudGraphic(Hud.load("res/tree.png"), null);
         Texture menuItemTex = Hud.load("res/test.png");
 
@@ -47,7 +49,7 @@ public class Hud implements DisplayableEntity {
         Menu[] menuItems = new Menu[6];
         String[] subMenuText = {"Items", "Character", "Options", "Save", "Quit", "Continue"};
         for (int i = 0; i < menuItems.length; i++) {
-            menuItems[i] = new Menu(64, 100 + 96 * i, false, new HudGraphic(menuItemTex, subMenuText[i]), true, null, new Event() {
+            menuItems[i] = new Menu(0, 100 + 96 * i, false, new HudGraphic(menuItemTex, subMenuText[i]), true, null, new Event() {
 
                 @Override
                 public void execute() {

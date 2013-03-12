@@ -27,7 +27,7 @@ public class HudGraphic implements DisplayableEntity {
     int textx, texty;
     public static ArrayList<UnicodeFont> fonts;
 
-    static {
+    public static void init() {
         fonts = new ArrayList<UnicodeFont>();
         fonts.add(loadFont("Times New Roman", 40));
     }
@@ -43,9 +43,11 @@ public class HudGraphic implements DisplayableEntity {
         f.addAsciiGlyphs();
         f.getEffects().add(new ColorEffect(color));
         try {
+            glDisable(GL_TEXTURE_2D);
             f.loadGlyphs();
         } catch (SlickException ex) {
             ex.printStackTrace();
+            glEnable(GL_TEXTURE_2D);
         }
         fonts.add(f);
         return f;

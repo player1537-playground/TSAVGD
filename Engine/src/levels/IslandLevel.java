@@ -28,7 +28,7 @@ public class IslandLevel extends Level {
         EventTest.addPhysicalEntity(player);
         EventTest.setPlayer(player);
 
-        Model soldierModel = new Model("Martha's Model", "soldier_small.obj");
+        Model soldierModel = new Model("Martha's Model", "shark.obj");
         addResource(soldierModel);
 
         for (int i = 0; i < 4; i++) {

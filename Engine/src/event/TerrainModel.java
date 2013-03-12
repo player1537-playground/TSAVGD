@@ -32,7 +32,7 @@ public class TerrainModel implements Resource {
     int indices;
     int sectionx, sectionz;
     Vector3f min, max;
-    static String defaultTexture = "grass.png";
+    static String defaultTexture = "sand-redo.png";
     private float multx, multz;
     private final String name;
     private final String mpath, tpath;

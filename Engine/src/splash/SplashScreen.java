@@ -24,31 +24,29 @@ public class SplashScreen {
 
     static boolean readyPlay = false;
     static int resIndex = 0;
-    static String[] resolutions;
+    static DisplayMode dm;
     static HudGraphic res;
     private static boolean debounce;
+    static int gameHeight = 768;
+    static int gameWidth = 1024;
+    public static boolean fullscreen = true;
+    public static String[] options = {"Full Screen", "1024x768"};
 
     public static void main(String[] args) {
         int width = 640, height = 480;
         try {
-
             DisplayMode[] yo = Display.getAvailableDisplayModes();
-            ArrayList<String> allRes = new ArrayList<String>();
             for (DisplayMode y : yo) {
-                String resString = "W " + y.getWidth() + " H " + y.getHeight();
-                if (!allRes.contains(resString)) {
-                    allRes.add(resString);
+                if (y.isFullscreenCapable() && y.getHeight() == gameHeight && y.getWidth() == gameWidth) {
+                    dm = y;
                 }
-                System.out.println("W " + y.getWidth() + " H " + y.getHeight());
             }
-            resolutions = new String[allRes.size()];
-            allRes.toArray(resolutions);
 
             Display.setDisplayMode(new DisplayMode(width, height));
-            //Display.setFullscreen(true);
             Display.setTitle("Voyager");
             Display.create();
             Mouse.create();
+            HudGraphic.init();
         } catch (LWJGLException e) {
             e.printStackTrace();
             Display.destroy();
@@ -63,7 +61,7 @@ public class SplashScreen {
 
         Texture button = Hud.load("res/play.png");
         HudGraphic play = new HudGraphic(button, "Play", HudGraphic.fonts.get(0), 65, 7);
-        res = new HudGraphic(button, resolutions[resIndex], HudGraphic.loadFont("Times New Roman", 28), 16, 14);
+        res = new HudGraphic(button, options[0], HudGraphic.loadFont("Times New Roman", 28), 16, 14);
         Menu playButton = new Menu(0, 0, false, play, true, null, new Event() {
 
             public void execute() {
@@ -73,7 +71,7 @@ public class SplashScreen {
         Menu resButton = new Menu(0, 80, false, res, true, null, new Event() {
 
             public void execute() {
-                changeRes();
+                toggleFull();
             }
         });
         Menu[] menuWrapper = {new Menu((width - play.getWidth()) / 2, 200, false, true, new Menu[]{playButton, resButton})};
@@ -100,14 +98,16 @@ public class SplashScreen {
         Display.destroy();
         Mouse.destroy();
         if (readyPlay) {
-            String[] resSplit = resolutions[resIndex].split(" ");
-            EventTest.main(new String[]{resSplit[1], resSplit[3]});
+            if (fullscreen) {
+                EventTest.main(dm);
+            } else {
+                EventTest.main(new DisplayMode(gameWidth, gameHeight));
+            }
         }
     }
 
-    public static void changeRes() {
-        resIndex++;
-        resIndex %= resolutions.length;
-        res.setMessage(resolutions[resIndex]);
+    public static void toggleFull() {
+        fullscreen = !fullscreen;
+        res.setMessage(options[fullscreen ? 0 : 1]);
     }
 }
