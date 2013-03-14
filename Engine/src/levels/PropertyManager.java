@@ -166,4 +166,14 @@ public class PropertyManager {
     public static void utilDecreaseInventorySlot(int slot, int decreaseBy) {
 	utilIncreaseInventorySlot(slot, -decreaseBy);
     }
+
+    public static int utilGetInventoryByName(String name) {
+	for (int i=0; i<NUM_ITEMS; i++) {
+	    String item = getString(utilInvName(i), null);
+	    if (item != null && item.equals(name)) {
+		return getInteger(utilInvCount(i));
+	    }
+	}
+	return 0;
+    }
 }

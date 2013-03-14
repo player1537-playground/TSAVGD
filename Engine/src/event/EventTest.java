@@ -267,6 +267,7 @@ public class EventTest {
             DebugMessages.addMessage("Acti", "" + activate);
             DebugMessages.addMessage("Brightness", "" + brightness);
             DebugMessages.addMessage("Player's name", p.getName());
+	    DebugMessages.addMessage("Player Pos", p.b.getMin().getX() + " " + p.b.getMin().getY() + " " + p.b.getMin().getZ());
             //System.out.println("Total " + delta);
             float temp = brightness * 0.35f;
             temp = temp < 0 ? 0 : temp > 1 ? 1 : temp;
