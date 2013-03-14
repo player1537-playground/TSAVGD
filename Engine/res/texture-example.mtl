@@ -1,0 +1,860 @@
+# Blender MTL File: 'town.blend'
+# Material Count: 78
+newmtl FrontColorNoCulling_texture18.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.693334 0.693334 0.618039
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture18.jpg
+
+
+newmtl FrontColorNoCulling_texture2.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.693334 0.693334 0.618039
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture2.jpg
+
+
+newmtl FrontColorNoCulling_texture23.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.693334 0.693334 0.618039
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture23.jpg
+
+
+newmtl FrontColorNoCulling_texture3.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.693334 0.693334 0.618039
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture3.jpg
+
+
+newmtl FrontColorNoCulling_texture4.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.693334 0.693334 0.618039
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture4.jpg
+
+
+newmtl material0_texture0.png
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture0.png
+
+
+newmtl material10_texture14.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture14.jpg
+
+
+newmtl material10_texture23.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture23.jpg
+
+
+newmtl material10_texture5.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture5.jpg
+
+
+newmtl material10_texture7.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture7.jpg
+
+
+newmtl material10_texture8.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture8.jpg
+
+
+newmtl material11_texture9.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture9.jpg
+
+
+newmtl material12_texture3.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture3.jpg
+
+
+newmtl material12_texture4.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture4.jpg
+
+
+newmtl material12_texture8.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture8.jpg
+
+
+newmtl material13_texture4.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.661961 0.592941 0.451765
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture4.jpg
+
+
+newmtl material14_texture4.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture4.jpg
+
+
+newmtl material15_texture11.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture11.jpg
+
+
+newmtl material16_texture12.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture12.jpg
+
+
+newmtl material17_texture13.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture13.jpg
+
+
+newmtl material18_texture14.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture14.jpg
+
+
+newmtl material18_texture19.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture19.jpg
+
+
+newmtl material18_texture20.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture20.jpg
+
+
+newmtl material18_texture21.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture21.jpg
+
+
+newmtl material18_texture3.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture3.jpg
+
+
+newmtl material18_texture5.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture5.jpg
+
+
+newmtl material18_texture8.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture8.jpg
+
+
+newmtl material19_texture14.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture14.jpg
+
+
+newmtl material1_texture0.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture0.jpg
+
+
+newmtl material20_texture16.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture16.jpg
+
+
+newmtl material21_texture5.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture5.jpg
+
+
+newmtl material22_texture5.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.109804 0.109804 0.109804
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture5.jpg
+
+
+newmtl material23_texture5.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.109804 0.109804 0.109804
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture5.jpg
+
+
+newmtl material24_texture16.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture16.jpg
+
+
+newmtl material24_texture3.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture3.jpg
+
+
+newmtl material24_texture4.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture4.jpg
+
+
+newmtl material24_texture8.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture8.jpg
+
+
+newmtl material25_texture14.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture14.jpg
+
+
+newmtl material25_texture18.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture18.jpg
+
+
+newmtl material25_texture2.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture2.jpg
+
+
+newmtl material25_texture7.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture7.jpg
+
+
+newmtl material26_texture18.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture18.jpg
+
+
+newmtl material26_texture19.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture19.jpg
+
+
+newmtl material27_texture19.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture19.jpg
+
+
+newmtl material28_texture19.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture19.jpg
+
+
+newmtl material29_texture20.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture20.jpg
+
+
+newmtl material29_texture22.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture22.jpg
+
+
+newmtl material2_texture1.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture1.jpg
+
+
+newmtl material30
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\\Users\\Andy\\Downloads\\Sol\\images\\texture23.jpg
+
+
+newmtl material30_texture23.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture23.jpg
+
+
+newmtl material30_texture5.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture5.jpg
+
+
+newmtl material31_texture2.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture2.jpg
+
+
+newmtl material3_texture2.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture2.jpg
+
+
+newmtl material3_texture20.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture20.jpg
+
+
+newmtl material3_texture24.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture24.jpg
+
+
+newmtl material4_texture14.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture14.jpg
+
+
+newmtl material4_texture3.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture3.jpg
+
+
+newmtl material4_texture4.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture4.jpg
+
+
+newmtl material5_texture3.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture3.jpg
+
+
+newmtl material5_texture4.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture4.jpg
+
+
+newmtl material6_texture10.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture10.jpg
+
+
+newmtl material6_texture14.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture14.jpg
+
+
+newmtl material6_texture15.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture15.jpg
+
+
+newmtl material6_texture17.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture17.jpg
+
+
+newmtl material6_texture4.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture4.jpg
+
+
+newmtl material6_texture5.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture5.jpg
+
+
+newmtl material6_texture8.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture8.jpg
+
+
+newmtl material7_texture2.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture2.jpg
+
+
+newmtl material7_texture6.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture6.jpg
+
+
+newmtl material8_texture14.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture14.jpg
+
+
+newmtl material8_texture16.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture16.jpg
+
+
+newmtl material8_texture3.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture3.jpg
+
+
+newmtl material8_texture4.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture4.jpg
+
+
+newmtl material8_texture5.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture5.jpg
+
+
+newmtl material8_texture6.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture6.jpg
+
+
+newmtl material8_texture8.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture8.jpg
+
+
+newmtl material9_texture22.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture22.jpg
+
+
+newmtl material9_texture5.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Andy\Downloads\Sol\images\texture5.jpg
+
+

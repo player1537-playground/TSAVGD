@@ -17,12 +17,13 @@ import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
 import org.newdawn.slick.util.ResourceLoader;
 import org.lwjgl.util.glu.Util.*;
+
 /**
  *
  * @author Andy
  */
 public class Model implements Resource {
-    
+
     public Vector3f[] verts;
     public Vector3f[] normals;
     public Vector3f[] textureCoords;
@@ -38,19 +39,19 @@ public class Model implements Resource {
         this.mpath = path;
         this.tpath = defaultTexture;
     }
-    
+
     public void load() {
         ArrayList vertexList = new ArrayList(1000);
         ArrayList normalList = new ArrayList(1000);
         ArrayList faceList = new ArrayList(1000);
-        
+
         try {
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(
                     ResourceLoader.getResourceAsStream("res/" + mpath)));
             String currentLine;
             while ((currentLine = reader.readLine()) != null) {
-		String[] splitLine = currentLine.split(" ");
+                String[] splitLine = currentLine.split(" ");
                 //System.out.println(currentLine);
                 if (currentLine.startsWith("v ")) {
                     float x = Float.valueOf(splitLine[1]);
@@ -68,7 +69,7 @@ public class Model implements Resource {
                     float z = Float.valueOf(splitLine[3]);
                     normalList.add(new Vector3f(x, y, z));
                 } else if (currentLine.startsWith("f ")) {
-		    String[][] splitSlash = { splitLine[1].split("/"),  splitLine[2].split("/"), splitLine[3].split("/") };
+                    String[][] splitSlash = {splitLine[1].split("/"), splitLine[2].split("/"), splitLine[3].split("/")};
                     int[] vertexIndices = {Integer.parseInt(splitSlash[0][0]) - 1,
                         Integer.parseInt(splitSlash[1][0]) - 1,
                         Integer.parseInt(splitSlash[2][0]) - 1};
@@ -101,7 +102,7 @@ public class Model implements Resource {
         normalList.toArray(this.normals);
         this.faces = new Face[faceList.size()];
         faceList.toArray(faces);
-        
+
         Texture t = getTexture(tpath);
         this.textureCoords = new Vector3f[]{new Vector3f(0, 0, 0), new Vector3f(0, 1, 0), new Vector3f(1, 1, 0)};
         System.out.println("Model loaded " + t.getTextureID());
@@ -110,16 +111,16 @@ public class Model implements Resource {
         glNewList(indice, GL_COMPILE);
         initDraw();
         glEndList();
-        
+
     }
-    
+
     public static Model loadModel(String path) {
         Model m = new Model(path, path);
         m.load();
         return m;
     }
 
-    public static Model loadModel(String path, boolean texture) {
+    public void loadWithTex() {
 
         ArrayList verts = new ArrayList();
         ArrayList normals = new ArrayList();
@@ -131,7 +132,7 @@ public class Model implements Resource {
         try {
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(
-                    ResourceLoader.getResourceAsStream("res/" + path)));
+                    ResourceLoader.getResourceAsStream("res/" + mpath)));
             String currentLine;
             while (!(currentLine = reader.readLine()).startsWith("mtllib ")) {
             }
@@ -148,7 +149,7 @@ public class Model implements Resource {
                 }
             }
             while ((currentLine = reader.readLine()) != null) {
-		String[] spaceSplit = currentLine.split(" ");
+                String[] spaceSplit = currentLine.split(" ");
                 //System.out.println(currentLine);
                 if (currentLine.startsWith("v ")) {
                     float x = Float.valueOf(spaceSplit[1]);
@@ -165,26 +166,27 @@ public class Model implements Resource {
                     float z = Float.valueOf(spaceSplit[3]);
                     normals.add(new Vector3f(x, y, z));
                 } else if (currentLine.startsWith("f ")) {
-		    String[][] slashSplit = new String[][] {
-			spaceSplit[1].split("/"),
-			spaceSplit[2].split("/"),
-			spaceSplit[3].split("/")
-		    };
-                    int[] vertexIndices = {Integer.parseInt(slashSplit[1][0]) - 1,
-                        Integer.parseInt(slashSplit[2][0]) - 1,
-                        Integer.parseInt(slashSplit[3][0]) - 1};
-                    int[] textureCoordinates = {Integer.parseInt(slashSplit[1][1]) - 1,
-                        Integer.parseInt(slashSplit[2][1]) - 1,
-                        Integer.parseInt(slashSplit[3][1]) - 1};
-                    int[] normalIndices = new int[]{Integer.parseInt(slashSplit[1][2]) - 1,
-                        Integer.parseInt(slashSplit[2][2]) - 1,
-                        Integer.parseInt(slashSplit[3][2]) - 1};
+                    String[][] slashSplit = new String[][]{
+                        spaceSplit[1].split("/"),
+                        spaceSplit[2].split("/"),
+                        spaceSplit[3].split("/")
+                    };
+                    
+                    int[] vertexIndices = {Integer.parseInt(slashSplit[0][0]) - 1,
+                        Integer.parseInt(slashSplit[1][0]) - 1,
+                        Integer.parseInt(slashSplit[2][0]) - 1};
+                    int[] textureCoordinates = {Integer.parseInt(slashSplit[0][1]) - 1,
+                        Integer.parseInt(slashSplit[1][1]) - 1,
+                        Integer.parseInt(slashSplit[2][1]) - 1};
+                    int[] normalIndices = new int[]{Integer.parseInt(slashSplit[0][2]) - 1,
+                        Integer.parseInt(slashSplit[1][2]) - 1,
+                        Integer.parseInt(slashSplit[2][2]) - 1};
 
                     faces.add(new Face(vertexIndices, normalIndices, textureCoordinates, textureIndex));
 
                 } else if (currentLine.startsWith("usemtl ")) {
-		    String currentName = spaceSplit[1];
-		    textureIndex = materialHash.get(currentName).textureIndice;
+                    String currentName = spaceSplit[1];
+                    textureIndex = materialHash.get(currentName).textureIndice;
                 }
 
             }
@@ -195,18 +197,21 @@ public class Model implements Resource {
             e.printStackTrace();
         }
 
-        Vector3f[] vertArray = new Vector3f[verts.size()];
-        verts.toArray(vertArray);
-        Vector3f[] normalArray = new Vector3f[normals.size()];
-        normals.toArray(normalArray);
-        Vector3f[] textureCArray = new Vector3f[textureCoords.size()];
-        textureCoords.toArray(textureCArray);
-        Face[] faceArray = new Face[faces.size()];
-        faces.toArray(faceArray);
-        Texture[] textureArray = new Texture[Material.textures.size()];
-        Material.textures.toArray(textureArray);
-        return new Model(vertArray, normalArray, textureCArray, faceArray, textureArray);
-
+        this.verts = new Vector3f[verts.size()];
+        verts.toArray(this.verts);
+        this.normals = new Vector3f[normals.size()];
+        normals.toArray(this.normals);
+        this.textureCoords = new Vector3f[textureCoords.size()];
+        textureCoords.toArray(this.textureCoords);
+        this.faces = new Face[faces.size()];
+        faces.toArray(this.faces);
+        tex = new Texture[Material.textures.size()];
+        Material.textures.toArray(tex);
+        
+        indice = glGenLists(1);
+        glNewList(indice, GL_COMPILE);
+        initDraw();
+        glEndList();
     }
 
     public void initDraw() {

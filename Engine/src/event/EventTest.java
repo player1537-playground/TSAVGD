@@ -201,6 +201,27 @@ public class EventTest {
             //de.add(h);
 
             //pe.add(p);
+            AbstractEntity testMap = new AbstractEntity("Map") {
+
+                @Override
+                public void collide(ArrayList<Triangle> cols) {
+                }
+
+                @Override
+                public void collide(PhysicalEntity col) {
+                }
+
+                @Override
+                public void update(int delta) {
+                }
+            };
+            Model map = new Model("MAP", "texture-example.obj");
+            map.loadWithTex();
+            testMap.setModel(map);
+            testMap.load();
+            addAbstractEntity(testMap);
+            System.out.println(testMap.b.getDimension());
+           testMap.setPosition(new Vector3f(0, 20, 0));
 
             w = new PhysicalWorld(ter, pe);
 

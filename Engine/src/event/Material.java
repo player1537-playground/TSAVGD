@@ -23,10 +23,11 @@ public class Material {
 
     public Material(String name, String path) {
         this.name = name;
+        System.out.println(name);
         if (!paths.contains(path)) {
             try {
                 this.textureIndice = textures.size();
-                textures.add(TextureLoader.getTexture("JPG",
+                textures.add(TextureLoader.getTexture(path.substring(path.length() - 3).toUpperCase(),
                         ResourceLoader.getResourceAsStream(path)));
                 paths.add(path);
             } catch (IOException ex) {
