@@ -43,7 +43,7 @@ public class ConversationDisplay {
         author.setConversation(true);
         EventTest.p.startConversation(author);
         ConversationDisplay.text = text;
-        textDisp.setMessage(author.toString() + " - \n         " + text);
+        textDisp.setMessage(author.getName() + " - \n         " + text);
     }
 
     public static void update(int delta) {

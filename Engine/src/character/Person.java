@@ -74,7 +74,7 @@ public class Person extends AbstractEntity implements Activatable {
     }
 
     public void startConversation() {
-        ConversationDisplay.startConversation(this, "HEY WASSUPP DAWG");
+        ConversationDisplay.startConversation(this, "So long and thanks for all the fish.");
     }
 
     public void setConversation(boolean conv) {
@@ -89,6 +89,10 @@ public class Person extends AbstractEntity implements Activatable {
         return collision;
     }
 
+    public String getName() {
+        return "Larry the Dolphin";
+    }
+    
     @Override
     public void load() {
         super.load();

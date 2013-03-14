@@ -16,6 +16,7 @@ import org.lwjgl.opengl.*;
 import org.lwjgl.util.vector.Vector3f;
 import static org.lwjgl.opengl.GL11.*;
 import character.*;
+import java.util.logging.Logger;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.UnicodeFont;
 import sound.Sound;
@@ -56,6 +57,7 @@ public class EventTest {
     private static Object thelock = new Object(); // Used to synchronize render()/update()
     private static float dx, dy;
     private static float brightness = 0.5f;
+    private static boolean quit;
 
     public static void main(String[] argv) {
         if (argv == null || argv.length != 2) {
@@ -69,7 +71,7 @@ public class EventTest {
 
     public static void main(DisplayMode dm) {
         Level initialLevel = new IslandLevel();
-            System.out.println("W " + dm.getWidth() + " H " + dm.getHeight());
+        System.out.println("W " + dm.getWidth() + " H " + dm.getHeight());
         create(dm, initialLevel);
     }
 
@@ -175,8 +177,7 @@ public class EventTest {
             /*
              * ter = new
              * Terrain(TerrainModel.loadModel(terrainDisplayableModelPath),
-             * Model.loadModel(terrainCollidableModelPath),
-			      p);
+             * Model.loadModel(terrainCollidableModelPath), p);
              */
 
             System.out.println("DONE");
@@ -228,7 +229,7 @@ public class EventTest {
         music.repeat();
         music.setVolume(0.4f);
         music.play();
-        while (!Display.isCloseRequested() && KeyboardWrapper.get(Keyboard.KEY_ESCAPE).isUp()) {
+        while (!Display.isCloseRequested() && !quit) {
 
             getDeltaBottleNeck();
 
@@ -286,6 +287,10 @@ public class EventTest {
 
     }
 
+    public static void quit() {
+        quit = true;
+    }
+
     public static boolean isRunning() {
         return isRunning;
     }
@@ -322,10 +327,13 @@ public class EventTest {
     }
 
     private static void processKeyboard() {
-        if (KeyboardWrapper.put(Keyboard.KEY_P).isPressed()) {
-            paused = !paused;
-            h.setPause(paused);
-            Mouse.setGrabbed(!paused);
+        if (ConversationDisplay.isFinished() && 
+                (KeyboardWrapper.put(Keyboard.KEY_P).isPressed()
+                || KeyboardWrapper.put(Keyboard.KEY_ESCAPE).isPressed())) {
+            if (!Hud.questMenu.show && !Hud.optionsMenu.show) {
+                pause(!paused);
+            }
+            Hud.alternateMenu();
         }
 
         if (KeyboardWrapper.put(Keyboard.KEY_F).isPressed()) {
@@ -366,6 +374,7 @@ public class EventTest {
         } else {
             activate = false;
         }
+
     }
 
     private static void processMouse() {
@@ -406,7 +415,7 @@ public class EventTest {
             ent.draw();
         }
         h.draw();
-        
+
     }
 
     public static FloatBuffer asFloatBuffer(float... values) {
@@ -494,5 +503,10 @@ public class EventTest {
 
     public static void setGravity(float g) {
         gravity = g;
+    }
+
+    public static void pause(boolean pause) {
+        paused = pause;
+        Mouse.setGrabbed(!paused);
     }
 }

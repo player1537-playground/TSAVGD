@@ -111,4 +111,10 @@ public class SoundManager {
     public static boolean isMuted() {
         return muted;
     }
+
+    public static void setVolume(float volume) {
+        for(Sound s : sounds) {
+            s.setMult(volume);
+        }
+    }
 }

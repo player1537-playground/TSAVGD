@@ -48,7 +48,7 @@ public abstract class AbstractEntity extends PhysicalEntity implements Displayab
             glRotatef(angle, 0, 1, 0);
             m.draw();
             glPopMatrix();
-            glDisable(GL_CULL_FACE);
+            /*glDisable(GL_CULL_FACE);
             glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
             glBegin(GL_QUADS);
 
@@ -84,7 +84,7 @@ public abstract class AbstractEntity extends PhysicalEntity implements Displayab
 
             glEnd();
             glEnable(GL_CULL_FACE);
-            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);*/
         }
 
     }

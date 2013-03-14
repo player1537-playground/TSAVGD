@@ -60,8 +60,8 @@ public class SplashScreen {
         glMatrixMode(GL_MODELVIEW);
 
         Texture button = Hud.load("res/play.png");
-        HudGraphic play = new HudGraphic(button, "Play", HudGraphic.fonts.get(0), 65, 7);
-        res = new HudGraphic(button, options[0], HudGraphic.loadFont("Times New Roman", 28), 16, 14);
+        HudGraphic play = new HudGraphic(button, "Play", HudGraphic.fonts.get(0), 67, 7);
+        res = new HudGraphic(button, options[0], HudGraphic.loadFont("Times New Roman", 28), 34, 14);
         Menu playButton = new Menu(0, 0, false, play, true, null, new Event() {
 
             public void execute() {

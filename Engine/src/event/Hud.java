@@ -27,53 +27,73 @@ public class Hud implements DisplayableEntity {
     public static float width, height;
     static ArrayList<DisplayableEntity> graphics = new ArrayList<DisplayableEntity>();
     static Menu pauseMenu;
+    static Menu questMenu;
+    static Menu optionsMenu;
     static Menu itemBar;
     static Menu messages;
     static Menu debug;
     static Menu conv;
-
     boolean debounce;
 
     public Hud(float width, float height) {
         this.width = width;
         this.height = height;
         UnicodeFont uf = HudGraphic.loadFont("Comic Sans", 16);
-        HudGraphic menu = new HudGraphic(Hud.load("res/tree.png"), null);
-        Texture menuItemTex = Hud.load("res/test.png");
+        HudGraphic menu = new HudGraphic(Hud.load("res/pause-menu.png"), null);
+        Texture menuItemTex = Hud.load("res/pause-menu-button.png");
 
         HudGraphic itemBarGraphic = new HudGraphic(Hud.load("res/item_bar_test.png"), null);
-        HudGraphic item = new HudGraphic(Hud.load("res/bullet.png"), null);
+        HudGraphic item = new HudGraphic(null, null);
 
         final Sound ding = SoundManager.createSound("res/ding.wav");
 
-        Menu[] menuItems = new Menu[6];
-        String[] subMenuText = {"Items", "Character", "Options", "Save", "Quit", "Continue"};
+        String[] subMenuText = {"Quests", "Options", "Quit", "Continue"};
+        Event[] subMenuEvent = {new Event() {
+
+        @Override
+        public void execute() {
+            ding.play(true);
+            setShowQuestMenu(true);
+        }
+    }, new Event() {
+
+        @Override
+        public void execute() {
+            ding.play(true);
+            setShowOptionsMenu(true);
+        }
+    }, new Event() {
+
+        @Override
+        public void execute() {
+            ding.play(true);
+            EventTest.quit();
+        }
+    }, new Event() {
+
+        @Override
+        public void execute() {
+            ding.play(true);
+            setShowPauseMenu(false);
+            EventTest.pause(false);
+        }
+    }
+        };
+        Menu[] menuItems = new Menu[subMenuText.length];
         for (int i = 0; i < menuItems.length; i++) {
-            menuItems[i] = new Menu(0, 100 + 96 * i, false, new HudGraphic(menuItemTex, subMenuText[i]), true, null, new Event() {
-
-                @Override
-                public void execute() {
-                    pauseMenu.hide();
-                    Menu[] items = pauseMenu.sub;
-                    for (Menu m : items) {
-                        m.hide();
-                    }
-
-                    ding.play(true);
-                }
-            });
+            menuItems[i] = new Menu(24, 110 + (menuItemTex.getImageHeight() + 24) * i, false, new HudGraphic(menuItemTex, subMenuText[i]), true, null, subMenuEvent[i]);
         }
         pauseMenu = new Menu(width - menu.getWidth(), 0, false, menu, true, menuItems, null);
         pauseMenu.hideBranch();
 
         Menu[] items = new Menu[7];
         for (int i = 0; i < items.length; i++) {
-            items[i] = new Menu(16 + 72 * i, 10, false, item, true, null, null);
+            items[i] = new Menu(86 + 72 * i, 16, false, item, true, null, null);
         }
-        itemBar = new Menu((width - itemBarGraphic.getWidth()) / 2, height - itemBarGraphic.getHeight(), false, itemBarGraphic, true, items, null);
+        itemBar = new Menu(20, height - itemBarGraphic.getHeight(), false, itemBarGraphic, true, items, null);
 
         MessageCenter.setAttributes(300, 100, 5);
-        messages = new Menu(30, height - 110, 300, 100, false, new DisplayableEntity() {
+        messages = new Menu(30, height - 190, 300, 100, false, new DisplayableEntity() {
 
             @Override
             public void draw() {
@@ -85,7 +105,7 @@ public class Hud implements DisplayableEntity {
                 MessageCenter.update(delta);
             }
         }, true, null, null);
-        
+
         debug = new Menu(0, 0, 400, 100, false, new DisplayableEntity() {
 
             @Override
@@ -98,7 +118,7 @@ public class Hud implements DisplayableEntity {
                 DebugMessages.update(delta);
             }
         }, true, null, null);
-        
+
         conv = new Menu(0, 0, 0, 0, false, new DisplayableEntity() {
 
             @Override
@@ -112,13 +132,50 @@ public class Hud implements DisplayableEntity {
             }
         }, false, null, null);
 
+        UnicodeFont menuTitle = HudGraphic.loadFont("Arial", 64);
+        HudGraphic quest = new HudGraphic(Hud.load("res/quest-menu.png"), "Quests", menuTitle, (int) (width * 3f / 4 - 120), 80);
+        questMenu = new Menu(0, 0, false, quest, false, null, null);
+        questMenu.hideBranch();
+        
+        Menu[] volumeTicks = new Menu[11];
+        Texture volumeTickTex = Hud.load("res/tick.png");
+        for(int i = 0; i < volumeTicks.length; i++) {
+            final int index = i;
+            volumeTicks[i] = new Menu(23 + 25 * i, 26, false, new HudGraphic(volumeTickTex, "" + i, uf, -2, -19), true, null, new Event() {
+                @Override
+                public void execute() {
+                    SoundManager.setVolume(index / 10f);
+                }
+            });
+        }
+        Texture volumeBackground = Hud.load("res/volume.png");
+        Menu volumeChange = new Menu(350, 325, false, new HudGraphic(volumeBackground, "Change Volume", HudGraphic.fonts.get(0), 20, -100), true, volumeTicks, null);
+        
+        String[] qualityStrings = {"   Low", "Medium", "  High"};
+        Menu[] qualityOptions = new Menu[qualityStrings.length];
+        for(int i = 0; i < qualityOptions.length; i++) {
+            qualityOptions[i] = new Menu(10 + i * 290, 100, false, new HudGraphic(menuItemTex, qualityStrings[i], HudGraphic.fonts.get(0), 70, 30), true, null, null);
+        }
+        Menu quality = new Menu(60, 500, false, new HudGraphic(null, "Quality", HudGraphic.fonts.get(0), 380, 20), true, qualityOptions, null);
+        
+        Menu[] optionSubMenus = {
+            volumeChange,
+            quality
+        };
+        
+        HudGraphic options = new HudGraphic(Hud.load("res/options.png"), "Options", menuTitle, (int) (width / 2 - 120), 80);
+        optionsMenu = new Menu(0, 0, false, options, false, optionSubMenus, null);
+        optionsMenu.hideBranch();
+        
         debounce = true;
 
-        graphics.add(pauseMenu);
         graphics.add(itemBar);
         graphics.add(messages);
-        graphics.add(debug);
         graphics.add(conv);
+        graphics.add(pauseMenu);
+        graphics.add(questMenu);
+        graphics.add(optionsMenu);
+        graphics.add(debug);
 
     }
 
@@ -154,12 +211,14 @@ public class Hud implements DisplayableEntity {
 
     @Override
     public void update(int delta) {
-        for(Entity e : graphics) {
+        for (Entity e : graphics) {
             e.update(delta);
         }
         boolean pressed = Mouse.isButtonDown(0);
         if (pressed && debounce) {
             pauseMenu.mouseClick(Mouse.getX(), (int) (height - Mouse.getY()));
+            questMenu.mouseClick(Mouse.getX(), (int) (height - Mouse.getY()));
+            optionsMenu.mouseClick(Mouse.getX(), (int) (height - Mouse.getY()));
         }
         debounce = !pressed;
     }
@@ -173,24 +232,39 @@ public class Hud implements DisplayableEntity {
         return null;
     }
 
-    public void setPause(boolean paused) {
-        pauseMenu.setShowBranch(paused);
-        itemBar.setShowBranch(!paused);
-        conv.setShowBranch(!paused);
-        if (!paused) {
-            resetMenu();
-        }
+    public static void setPause(boolean paused) {
+        setShowPauseMenu(paused);
     }
 
-    private void resetMenu() {
-        Menu[] items = pauseMenu.sub;
-        for (Menu m : items) {
-            m.hideChildren();
-            m.show = true;
-        }
-    }
-    
     public static void setShowConversation(boolean show) {
         conv.setShow(show);
+    }
+
+    public static void setShowQuestMenu(boolean show) {
+        pauseMenu.setShowBranch(!show);
+        itemBar.setShowBranch(!show);
+        questMenu.setShowBranch(show);
+    }
+
+    public static void setShowOptionsMenu(boolean show) {
+        pauseMenu.setShowBranch(!show);
+        itemBar.setShowBranch(!show);
+        optionsMenu.setShowBranch(show);
+    }
+
+    public static void setShowPauseMenu(boolean show) {
+        pauseMenu.setShowBranch(show);
+    }
+
+    public static void alternateMenu() {
+        if (questMenu.show) {
+            setShowQuestMenu(false);
+        } else if (optionsMenu.show) {
+            setShowOptionsMenu(false);
+        } else if (pauseMenu.show) {
+            setShowPauseMenu(false);
+        } else {
+            setShowPauseMenu(true);
+        }
     }
 }
