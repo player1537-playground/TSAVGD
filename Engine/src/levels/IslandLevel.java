@@ -62,5 +62,26 @@ public class IslandLevel extends Level {
 	testMap.setPosition(new Vector3f(0, 20, 0));
 	addResource(map);
 	addResource(testMap);
+
+	AbstractEntity bananaEnt = new AbstractEntity("Banana 01") {
+		@Override
+		    public void collide(ArrayList<Triangle> cols) {
+                }
+
+                @Override
+		    public void collide(PhysicalEntity col) {
+                }
+
+                @Override
+		    public void update(int delta) {
+                }
+		
+	    };
+	Model banana = new Model("BananaModel 01", "banana.obj", true);
+	bananaEnt.setModel(banana);
+	EventTest.addAbstractEntity(bananaEnt);
+	bananaEnt.setPosition(new Vector3f(40, 20, 0));
+	addResource(bananaEnt);
+	addResource(banana);
     }
 }
