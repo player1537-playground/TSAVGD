@@ -30,6 +30,7 @@ jar cmfv0 manifest windows.jar \
     -C $src sound \
     -C $src levels \
     -C $src util \
+    -C $src quests \
     -C $root res
 #    $lwjgl/lwjgl.jar \
 #    $lwjgl/lwjgl_util.jar \

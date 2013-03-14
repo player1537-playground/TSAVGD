@@ -33,14 +33,24 @@ public class Model implements Resource {
     static String defaultTexture = "test.png";
     private final String name;
     private final String mpath, tpath;
+    private boolean textured;
 
     public Model(String name, String path) {
+	this(name, path, false);
+    }
+
+    public Model(String name, String path, boolean textured) {
         this.name = name;
         this.mpath = path;
         this.tpath = defaultTexture;
+	this.textured = textured;
     }
 
     public void load() {
+	if (textured) {
+	    this.loadWithTex();
+	    return;
+	}
         ArrayList vertexList = new ArrayList(1000);
         ArrayList normalList = new ArrayList(1000);
         ArrayList faceList = new ArrayList(1000);
@@ -142,9 +152,9 @@ public class Model implements Resource {
             String name = "";
             while ((currentLine = matReader.readLine()) != null) {
                 if (currentLine.startsWith("newmtl ")) {
-                    name = currentLine.split(" ")[1];
+                    name = currentLine.substring("newmtl ".length());
                 } else if (currentLine.startsWith("map_Kd ")) {
-                    String currentPath = currentLine.split(" ")[1];
+                    String currentPath = currentLine.substring("newmtl ".length());
                     materialHash.put(name, new Material(name, currentPath));
                 }
             }
@@ -185,7 +195,7 @@ public class Model implements Resource {
                     faces.add(new Face(vertexIndices, normalIndices, textureCoordinates, textureIndex));
 
                 } else if (currentLine.startsWith("usemtl ")) {
-                    String currentName = spaceSplit[1];
+                    String currentName = currentLine.substring("usemtl ".length());
                     textureIndex = materialHash.get(currentName).textureIndice;
                 }
 

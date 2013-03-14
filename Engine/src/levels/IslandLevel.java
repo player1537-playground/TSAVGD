@@ -3,6 +3,7 @@ package levels;
 import character.Person;
 import event.*;
 import org.lwjgl.util.vector.Vector3f;
+import java.util.*;
 
 public class IslandLevel extends Level {
 
@@ -40,6 +41,26 @@ public class IslandLevel extends Level {
         }
 
 	
+	AbstractEntity testMap = new AbstractEntity("Map") {
 
+                @Override
+		    public void collide(ArrayList<Triangle> cols) {
+                }
+
+                @Override
+		    public void collide(PhysicalEntity col) {
+                }
+
+                @Override
+		    public void update(int delta) {
+                }
+            };
+	Model map = new Model("MAP", "lame-model.obj", true);
+	testMap.setModel(map);
+	EventTest.addAbstractEntity(testMap);
+	//System.out.println(testMap.b.getDimension());
+	testMap.setPosition(new Vector3f(0, 20, 0));
+	addResource(map);
+	addResource(testMap);
     }
 }

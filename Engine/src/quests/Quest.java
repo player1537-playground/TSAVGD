@@ -1,11 +1,16 @@
 package quests;
 
 public abstract class Quest {
-    private String[] description;
+    String[] description;
+    String name;
     public void update() {
 	if (testFinishCriteria()) {
 	    onFinish();
 	}
+    }
+
+    public String getName() {
+	return this.name;
     }
 
     public String[] getDescription() {

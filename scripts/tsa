@@ -89,7 +89,7 @@ function compile-default() {
 	exit 1
     fi
     cd src/event
-    compile ../{event,character,sound,splash,levels,util}
+    compile ../{event,character,sound,splash,levels,util,quests}
 }
 
 function run-default() {

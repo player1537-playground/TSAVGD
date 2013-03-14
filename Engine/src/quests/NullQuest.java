@@ -1,9 +1,10 @@
 package quests;
 
-import events.PropertyManager;
+import event.EventTest;
 
-public class CowQuest extends Quest {
+public class NullQuest extends Quest {
     { 
+	name = "End Quest";
 	description = new String[] {
 	    "NOTHING!  You've done them all!"
 	};
@@ -14,7 +15,7 @@ public class CowQuest extends Quest {
 	return false;
     }
 
-    public int percentageComplete() {
+    public int getPercentage() {
 	return -33;
     }
 

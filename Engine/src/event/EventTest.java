@@ -24,6 +24,7 @@ import sound.SoundManager;
 import levels.*;
 import util.FlagDropper;
 import util.SelectTerrain;
+import quests.*;
 
 /**
  *
@@ -58,6 +59,7 @@ public class EventTest {
     private static float dx, dy;
     private static float brightness = 0.5f;
     private static boolean quit;
+    private static Quest currentQuest = null;
 
     public static void main(String[] argv) {
         if (argv == null || argv.length != 2) {
@@ -201,27 +203,6 @@ public class EventTest {
             //de.add(h);
 
             //pe.add(p);
-            AbstractEntity testMap = new AbstractEntity("Map") {
-
-                @Override
-                public void collide(ArrayList<Triangle> cols) {
-                }
-
-                @Override
-                public void collide(PhysicalEntity col) {
-                }
-
-                @Override
-                public void update(int delta) {
-                }
-            };
-            Model map = new Model("MAP", "texture-example.obj");
-            map.loadWithTex();
-            testMap.setModel(map);
-            testMap.load();
-            addAbstractEntity(testMap);
-            System.out.println(testMap.b.getDimension());
-           testMap.setPosition(new Vector3f(0, 20, 0));
 
             w = new PhysicalWorld(ter, pe);
 
@@ -234,6 +215,7 @@ public class EventTest {
             ConversationDisplay.init();
             Message.init();
             FlagDropper.init();
+	    setQuest(new BananaQuest());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -407,6 +389,7 @@ public class EventTest {
     public static void update(int delta) {
 
         synchronized (thelock) {
+	    currentQuest.update();
             setConversation(!ConversationDisplay.isFinished());
             if (inConversation && isActivate()) {
                 ConversationDisplay.advance();
@@ -530,5 +513,9 @@ public class EventTest {
     public static void pause(boolean pause) {
         paused = pause;
         Mouse.setGrabbed(!paused);
+    }
+
+    public static void setQuest(Quest q) {
+	currentQuest = q;
     }
 }
