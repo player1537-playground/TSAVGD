@@ -6,6 +6,7 @@ package event;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import levels.Resource;
@@ -118,13 +119,14 @@ public class Model implements Resource {
         return m;
     }
 
-    /*public static Model loadModel(String path, boolean texture) {
+    public static Model loadModel(String path, boolean texture) {
 
         ArrayList verts = new ArrayList();
         ArrayList normals = new ArrayList();
         ArrayList textureCoords = new ArrayList();
         ArrayList faces = new ArrayList();
-        ArrayList<Material> materials = new ArrayList<Material>();
+        HashMap<String, Material> materialHash = new HashMap<String, Material>();
+        //ArrayList<Material> materialHash = new HashMap<String, Material>();
         int textureIndex = 0;
         try {
 
@@ -142,47 +144,47 @@ public class Model implements Resource {
                     name = currentLine.split(" ")[1];
                 } else if (currentLine.startsWith("map_Kd ")) {
                     String currentPath = currentLine.split(" ")[1];
-                    materials.add(new Material(name, currentPath));
+                    materialHash.put(name, new Material(name, currentPath));
                 }
             }
             while ((currentLine = reader.readLine()) != null) {
-
+		String[] spaceSplit = currentLine.split(" ");
                 //System.out.println(currentLine);
                 if (currentLine.startsWith("v ")) {
-                    float x = Float.valueOf(currentLine.split(" ")[1]);
-                    float y = Float.valueOf(currentLine.split(" ")[2]);
-                    float z = Float.valueOf(currentLine.split(" ")[3]);
+                    float x = Float.valueOf(spaceSplit[1]);
+                    float y = Float.valueOf(spaceSplit[2]);
+                    float z = Float.valueOf(spaceSplit[3]);
                     verts.add(new Vector3f(x, y, z));
                 } else if (currentLine.startsWith("vt ")) {
-                    float x = Float.valueOf(currentLine.split(" ")[1]);
-                    float y = Float.valueOf(currentLine.split(" ")[2]);
+                    float x = Float.valueOf(spaceSplit[1]);
+                    float y = Float.valueOf(spaceSplit[2]);
                     textureCoords.add(new Vector3f(x, y, 0));
                 } else if (currentLine.startsWith("vn ")) {
-                    float x = Float.valueOf(currentLine.split(" ")[1]);
-                    float y = Float.valueOf(currentLine.split(" ")[2]);
-                    float z = Float.valueOf(currentLine.split(" ")[3]);
+                    float x = Float.valueOf(spaceSplit[1]);
+                    float y = Float.valueOf(spaceSplit[2]);
+                    float z = Float.valueOf(spaceSplit[3]);
                     normals.add(new Vector3f(x, y, z));
                 } else if (currentLine.startsWith("f ")) {
-                    int[] vertexIndices = {Integer.parseInt(currentLine.split(" ")[1].split("/")[0]) - 1,
-                        Integer.parseInt(currentLine.split(" ")[2].split("/")[0]) - 1,
-                        Integer.parseInt(currentLine.split(" ")[3].split("/")[0]) - 1};
-                    int[] textureCoordinates = {Integer.parseInt(currentLine.split(" ")[1].split("/")[1]) - 1,
-                        Integer.parseInt(currentLine.split(" ")[2].split("/")[1]) - 1,
-                        Integer.parseInt(currentLine.split(" ")[3].split("/")[1]) - 1};
-                    int[] normalIndices = new int[]{Integer.parseInt(currentLine.split(" ")[1].split("/")[2]) - 1,
-                        Integer.parseInt(currentLine.split(" ")[2].split("/")[2]) - 1,
-                        Integer.parseInt(currentLine.split(" ")[3].split("/")[2]) - 1};
+		    String[][] slashSplit = new String[][] {
+			spaceSplit[1].split("/"),
+			spaceSplit[2].split("/"),
+			spaceSplit[3].split("/")
+		    };
+                    int[] vertexIndices = {Integer.parseInt(slashSplit[1][0]) - 1,
+                        Integer.parseInt(slashSplit[2][0]) - 1,
+                        Integer.parseInt(slashSplit[3][0]) - 1};
+                    int[] textureCoordinates = {Integer.parseInt(slashSplit[1][1]) - 1,
+                        Integer.parseInt(slashSplit[2][1]) - 1,
+                        Integer.parseInt(slashSplit[3][1]) - 1};
+                    int[] normalIndices = new int[]{Integer.parseInt(slashSplit[1][2]) - 1,
+                        Integer.parseInt(slashSplit[2][2]) - 1,
+                        Integer.parseInt(slashSplit[3][2]) - 1};
 
                     faces.add(new Face(vertexIndices, normalIndices, textureCoordinates, textureIndex));
 
                 } else if (currentLine.startsWith("usemtl ")) {
-                    for (Material m : materials) {
-                        String currentName = currentLine.split(" ")[1];
-                        if (m.getName().equals(currentName)) {
-                            textureIndex = m.textureIndice;
-                            break;
-                        }
-                    }
+		    String currentName = spaceSplit[1];
+		    textureIndex = materialHash.get(currentName).textureIndice;
                 }
 
             }
@@ -205,7 +207,7 @@ public class Model implements Resource {
         Material.textures.toArray(textureArray);
         return new Model(vertArray, normalArray, textureCArray, faceArray, textureArray);
 
-    }*/
+    }
 
     public void initDraw() {
 
